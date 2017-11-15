@@ -21,7 +21,6 @@ if __name__ == "__main__":
     for i, l in enumerate(f):
         l = ' '.join(l.split())
         res.append(l.split(" ", 6))
-    df = pd.DataFrame(data=res, columns=cols)
-    df.replace("-", np.nan)
+    df = pd.DataFrame(data=res, columns=cols).replace("-", np.nan)
     df.to_csv(args.output, sep=args.separator, index=False, header=True, compression="gzip")
 
