@@ -1,13 +1,9 @@
 import pandas as pd
-
-DATA_EXTERNAL = "../data/external/"
-DATA_PROCESSED = "../data/processed/"
-DATA_INTERIM = "../data/interim/"
-
+import config
 
 #Levanto tabla limpia de humsavar
 print("Loading humsavar table...")
-hum = pd.read_csv(DATA_INTERIM + "humsavar_clean_201711.csv.gz", sep=",")
+hum = pd.read_csv(config.DATA_INTERIM + "humsavar_clean_201711.csv.gz", sep=",")
 hum.columns = hum.columns.str.replace(" ", "_")
 
 #Correspondencia hecha por Santi
@@ -49,12 +45,12 @@ hum_final.rename(columns={"Type_of_variant": "TYPE"}, inplace=True)
 print("Merging features...")
 print("VARQ")
 #varQ
-varq = pd.read_csv(DATA_PROCESSED + "properties-varq.tab.gz", sep="\t").drop("TYPE", axis=1)
+varq = pd.read_csv(config.DATA_PROCESSED + "properties-varq.tab.gz", sep="\t").drop("TYPE", axis=1)
 humsavar_gt = varq.merge(hum_final, left_on="MUTANT", right_on="MUTANT", how="inner")
 
 print("PROTPARAM")
 #ProtParam
-protparam = pd.read_csv(DATA_INTERIM + "protparam_features.tab.gz", sep="\t")
+protparam = pd.read_csv(config.DATA_INTERIM + "protparam_features.tab.gz", sep="\t")
 humsavar_gt = humsavar_gt.merge(protparam, on="MUTANT", how="left")
 
 print("46-WAY-CONSERVATION")
@@ -62,9 +58,5 @@ print("46-WAY-CONSERVATION")
 cons46way = pd.read_csv("../data/interim/cons46way.csv")
 humsavar_gt = humsavar_gt.merge(cons46way, on="dbSNP", how="left")
 
-humsavar_gt.to_csv(DATA_PROCESSED + "humsavar_gt.csv.gz", index=False, compression="gzip")
-
-
-
-
+humsavar_gt.to_csv(config.DATA_PROCESSED + "humsavar_gt.csv.gz", index=False, compression="gzip")
 
