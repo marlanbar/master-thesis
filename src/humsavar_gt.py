@@ -38,25 +38,29 @@ df["C3"] = df.C3.map(AMINO_CODE)
 mutant = pd.Series(data=(hum["Swiss_Prot_AC"] + "-" + df.C2 
                          + "-" + df.C1 + "-" + df.C3).tolist(), name="MUTANT")
 
-hum_final = pd.concat([hum, mutant], 1)[["Type_of_variant", "MUTANT", "dbSNP"]]
-hum_final.rename(columns={"Type_of_variant": "TYPE"}, inplace=True)
+humsavar_gt = pd.concat([hum, mutant], 1)[["Type_of_variant", "MUTANT", "dbSNP"]]
+humsavar_gt.rename(columns={"Type_of_variant": "TYPE"}, inplace=True)
 
 # Mergeo features
 print("Merging features...")
-print("VARQ")
+#print("VARQ")
 #varQ
-varq = pd.read_csv(config.DATA_PROCESSED + "properties-varq.tab.gz", sep="\t").drop("TYPE", axis=1)
-humsavar_gt = varq.merge(hum_final, left_on="MUTANT", right_on="MUTANT", how="inner")
+#varq = pd.read_csv(config.DATA_PROCESSED + "properties-varq.tab.gz", sep="\t").drop("TYPE", axis=1)
+#humsavar_gt = varq.merge(hum_final, left_on="MUTANT", right_on="MUTANT", how="inner")
 
-print("PROTPARAM")
+print("Protparam")
 #ProtParam
 protparam = pd.read_csv(config.DATA_INTERIM + "protparam_features.tab.gz", sep="\t")
 humsavar_gt = humsavar_gt.merge(protparam, on="MUTANT", how="left")
 
 print("46-WAY-CONSERVATION")
-#Conservation (46-way primates)
-cons46way = pd.read_csv("../data/interim/cons46way.csv")
-humsavar_gt = humsavar_gt.merge(cons46way, on="dbSNP", how="left")
+print("phyloP46way")
+phyloP46way = pd.read_csv("../data/interim/phyloP46way.csv")
+humsavar_gt = humsavar_gt.merge(phyloP46way, on="dbSNP", how="left")
+
+print("phastCons46way")
+phastCons46way = pd.read_csv("../data/interim/phastCons46way.csv")
+humsavar_gt = humsavar_gt.merge(phastCons46way, on="dbSNP", how="left")
 
 humsavar_gt.to_csv(config.DATA_PROCESSED + "humsavar_gt.csv.gz", index=False, compression="gzip")
 
