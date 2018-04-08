@@ -1,22 +1,41 @@
-\section{Objetivo Inicial}
-
-La predicción de enfermedades causadas por los polimorfismos de un solo nucleótido (SNPs, por sus siglas en inglés) tuvo un desarrollo constante y acelerado en los últimos años en parte gracias a nuevas técnicas de secuenciación del genoma, que permite el análisis del material genético de pacientes con mayor facilidad. Nuestro objetivo es generar un método de predicción propio a través del análisis de distintas herramientas ya existentes, reutilizando sus features más importantes, como así también agregando nuevos y explorando distintos métodos de Machine Learning que superen las métricas alcanzadas por los trabajos previos en el área.
-
-
-\section{Introducción Biológica}
+\section{Conceptos Biológicos}
 
 \subsection{El Genoma Humano}
 
-El genoma humano está compuesto por alrededor de 20.000 genes. Cada uno de estos genes se encuentran en alguno de los 23 pares de cromosomas (moléculas de ADN) que componen el código genético de un individuo. 
-El gen se define como una parte del material genético que codifica una proteína. El origen de de muchos de ellos provienen de nuestros ancestros e incluso antiguas especies. A su vez, un gen está conformado por codones, conjuntos de tres bases que configuran un único aminoácido.
+El genoma humano está compuesto por alrededor de 30.000 \textbf{genes}. Cada uno de estos genes se encuentran en alguno de los 23 pares de cromosomas (moléculas de ADN) que componen el código genético de un individuo. 
+El gen se define como una parte del material genético que codifica una proteína. Este material genético está conformado por \textbf{nucleótidos}, tríos conformados por un azúcar, un grupo fosfato y una base nitrogenada, que puede ser Adenina (A), Timina (T), Guanina (G) o Citosina (C). En el caso del ARN la Citosina es reemplazada por el Uracilo (U).
+
+Las partes de un gen se dividen en dos: los exones, que son la parte codificante de los genes, y los intrones, que se eliminan en el procesamiento del ARN. 
+A su vez, los exones están conformado por codones, conjuntos de tres bases que configuran un único aminoácido. 
 
 
 \subsection{Proteínas}
 
 Las proteínas son parte fundamental de todo organismo vivo. Son biomoléculas formadas por cadenas de aminoácidos, y de acuerdo a su composición y forma, cumplen diferentes funciones vitales.
 
+\subsection{Polimorfismos de un Sólo Nucleótido (SNPs)}
+
+Durante el proceso de replicación o división de las células, pueden surgir distintos "errores", denominados mutaciones. Estas mutaciones son de vital importancia en el proceso de selección natural, pero también pueden ser la causas de distintas enfermedades. Existen diferentes tipos de mutaciones en el ADN, una de ellas siendo las SNPs, que consisten en el reemplazo de una base nucleótida por otra.
 
 
-\section{Técnicas de Machine Learning}
+\section{Aprendizaje Automático}
+
+El aprendizaje automático es un método computacional que consiste en aprender a partir de los datos. Este aprendizaje puede ser supervisado, en donde se utilizan ejemplos previos que están "rotulados", o no supervisado, donde el objetivo es encontrar distintos grupos de ejemplos dentro de los datos. En esta tesis trabajaremos con algoritmos supervisados. A partir de ellos podemos realizar tareas diversas, que podemos agrupar en dos grandes grupos: la clasificación de nuevos datos, y la regresión, en donde el objetivo es la predicción de una variable continua. 
+
+\subsection{Aprendizaje Supervisado}
+
+\subsection{Métodos de Clasificación}
+
+\subsection{Random Forest}
+
+\subsection{Algoritmos de Ensamble}
+
+\section{Bases de Datos Genéticas}
 
 \section{Trabajo previo}
+
+\section{Objetivo de este trabajo}
+
+La predicción de enfermedades causadas por los polimorfismos de un solo nucleótido (SNPs, por sus siglas en inglés) tuvo un desarrollo constante y acelerado en los últimos años en parte gracias a nuevas técnicas de secuenciación del genoma, que permite el análisis del material genético de pacientes con mayor facilidad. Nuestro objetivo es generar un método de predicción propio a través del análisis de distintas herramientas ya existentes, reutilizando sus features más importantes, como así también agregando nuevos y explorando distintos métodos de Machine Learning que superen las métricas alcanzadas por los trabajos previos en el área.
+
+
