@@ -5,15 +5,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage[left=3cm,right=3cm,bottom=3.5cm,top=3.5cm]{geometry}
+\usepackage{epigraph}
+\usepackage{todonotes}
 
 \begin{document}
 
 %%%% CARATULA
 
 \def\autor{Martín Ezequiel Langberg}
-\def\tituloTesis{Predicción de patogenicidad en Polimorfimos de un Sólo Nucleótido usando Machine Learning}
-\def\runtitulo{La Guerra de las Galaxias: Rebelión e Imperio}
-\def\runtitle{Star Wars: Rebellion and Empire}
+\def\tituloTesis{Predicción de patogenicidad en Polimorfismos de un Sólo Nucleótido usando Aprendizaje Automático}
+\def\runtitulo{Predicción de patogenicidad en Polimorfismos de un Sólo Nucleótido usando Aprendizaje Automático}
 \def\director{Ariel Berenstein}
 \def\codirector{Pablo Turjanski}
 \def\lugar{Buenos Aires, 2018}
@@ -21,8 +22,8 @@
 
 %%%% ABSTRACTS, AGRADECIMIENTOS Y DEDICATORIA
 \frontmatter
-% \pagestyle{empty}
-% \input{abs_esp.tex}
+\pagestyle{empty}
+\input{abs_esp.tex}
 
 % \cleardoublepage
 % \input{abs_en.tex} % OPCIONAL: comentar si no se quiere
@@ -45,8 +46,30 @@
 \label{ch:introduccion}
 \include{introduccion}
 
+\chapter{Materiales y Métodos}
+\label{ch:materiales}
+\include{materiales}
+
+\chapter{Desarrollo y Resultados}
+\label{ch:desarrollo}
+\include{desarrollo}
+
+\chapter{Discusión y Conclusiones}
+\label{ch:conclusiones}
+\include{conclusiones}
+
+
+
+
 %%%% BIBLIOGRAFIA
+
 \backmatter
-%\bibliography{tesis}
+
+\bibliography{references/reference}
+\addcontentsline{toc}{chapter}{Bibliografía}
+
+\bibliographystyle{alpha}
+
+
 
 \end{document}
