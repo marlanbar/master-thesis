@@ -1,26 +1,45 @@
 \section{La Bioinformática y la Medicina Personalizada}
 
-La biología y en particular la genética ha tenido un lugar destacado en el siglo XX gracias a enormes avances como el descubrimiento de la estructura molecular del ADN con el aporte de Franklin, Crick y Watson. A partir de esos hitos científicos se sucedieron grandes esfuerzos a nivel internacional como el Proyecto Genoma Humano o ENCODE, que tienen como objetivo general el mapeo del código genético humano \textbf{[CITAR]} y sus elementos funcionales \textbf{[CITAR]}. Estos trabajos, entre otros, han generado enormes volúmenes de datos que necesitan ser procesados para obtener información. La bioinformática puede ser definida entonces como la aplicación de la informática para el entendimiento y el uso efectivo de los datos biológicos. Estas tareas incluyen:
+La biología, y en particular la genética, han tenido un lugar destacado en el siglo XX gracias a enormes avances como ser el descubrimiento de la estructura molecular del ADN, con el aporte de Franklin, Crick y Watson. A partir de esos hitos científicos, se sucedieron grandes esfuerzos a nivel internacional, como el Proyecto Genoma Humano o ENCODE, que tienen como objetivo general el mapeo entre código genético humano \textbf{[CITAR]} y sus elementos funcionales \textbf{[CITAR]}. Estos trabajos, sumados a los recientes avances en las tecnologías de secuenciación masiva, han generado un creciente volumen de datos genómicos de acceso público que necesitan ser procesados para obtener información. Esto dio a su vez lugar a una rápida expansión de la bioinformática aplicada al área de la genómica. La bioinformática puede ser definida como la aplicación de la informática para el entendimiento y el uso efectivo de los datos biológicos. Estas tareas incluyen:
 
 \begin{itemize}
-    \setlength\itemsep{0.5em}
+    \setlength\itemsep{0.2em}
     \item Inferir la forma de una proteína y su función a partir de una secuencia de aminoácidos,
     \item Encontrar todos los genes y proteínas de un genoma dado,
-    \item Determinar sitios en la estructura de la proteína donde moléculas de una droga determinada pueda adherirse.
+    \item Determinar sitios en la estructura de la proteína donde moléculas de una droga determinada pueda adherirse,
+    \item Comparar secuencias de material genético y encontrar similitudes funcionales entre distintas especies.
 \end{itemize}
 
+\todo{TO DO}
+\todo{
+\begin{enumerate}
+    \item Agregar más ítems que expliquen que hace la bioinformática
+    \item  Incluir figura que describa el crecimiento exponencial de datos genómicos
+    \item Escribir sobre la Medicina Personalizada
+\end{enumerate}
+}
 
 \section{Conceptos Biológicos}
 
-\subsection{El Genoma Humano}
+Para poder avanzar en el desarrollo de este trabajo, es importante entender el proceso por el cual la información genética se utiliza para definir las características del ser humano. 
 
 
-Para definir el genoma humano primero es necesario definir que es un gen. Esta definición ha ido evolucionado con el tiempo debido a los frecuentes descubrimientos en este área \textbf{[CITAR]}.   
-El gen se define como una parte del material genético que codifica una proteína. Este material genético está conformado por \textbf{nucleótidos}, tríos conformados por un azúcar, un grupo fosfato y una base nitrogenada, que puede ser Adenina (A), Timina (T), Guanina (G) o Citosina (C). 
+\subsection{Proteínas}
 
-El genoma humano está compuesto por alrededor de 20.000 genes \textbf{[CITAR]}. Cada uno de estos genes se encuentran en alguno de los 23 pares de cromosomas (moléculas de ADN) que componen el código genético de un individuo. 
+Las proteínas son parte fundamental de todo organismo vivo. Son biomoléculas formadas por cadenas de aminoácidos, y de acuerdo a su composición y forma, cumplen diferentes funciones vitales.
 
 
+\section{El Dogma Central de la Biología Molecular}
+
+Este material genético está conformado por bloques esenciales llamados \textbf{nucleótidos}, monómeros conformados por un azúcar, un grupo fosfato y una base nitrogenada, que puede ser Adenina (A), Timina (T), Guanina (G) o Citosina (C). Estos monómeros conforman una cadena lineal (polímero) de doble hélice que enfrenta .
+
+
+
+\cite{Alberts2014}. Esta secuencia es comparable a la tira de unos y ceros que conforman un archivo de datos. 
+
+De acuerdo al dogma central de la biología, esquema descubierto por Watson y Crick que permite explicar de forma simplificada el proceso de la creación de proteínas, el ADN se transcribe en el ARN , o ácido Ribonucleico que intercambia la Timina por el Uracilo (U), y luego finalmente se traduce en la proteína.
+
+El genoma humano está compuesto por entre 20.000 y 25.000 genes \textbf{[CITAR]}. Cada uno de estos genes se encuentran en alguno de los 23 pares de cromosomas (moléculas de ADN) que componen el código genético de un individuo. 
 
 En el caso del ARN la Citosina es reemplazada por el Uracilo (U).
 
@@ -28,13 +47,14 @@ Las partes de un gen se dividen en dos: los exones, que son la parte codificante
 A su vez, los exones están conformado por codones, conjuntos de tres bases que configuran un único aminoácido. 
 
 
-\subsection{Proteínas}
+\subsection{El Genoma Humano}
 
-Las proteínas son parte fundamental de todo organismo vivo. Son biomoléculas formadas por cadenas de aminoácidos, y de acuerdo a su composición y forma, cumplen diferentes funciones vitales.
+El gen se define como una parte del material genético que codifica una proteína. 
+
 
 \subsection{Polimorfismos de un Sólo Nucleótido (SNPs)}
 
-Durante el proceso de replicación o división de las células, pueden surgir distintos "errores", denominados mutaciones. Estas mutaciones son de vital importancia en el proceso de selección natural, pero también pueden ser la causas de distintas enfermedades. Existen diferentes tipos de mutaciones en el ADN, una de ellas siendo las SNPs, que consisten en el reemplazo de una base nucleótida por otra.
+Durante el proceso de replicación o división de las células, pueden surgir distintos cambios, denominados mutaciones. Estas mutaciones son de vital importancia en el proceso de selección natural, pero también pueden ser la causas de distintas enfermedades. Existen diferentes tipos de mutaciones en el ADN, una de ellas siendo las SNPs, que consisten en el reemplazo de un nucleótido por otro.
 
 
 \section{Aprendizaje Automático}
