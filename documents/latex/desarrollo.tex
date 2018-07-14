@@ -1,7 +1,41 @@
 \section{Modelo usando el dataset VarQ}
 
-Comenzamos nuestro trabajo analizando el dataset construido en el trabajo de Santiago Moreno. Para esto fue necesario una actualización de las etiquetas de cada una de las variantes, para confirmar que su status siguiera vigente. Así, cruzamos los datos con las fuentes originales usadas de Humsavar y Clinvar, y encontramos un subconjunto de proteínas que no aparecían en ninguna de las dos fuentes. Como puede observarse en la figura 3.1, de las  17869 variantes del dataset, logramos encontrar 7580 en la tabla de Clinvar, de los cuales sólo 2397 tenían un estado confirmado como patogénicas, y 138 como benignas. El resto posee una caracterización difusa (por ejemplo, ``factor de riesgo''), y por lo tanto decidimos descartarlas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 7261 variantes de los cuales 4667 corresponden a patogénicas, 1983 son benignas y el resto como ``no clasificado''. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos. Esto nos deja con un dataset reducido de 7418 variantes de las cuales 5377 son patogénicas y 2041 son benignas. 
-Si bien la cantidad de variantes patogénicas es mucho mayor que la cantidad de variantes benignas (es decir, el dataset se encuentra desbalanceado) decidimos generar un modelo para poder evaluar de forma superficial la dificultad del problema. Decidimos probar diferentes modelos (SVM, Regresión Logística y Random Forest) (\todo{Mostrar gráfico del rendimiento de cada modelo}), imputando la variables nulas con la mediana y estandarizando, y obtuvimos los mejores resultados en el caso del Random Forest. Cómo se puede observar en la figura 3.2 se obtuvo un AUC de 0.68. 
+Comenzamos nuestro trabajo analizando el dataset construido en la tesis de Santiago Moreno. Este dataset fue construido inicialmente con las variantes originales del sitio de VarQ, que consistieron en aproximadamente 400 mutaciones correspondientes a 13 proteínas con 10 variables. Posteriormente en el mismo trabajo se aumentó la cantidad para llegar a las aproximadamente 18 mil variables del dataset VarQ usando otras fuentes como Clinvar y Uniprot. Llamaremos a este dataset \textit{VarQ Completo}. 
+
+\subsection{Limpieza del dataset VarQ Completo}
+
+Para trabajar con este dataset decidimos verificar las etiquetas de cada una de las variantes, para confirmar que su status siguiera vigente. Así, cruzamos los datos con las fuentes originales usadas de Humsavar y Clinvar, y encontramos un subconjunto importante de proteínas que no aparecían en ninguna de las dos fuentes. Como puede observarse en la figura 3.1, de las 17.869 variantes del dataset, logramos encontrar 7.580 en la tabla de Clinvar, de los cuales sólo 2.397 tenían un estado confirmado como patogénicas, y 138 como benignas. El resto posee una caracterización difusa (por ejemplo, ``factor de riesgo''), y por lo tanto decidimos descartarlas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 7.261 variantes de los cuales 4.667 corresponden a patogénicas, 1.983 son benignas y el resto como ``no clasificado''. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos. Esto nos deja con un dataset reducido de 7.418 variantes de las cuales 5.377 son patogénicas y 2.041 son benignas. Denominaremos a este dataset \textit{VarQ Reducido}. 
+
+\subsection{Variables del dataset VarQ Reducido}
+
+\begin{itemize}
+    \item Variación de Energía (ENE): En \textit{VarQ}, las mutaciones son modeladas con el software FoldX, construye un modelo a partir de una estructura dada, mutando residuos específicos. El software predice el impacto energético de la mutación en la estabilidad de la proteína o, en caso de tratarse de un complejo, en la estabilidad del mismo.
+     \item SASA : Es el valor correspondiente a la superficie accesible por parte del solvente, de la cadena lateral del aminoácido. Este valor permite determinar si la cadena lateral se encuentra en la superficie o en el núcleo de la estructura.
+     \item Porcentaje de SASA: El porcentaje que representa el SASA sobre el total. Es decir el porcentaje que representa el SASA en función de la estructura de la proteína.
+     \item B-Factor (BF): o factor de temperatura, que corresponde a un aminoácido dentro de la proteína. Una mayor temperatura, indica que el aminoácido pertenece a una zona potencialmente de mayor movilidad.
+     \item Switchability (SWI): Evalúa cuán propenso a generar un cambio de hélice alfa a hoja beta es un conjunto de aminoácidos.
+     \item Aggregability (AGG): El software Tango evalúa cuán
+    propenso es un aminoácido a generar agregación en una proteína desde un punto de vista estructural. La agregación es el proceso por el cual proteínas mal formadas
+    adoptan una conformación que causa su polimerización en fibrillas agregadas y organizadas. Muchas enfermedades neurodegenerativas (Amiloidosis) están asociadas con la agregación proteica.
+     \item Conservación (CONS): Se calcula en bits, siempre y cuando la mutación pueda ser mapeada a una posición en una familia PFam asignada. Cuando una posición tiene un alto valor en bits y la
+    misma posición coincide con el aminoácido conservado en la secuencia de la proteína
+    interpretamos que dicha posición está altamente conservada. La misma puede estar
+    altamente conservada porque es importante estructuralmente o porque es importante para
+    la actividad enzimática. Los residuos con alta conservación tendrán un impacto mayor sobre la función pues afectan aminoácidos de la familia.
+     \item Sitio Activo (AS): Las posiciones de sitio activo son
+    aquellas que se encuentran marcados como unidos a ligandos en los archivos PDB o que
+    pertenecen al mismo pocket que se encuentren conteniendo estos residuos nombrados o
+    aquellos que pertenezcan al Catalytic Site Atlas.
+     \item Interfaz 3DID: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de 3DID.
+     \item Interfaz PDB: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de PDB.
+\end{itemize}
+
+
+\subsection{Descripción del dataset VarQ Reducido}
+
+\subsection{Modelo creado a partir del dataset Reducido}
+
+Si bien la cantidad de variantes patogénicas es mucho mayor que la cantidad de variantes benignas (es decir, el dataset se encuentra desbalanceado) decidimos generar un modelo para poder evaluar de forma superficial la dificultad del problema. Decidimos probar diferentes modelos (SVM, Regresión Logística y Random Forest) (\todo{Mostrar gráfico del rendimiento de cada modelo}), imputando la variables nulas con la mediana y estandarizando, y obtuvimos los mejores resultados en el caso del Random Forest. Cómo se puede observar en la figura 3.2 se obtuvo un AUC de 0,68. 
 
 % Dado que la cantidad de variantes patogénicas en el dataset VarQ reducido es mucho mayor que la cantidad de variantes benignas decidimos generar 10 datasets distintos con las 2 mil variantes benignas y un subset aleatorio de 2 mil variantes patogénicas para obtener un conjunto de datasets balanceado de entrenamiento. Los resultados del algoritmo aplicado en cada uno de los datasets se promedió y se tuvo en cuenta la variación entre los resultados al momento de ser reportados. 
 % En cada uno de los datasets se dividieron las variantes en subsets de entrenamiento (2/3 del total) y test (1/3 del total). Se entrenó con distintos algoritmos (Random Forest, Regresión Logística y Support Vector Machine), obteniendo el mejor resultado en el Random Forest. La curva AUC 
@@ -36,7 +70,6 @@ Promedio      & 0.68      & 0.69   & 0.65     \\ \hline
 
 En la figura 3.3, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al impacto energético de la mutación.  
 
-
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.55]{documents/latex/figures/3/importances_varq.pdf}
@@ -44,10 +77,9 @@ En la figura 3.3, la importancia de los features reportado por el algoritmo Rand
     \label{fig:importance_varq}
 \end{figure}
 
-
 \section{Modelo usando Propiedades Estructurales de la Proteína}
 
-Inicialmente en el trabajo de Santiago Moreno se tomaron las variantes originales del sitio de VarQ, que consistían en aproximadamente 400 mutaciones correspondientes a 13 proteínas con 10 variables. Posteriormente en el mismo trabajo se aumentó la cantidad para llegar a las aproximadamente 19 mil variables del dataset VarQ. En esta sección generamos un nuevo dataset utilizando las variantes de Humsavar (a nivel de proteínas) buscando nuevas fuentes de información de carácter estructural de las proteínas.
+En esta sección generamos un nuevo dataset utilizando las variantes de Humsavar (a nivel de proteínas) buscando nuevas fuentes de información de carácter estructural de las proteínas.
 
 Para el análisis de estas variable usamos el dataset de variables de Humsavar, que se compone de 68523 variantes (o ``mutantes'') de las cuales 39655 son variantes benignas (58\%) y 28868 (42\%) están asociadas a enfermedades. 
 
@@ -129,7 +161,6 @@ Promedio      & 0.76      & 0.67   & 0.70     \\ \hline
     \label{fig:auc_1}
 \end{figure}
 
-
 % \subsection{Importancia de los atributos}
 
 El algoritmo nos permite identificar los mejores atributos dado su rango en cada uno de los árboles del clasificador. En este caso, podemos ver que los primeros tres atributos refieren a matrices de sustitución. Los siguientes features pertenecen a ProtParam, como la aromaticidad, la flexibilidad y la hidrofobicidad. La hidrofobicidad, o la capacidad de repeler el agua de la subsecuencia de los aminoácidos, es uno de las variables consideradas relevantes para definir la patogenicidad de una proteína, de acuerdo a \cite{Wang2016}. Por el otro lado, podemos observar variables con un nivel de importancia muy similar, como es el caso de PAM25, EX y BLOSUM. Estas variables corresponden a matrices de sustitución, y en la figura 3.6 podemos observar que existe una alta correlación entre ellas. \todo{TODO: Evaluar formas de variar el modelo usando variables que no esten correlacionadas. MRMR?} 
@@ -141,7 +172,6 @@ El algoritmo nos permite identificar los mejores atributos dado su rango en cada
     \label{fig:importance_1}
 \end{figure}
 
-
 % \subsection{Correlación}
 
 \begin{figure}[H]
@@ -150,9 +180,6 @@ El algoritmo nos permite identificar los mejores atributos dado su rango en cada
     \caption{Test de Correlación de Pearson (Significación: 0,05) sobre las variables del dataset estructural. Los valores en blanco poseen un p-valor por debajo del nivel de significación. Se puede observar que GRANTHAM se encuentra altamente anti-correlacionado con las matrices PAM y BLOSUM, mientras que estas se encuentran correlacionadas al igual que con EX.}
     \label{fig:corrplot_1}
 \end{figure}
-
-
-
 
 \section{Modelo usando Variables Genómicas}
 
