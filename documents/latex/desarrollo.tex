@@ -61,10 +61,10 @@ min & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.13 & -12.64 \\ \hline
 75\% & 52.15 & 0.27 & 61.14 & 0.28 & 0.16 & 0.37 & 3.89 \\ \hline
 max & 246.41 & 0.75 & 755.61 & 8.72 & 100.0 & 4.77 & 57.51 \\ \hline
 \end{tabular}
-\caption{Descripción de variables del dataset VarQ Reducido.}
+\caption{Descripción de variables continuas del dataset VarQ Reducido.}
 \end{table}
 
-Por otro lado también estamos interesados en detectar variables con muy poca cobertura. En la figura 1.2 podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variantes (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
+Otro de los puntos importantes durante la exploración del dataset es la detección de variables con muy poca cobertura. En la figura 1.2 podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variantes (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
 
 \begin{figure}[H]
     \centering
@@ -73,7 +73,7 @@ Por otro lado también estamos interesados en detectar variables con muy poca co
     \label{fig:proporcion_nulos_varq}
 \end{figure}
 
-Por último, queremos saber cuantas variables nulas tienen cada una de las variantes del dataset. En la figura 1.3 podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas.
+Otro factor importante a considerar es cuantas variables nulas tienen cada una de las variantes del dataset. En la figura 1.3 podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas.
 
 \begin{figure}[h]
     \centering
@@ -82,16 +82,27 @@ Por último, queremos saber cuantas variables nulas tienen cada una de las varia
     \label{fig:nulos_varq}
 \end{figure}
 
-
 \subsection{Modelo creado a partir del dataset Reducido}
 
-Una vez definido el dataset, podemos generar un modelo estadístico.
+Una vez definido el dataset, podemos usar aprendizaje automático con el objetivo de generar un predictor de variantes patogénicas. Si bien el dataset se encuentra altamente desbalanceado, dado que la cantidad de variantes patogénicas es mucho mayor que la cantidad de variantes benignas, decidimos generar un modelo para poder evaluar de forma preliminar la dificultad del problema. 
+
+Para esto evaluamos diferentes algoritmos de aprendizaje automático: SVM, Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoritmos tuvo tres fases: 
+
+\begin{itemize}
+    \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
+    \item \textbf{Imputación de las variables}: Se reemplazaron los valores nulos de cada variable por su mediana en caso de las continuas y por el valor más frecuente en el caso de las variables categóricas.
+    \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escala los datos de acuerdo a la distancia intercuartil.
+\end{itemize}
 
 
-Si bien la cantidad de variantes patogénicas es mucho mayor que la cantidad de variantes benignas (es decir, el dataset se encuentra desbalanceado) decidimos generar un modelo para poder evaluar de forma superficial la dificultad del problema. Decidimos probar diferentes modelos (SVM, Regresión Logística y Random Forest) (\todo{Mostrar gráfico del rendimiento de cada modelo}), imputando la variables nulas con la mediana y estandarizando, y obtuvimos los mejores resultados en el caso del Random Forest. Cómo se puede observar en la figura 3.2 se obtuvo un AUC de 0,68. 
+Luego del preprocesamiento, para cada uno de los algormitmos se realizó una búsqueda de hiperparámetros óptimos a partir de estos datos con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar los todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{Cross Validation}). \todo{Evaluar RandomizedGridSearch}. En la figura 1.4 podemos observar los resultados obtenidos.
 
-% Dado que la cantidad de variantes patogénicas en el dataset VarQ reducido es mucho mayor que la cantidad de variantes benignas decidimos generar 10 datasets distintos con las 2 mil variantes benignas y un subset aleatorio de 2 mil variantes patogénicas para obtener un conjunto de datasets balanceado de entrenamiento. Los resultados del algoritmo aplicado en cada uno de los datasets se promedió y se tuvo en cuenta la variación entre los resultados al momento de ser reportados. 
-% En cada uno de los datasets se dividieron las variantes en subsets de entrenamiento (2/3 del total) y test (1/3 del total). Se entrenó con distintos algoritmos (Random Forest, Regresión Logística y Support Vector Machine), obteniendo el mejor resultado en el Random Forest. La curva AUC 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.55]{documents/latex/figures/3/resultados_varq.pdf}
+    \caption{Área bajo la curva ROC para cada uno de los algoritmos evaluados: \textit{Random Forest} (RF), \textit{Logistic Regression} (LR) y \textit{Support Vector Classifier} (SVC)}
+    \label{fig:resultados_varq}
+\end{figure}
 
 
 \begin{table}[H]
