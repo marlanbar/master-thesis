@@ -40,12 +40,12 @@ Para trabajar con este dataset decidimos verificar la etiqueta de cada una de la
     \label{fig:interseccion_varq}
 \end{figure}
 
-Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas está rotulada incorrectamente va a generar ruido. Como puede observarse en la figura 3.1, de las 17.869 variantes del dataset, logramos encontrar 2.535 en la tabla de Clinvar, de los cuales sólo 2.397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6.650 variantes de los cuales 4.667 corresponden a patogénicas y 1.983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica. Esto nos deja con un dataset reducido de 7.418 variantes de las cuales 5.377 son patogénicas y 2.041 son benignas. Denominaremos a este dataset \textit{VarQ Reducido}. 
+Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas está rotulada incorrectamente va a generar ruido. Como puede observarse en la figura \ref{fig:interseccion_varq}, de las 17.869 variantes del dataset, logramos encontrar 2.535 en la tabla de Clinvar, de los cuales sólo 2.397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6.650 variantes de los cuales 4.667 corresponden a patogénicas y 1.983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica. Esto nos deja con un dataset reducido de 7.418 variantes de las cuales 5.377 son patogénicas y 2.041 son benignas. Denominaremos a este dataset \textit{VarQ Reducido}. 
 
 
 \subsection{Descripción estadística del dataset VarQ Reducido}
 
-A partir de VarQ Reducido estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la posición y la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes. En la tabla 1.1 podemos ver distintas métricas sobre las variables continuas del dataset como la cantidad de variables con valor no nulo (count), la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
+A partir de VarQ Reducido estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la posición y la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes. En la tabla \ref{tab:descripcion_varq} podemos ver distintas métricas sobre las variables continuas del dataset como la cantidad de variables con valor no nulo (count), la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
 
 \begin{table}[H]
 \centering
@@ -62,9 +62,10 @@ min & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.13 & -12.64 \\ \hline
 max & 246.41 & 0.75 & 755.61 & 8.72 & 100.0 & 4.77 & 57.51 \\ \hline
 \end{tabular}
 \caption{Descripción de variables continuas del dataset VarQ Reducido.}
+\label{tab:descripcion_varq}
 \end{table}
 
-Otro de los puntos importantes durante la exploración del dataset es la detección de variables con muy poca cobertura. En la figura 1.2 podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variantes (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
+Otro de los puntos importantes durante la exploración del dataset es la detección de variables con muy poca cobertura. En la figura \ref{fig:proporcion_nulos_varq} podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variantes (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
 
 \begin{figure}[H]
     \centering
@@ -73,7 +74,7 @@ Otro de los puntos importantes durante la exploración del dataset es la detecci
     \label{fig:proporcion_nulos_varq}
 \end{figure}
 
-Otro factor importante a considerar es cuantas variables nulas tienen cada una de las variantes del dataset. En la figura 1.3 podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas.
+Otro factor importante a considerar es cuantas variables nulas tienen cada una de las variantes del dataset. En la figura \ref{fig:nulos_varq} podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas.
 
 \begin{figure}[h]
     \centering
@@ -91,17 +92,36 @@ Para esto evaluamos diferentes algoritmos de aprendizaje automático: SVM, Regre
 \begin{itemize}
     \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
     \item \textbf{Imputación de las variables}: Se reemplazaron los valores nulos de cada variable por su mediana en caso de las continuas y por el valor más frecuente en el caso de las variables categóricas.
-    \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escala los datos de acuerdo a la distancia intercuartil.
+    \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escalar los datos de acuerdo a la distancia intercuartil.
 \end{itemize}
 
+Luego del preprocesamiento, para cada uno de los algormitmos se realizó una búsqueda de hiperparámetros óptimos a partir de estos datos con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar los todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). En la figura \ref{fig:resultados_varq} podemos observar los resultados obtenidos. Random Forest fue el mejor por una leve diferencia. 
 
-Luego del preprocesamiento, para cada uno de los algormitmos se realizó una búsqueda de hiperparámetros óptimos a partir de estos datos con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar los todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{Cross Validation}). \todo{Evaluar RandomizedGridSearch}. En la figura 1.4 podemos observar los resultados obtenidos.
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.55]{documents/latex/figures/3/resultados_varq.pdf}
     \caption{Área bajo la curva ROC para cada uno de los algoritmos evaluados: \textit{Random Forest} (RF), \textit{Logistic Regression} (LR) y \textit{Support Vector Classifier} (SVC)}
     \label{fig:resultados_varq}
+\end{figure}
+
+\begin{figure}
+\centering
+
+\begin{minipage}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{documents/latex/figures/3/auc_varq.pdf}
+    \caption{Curva AUC del algoritmo Random Forest del dataset VarQ.}
+    \label{fig:auc_varq}
+\end{minipage}
+
+\hfill
+
+\begin{minipage}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{documents/latex/figures/3/importances_varq.pdf}
+    \caption{Los atributos más importantes del dataset VarQ usando un modelo Random Forest.}
+    \label{fig:importance_varq}
+\end{minipage}
+
 \end{figure}
 
 
@@ -119,21 +139,12 @@ Promedio      & 0.68      & 0.69   & 0.65     \\ \hline
 \label{fig:metrics_varq}
 \end{table}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_varq.pdf}
-    \caption{Curva AUC del algoritmo Random Forest del dataset VarQ. La línea punteada corresponde a un predictor Random. \todo{Correr para el nuevo dataset}}
-    \label{fig:auc_varq}
-\end{figure}
 
-En la figura 3.3, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al impacto energético de la mutación.  
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/importances_varq.pdf}
-    \caption{Los atributos más importantes del dataset VarQ usando un modelo Random Forest. \todo{Correr para el nuevo dataset}}
-    \label{fig:importance_varq}
-\end{figure}
+En la figura \ref{fig:importance_varq}, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al impacto energético de la mutación.  
+
+
+\newpage
 
 \section{Modelo usando Propiedades Estructurales de la Proteína}
 
@@ -248,6 +259,8 @@ El algoritmo nos permite identificar los mejores atributos dado su rango en cada
     \label{fig:corrplot_1}
 \end{figure}
 
+\newpage
+
 \section{Modelo usando Variables Genómicas}
 
 Otra de las preguntas que nos hicimos al momento de comenzar este trabajo fue si las variables genómicas podían hacer un aporte al modelo, siendo que en los genes es donde se produce la mutación que finalmente da origen a la variante en la proteína. Como mencionamos preciamente, en la tabla Humsavar existe, para la mayoría de las mutaciones, el RSID o Reference SNP ID. Este identificador agrupa los distintos reportes que hagan referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37). A partir del RSID fue posible la consulta a la base de datos dbSNP (Versión snp150) con el que obtuvimos mayores detalles como ser el cromosoma, la posición y el cambio de nucleótido de la variante. 
@@ -305,7 +318,8 @@ Finalmente, unimos los dos conjuntos de variables para ver si representan una me
     \caption{Los 10 atributos más importantes del dataset integral.}
     \label{fig:importance_3}
 \end{figure}
-Una posible hipótesis que explicaría estos resultados es que las variables del dataset genómico terminan ``eclipsando'' las del dataset estructural, y por lo tanto se pierde el subconjunto de variantes detectados por este último. Una forma de observar este efecto es cuantificar dichas variantes, es decir, ver si efectivamente el dataset estructural esta detectando una cantidad significativa de variantes no encontradas por el model genómico que no aparecen en este nuevo modelo.  Ante esta situación una posible solución es usar algún método de ensamble que consiga potenciar al mejor de los dos modelos agregando las demás. Decidimos probar una serie de métodos clásicos de ensambling: Stacking, Bagging, y Boosting.
+
+Ante esta situación una posible solución es usar algún método de ensamble que consiga potenciar al mejor de los dos modelos agregando las demás. Decidimos probar una serie de métodos clásicos de ensambling: Stacking, Bagging, y Boosting.
 
 \todo{TO DO: Explicar métodos y exponer resultados.}
 \todo{TO DO: Listar diferencias entre las variantes correctamente detectadas de los dos modelos.}
