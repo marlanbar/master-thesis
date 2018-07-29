@@ -139,8 +139,6 @@ Promedio      & 0.68      & 0.69   & 0.65     \\ \hline
 \label{fig:metrics_varq}
 \end{table}
 
-
-
 En la figura \ref{fig:importance_varq}, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al impacto energético de la mutación.  
 
 
@@ -148,14 +146,12 @@ En la figura \ref{fig:importance_varq}, la importancia de los features reportado
 
 \section{Modelo usando Propiedades Estructurales de la Proteína}
 
-En esta sección generamos un nuevo dataset utilizando las variantes de Humsavar (a nivel de proteínas) buscando nuevas fuentes de información de carácter estructural de las proteínas.
-
-Para el análisis de estas variable usamos el dataset de variables de Humsavar, que se compone de 68523 variantes (o ``mutantes'') de las cuales 39655 son variantes benignas (58\%) y 28868 (42\%) están asociadas a enfermedades. 
+En esta sección generamos un nuevo dataset buscando nuevas fuentes de información de carácter estructural de las proteínas. Para el análisis de estas variables usamos la tabla Humsavar completa, compuesto por 68,523 variantes (o ``mutantes'') de las cuales 39,655 son benignas (58\%) y 28,868 (42\%) están asociadas a enfermedades. 
 
 \subsection{Extracción de variables usando Biopython}
 
-La primer fuente que utilizamos por su relativa facilidad en la extracción de un conjunto de variables físico químicas de la proteína fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python desarrollada por colaboradores para el área de la bioinformática, y posee una licencia de uso libre \todo{[citar]}.
-El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la proteína) y está basado en la herramienta del server proteómico Expasy \todo{[citar]}. Requiere el \textit{accession number} de la proteína (identificador único) o una subsecuencia de la misma para poder acceder a los parámetros calculados \todo{[citar]}, que son los siguientes:
+La primera fuente que utilizamos, por su relativa facilidad en la extracción de un conjunto de variables físico químicas de la proteína, fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python, desarrollada por colaboradores para el área de la bioinformática, y posee una licencia de uso libre \todo{[ref]}.
+El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la proteína) y está basado en la herramienta del server proteómico Expasy \todo{[ref]}. Requiere el \textit{accession number} de la proteína (identificador único) o una subsecuencia de la misma, para poder acceder a los parámetros calculados \todo{[ref]}, que son los siguientes:
 
 \begin{itemize}
     \item Peso molecular
@@ -169,7 +165,7 @@ El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la p
     \item Promedio de hidropaticidad
 \end{itemize}
 
-Para poder utilizar el módulo entonces recurrimos a Uniprot para conseguir el proteoma humano en formato FASTA. El formato FASTA fue desarrollado por David Lipman y William Pearson en 1985, y originalmente fue incluido en un programa del mismo nombre utilizado para el alineamiento múltiple de secuencias. Una archivo FASTA puede incluir diferentes secuencias, no necesariamente de aminoácidos, y cada una de estas secuencias posee una línea de descripción al comienzo que empieza con el símbolo $>$ \todo{[citar]}. Por ejemplo:
+Para poder utilizar el módulo ProtParam recurrimos a Uniprot con el fin de conseguir el proteoma humano en formato FASTA. El formato FASTA fue desarrollado por David Lipman y William Pearson en 1985, y originalmente fue incluido en un programa del mismo nombre utilizado para el alineamiento múltiple de secuencias \todo{[ref]}. Una archivo FASTA puede incluir diferentes secuencias, no necesariamente de aminoácidos, y cada una de estas secuencias posee una línea de descripción al comienzo que empieza con el símbolo $>$ \todo{[ref]}. Por ejemplo:
 
 \begin{verbatim}
 	>P01013 GENE X PROTEIN (OVALBUMIN-RELATED)
@@ -180,7 +176,7 @@ Para poder utilizar el módulo entonces recurrimos a Uniprot para conseguir el p
 \end{verbatim}
 
 
-A partir del proteoma obtenido se extrajeron las secuencias correspondientes a las proteínas del dataset Humsavar, y para cada una de ellas se tomó una subsecuencia de la misma alrededor de la posición donde se produjo la variante.
+A partir del proteoma obtenido \todo{[ref]} se extrajeron las secuencias correspondientes a las proteínas del dataset Humsavar, y para cada una de ellas se tomó una subsecuencia de la misma alrededor de la posición donde se produjo la variante.
 
 \vspace{2mm}
 \todo{
@@ -192,18 +188,70 @@ Para cada una de los parámetros calculados en ProtParam, generamos dos variable
 
 \subsection{Extracción de variables usando SNVBox}
 
-Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. \todo{Mencionar algunos papers que usaron esta base}. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV \cite{Wong2011}, como datos sobre la estructura de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano, lo que nos permitió una cobertura alta para las variantes del dataset con el que trabajamos.
-Algunas de las variables encontradas fueron:
+Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. \todo{Mencionar algunos papers que usaron esta base}. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV \cite{Wong2011}, como datos sobre la estructura de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano, lo que nos permitió una cobertura alta para las variantes del dataset con el que trabajamos. Las variables utilizadas fueron:
+
+\subsubsection{Variables sobre cambios en la sustitución del Aminoácido (Estructura Primaria)}
+\begin{itemize}
+    \item Score BLOSUM (AABLOSUM)
+    \item Carga (AACharge)
+    \item Volumen (AAVolume)
+    \item Hidrofobia (AAHydrophobicity)
+    \item Score Grantham (AAGrantham)
+    \item Polaridad (Polarity)
+    \item Score Ex (AAEx)
+    \item Score PAM250 (AAPAM250)
+    \item Score MJ (AAMJ)
+    \item Score HGMD2003 (AAHGMD2003)
+    \item Score VB (AAVB)
+    \item Transición (Transition)
+    \item COSMIC
+    \item COSMICvsSWISSPROT
+    \item HAPMAP
+    \item COSMICvsHAPMAP
+\end{itemize}
+
+\subsubsection{Variables a nivel de Proteína (sin considerar sustitución)}
+
+\begin{itemize}
+    \item BINDING
+    \item ACTIVE\_SITE
+    \item SITE
+    \item LIPID
+    \item BINDING
+    \item ACT\_SITE
+    \item SITE
+    \item LIPID
+    \item METAL
+    \item CARBOHYD
+    \item DNA\_BIND
+    \item NP\_BIND
+    \item CA\_BIND
+    \item DISULFID
+    \item SE\_CYS
+    \item MOD\_RES
+    \item PROPEP
+    \item SIGNALP
+    \item TRANSMEM
+    \item COMPBIAS
+    \item REP
+    \item MOTIF
+    \item ZN\_FING
+    \item REGIONS
+    \item PPI
+    \item RNABD
+    \item TF
+    \item LOC
+    \item MMBRBD
+\end{itemize}
 
 \vspace{2mm}
 \todo{
 TODO:
-1. Lista de variables
-2. Diagrama de SNVBOX
+Diagrama de SNVBOX
 }
 \vspace{2mm}
 
-\subsection{Descripción del \textit{Dataset Estructural}}
+\subsection{Descripción estadística del \textit{Dataset Estructural}}
 
 Luego del proceso del extracción de variables generamos un nuevo dataset cruzando estos atributos con las variantes de Humsavar. En el caso de los atributos relativos a los aminoácidos, pudimos cruzarlos usando la columna del dataset referente al identificador de la proteína, la posición de la variante, y el par de aminoácidos que se intercambiaron. Con los atributos relativos al genoma, pudimos cruzar la información usando la columna RSID (Reference SNP cluster ID). Esta columna identifica a un cluster de variaciones de un sólo nucleótido que pertenece a la misma posición en el genoma (o conjunto de posiciones) \cite{Ostell2007}. 
 El dataset resultante (denominado \textit{Dataset Estructural}) está compuesto por 68,5 mil variantes y 28 variables incluyendo la variable de respuesta (o tipo), de los cuales 39,6 mil son benignas (no se encontraron reportes de enfermedades en la literatura), y 28,8 mil variantes están asociadas a alguna enfermedad. 
@@ -213,7 +261,13 @@ Una de las formas que nos permite ver que tan bien las variables de este dataset
 
 \subsection{Generación del Modelo}
 
-Con este dataset generamos un modelo basado en un predictor Random Forest. Para la búsqueda de hiperparámetros usamos \textit{Grid-Search} (búsqueda ``en cuadrícula''). \todo{TODO: Evaluar RandomSearch}. Las variables se imputaron usando la mediana, y no fueron escalados al no ser necesario en algoritmos de clasificacion basados en árboles de decisión, dado que se evalúan las variables de forma independiente (\todo{cita?}). Se eligió inicialmente este tipo de predictor por ser el que obtuvo los mejores resultados en el dataset VarQ  con respecto a otros predictores (SVMs y Regresión Logística) y para centrar el análisis en cómo las variables afectan al modelo.  
+Con este dataset generamos un modelo basado en un predictor Random Forest. 
+Se eligió inicialmente este tipo de predictor por ser el que obtuvo los mejores resultados en el dataset \textit{VarQ Reducido}  con respecto a otros predictores (SVMs y Regresión Logística). Otras de las ventajas que aporta este modelo
+es su facilidad para explicar la importancia de las variables y su relativa baja complejidad computacional \todo{[Citar?]}. 
+
+Para esto volvimos a generar un Pipeline muy similar al de la sección anterior.
+
+Para la búsqueda de hiperparámetros usamos \textit{Grid-Search} (búsqueda ``en cuadrícula''). \todo{TODO: Evaluar RandomSearch}. Las variables se imputaron usando la mediana, y no fueron escalados al no ser necesario en algoritmos de clasificacion basados en árboles de decisión, dado que se evalúan las variables de forma independiente (\todo{cita?}). 
 
 Como puede observarse en la figura 3.4, a partir de este modelo se obtuvo un AUC de 0,71, que supera lo obtenido por el modelo usando el dataset VarQ. Las métricas observadas en la tabla 3.2 permiten dar cuenta de una precisión del 34\% con respecto a las variantes patogénicas, es decir, el modelo está reportando una 66\% cantidad de variables como patogénicas que no lo son (también conocido como error de tipo I), y un recall de 63\%, lo que indica que existe un 34\% de variables patogénicas en nuestro dataset que no están siendo detectadas por nuestro modelo (error de tipo II). \todo{TODO: Diagrama de errores}.
 
@@ -265,15 +319,27 @@ El algoritmo nos permite identificar los mejores atributos dado su rango en cada
 
 Otra de las preguntas que nos hicimos al momento de comenzar este trabajo fue si las variables genómicas podían hacer un aporte al modelo, siendo que en los genes es donde se produce la mutación que finalmente da origen a la variante en la proteína. Como mencionamos preciamente, en la tabla Humsavar existe, para la mayoría de las mutaciones, el RSID o Reference SNP ID. Este identificador agrupa los distintos reportes que hagan referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37). A partir del RSID fue posible la consulta a la base de datos dbSNP (Versión snp150) con el que obtuvimos mayores detalles como ser el cromosoma, la posición y el cambio de nucleótido de la variante. 
 
+
+\subsection{Variables de Conservación}
+
 En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). Esta \textit{conservación} es un término biológico que refiere a las secuencias conservadas, es decir secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica a en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (el caballo). En base a este alineamiento se usan dos medidas distintas de conservación, \textbf{PhastCons} \cite{siepel2005evolutionarily} y \textbf{PhyloP} \cite{Pollard2010}, que buscan detectar aquellas regiones en el genoma con mayor nivel de conservación entre las distintas especies. Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California, Santa Cruz \cite{Karolchik2004}.
 
+\subsection{Variables relativas a la Clase Funcional}
+
 También tomamos en consideración la función de la posición dentro del gen. La base de datos dbSNP define cada SNP de acuerdo a su clase funcional. Si la variación se encuentra cerca del intervalo de un transcripto, pero no en la región codificante, la clase funcional va a depender de la posición de la variación relativa a la estructura del transcripto \cite{Ostell2007}. Por otro lado, si la variación se encuentra en una zona codificante, la clase funcional se va a definir en base a si el alelo de la variación va a resultar en una sustitución sinónima (es decir, el nuevo codón va a formar el mismo aminoácido), una sustitución no sinónima (es decir, el nuevo codón va a formar un aminoácido distinto) o una sustitución sin sentido (en donde la mutación genera un codón de terminación prematuro).
+
+\subsection{Variables de SNVBox}
+
 Por último, usamos variables genómicas del dataset SNVBox, que calculan la conservación a 46 vías a nivel de exones, y la cantidad de SNPs conocidos en el exón donde se produjo la variante. \todo{TODO: Describir lista de variables del dataset}
 
+\subsection{Descripción estadística del dataset}
 
 A partir del dataset generado (llamado dataset genómico) podemos observar también como las variables permiten separar el dataset en dos clusters mucho mejor discriminados gracias a una combinación entre PCA y t-SNE.
 
 \todo{TODO: Poner gráficos de PCA y t-SNE}
+
+
+\subsection{Generación del Modelo}
 
 Luego de una primera aproximación al problema de encontrar las variables patogénicas generamos un modelo basado en Random Forest (volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ y para facilitar la comparación entre datasets). En este caso volvimos a imputar las variables con su respectiva mediana.Por las razones descriptas en el capítulo anterior tampoco se escalaron las variables. Como se puede observar en la figura 3.7 obtuvimos un AUC de 0,89. 
 Analizando la importancia de las variables (figura 3.8) en el modelo podemos observar que las variables de conservación están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados. Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ no genera un rendimiento similar?
@@ -300,6 +366,9 @@ Como podemos observar en la figura 3.8, el poder informativo de las variables de
 % \subsection{Descripción}
 % \subsection{Correlación}
 % \subsection{Resultados}
+
+
+\newpage
 
 \section{Integrando el dataset estructural y el genómico}
 
