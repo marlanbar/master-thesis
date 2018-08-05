@@ -31,7 +31,7 @@ A continuación damos una descripción detallada de las variables originales enc
 
 \subsection{Limpieza del dataset VarQ Completo}
 
-Para trabajar con este dataset decidimos verificar la etiqueta de cada una de las variantes, para confirmar que su status siguiera vigente. Para esto recurrimos a las fuentes Clinvar y Humsavar. Realizamos un primer filtrado de estas tablas quedándonos con aquellas variables con un status confirmado: en el caso de Humsavar, aquellas que figuran con la expresión \textit{Polymorphism} y \textit{Disease}, mientras que en Clinvar nos quedamos con aquellas que figuraban como \textit{Benign} y \textit{Pathogenic}, eliminando aquellas con caracterización difusa, por ejemplo, ``factor de riesgo''. 
+Para trabajar con este dataset decidimos verificar la etiqueta de cada una de las variantes, de manera de confirmar que su status siguiera vigente. Para esto recurrimos a las fuentes Clinvar y Humsavar. Realizamos un primer filtrado de estas tablas quedándonos con aquellas variables con un status confirmado: en el caso de Humsavar, aquellas que figuran con la expresión \textit{Polymorphism} y \textit{Disease}, mientras que en Clinvar nos quedamos con aquellas que figuraban como \textit{Benign} y \textit{Pathogenic}, eliminando aquellas con caracterización difusa, por ejemplo, ``factor de riesgo''. 
 
 \begin{figure}[H]
     \centering
@@ -40,19 +40,18 @@ Para trabajar con este dataset decidimos verificar la etiqueta de cada una de la
     \label{fig:interseccion_varq}
 \end{figure}
 
-Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas está rotulada incorrectamente va a generar ruido. Como puede observarse en la figura \ref{fig:interseccion_varq}, de las 17.869 variantes del dataset, logramos encontrar 2.535 en la tabla de Clinvar, de los cuales sólo 2.397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6.650 variantes de los cuales 4.667 corresponden a patogénicas y 1.983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica. Esto nos deja con un dataset reducido de 7.418 variantes de las cuales 5.377 son patogénicas y 2.041 son benignas. Denominaremos a este dataset \textit{VarQ Reducido}. 
+Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas estuviera rotulada incorrectamente introduciría ruido. Como puede observarse en la figura \ref{fig:interseccion_varq}, de las 17.869 variantes del dataset, logramos encontrar 2.535 en la tabla de Clinvar, de los cuales sólo 2.397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6.650 variantes de los cuales 4.667 corresponden a patogénicas y 1.983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica, y a menudo presenta conflictos de anotación por discrepancias entre evidencias reportadas. Esto nos deja con un dataset Curado de 7.418 variantes de las cuales 5.377 son patogénicas y 2.041 son benignas. Denominaremos a este dataset \textit{VarQ Curado}. 
 
 
-\subsection{Descripción estadística del dataset VarQ Reducido}
+\subsection{Descripción estadística del dataset VarQ Curado}
 
-A partir de VarQ Reducido estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la posición y la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes. En la tabla \ref{tab:descripcion_varq} podemos ver distintas métricas sobre las variables continuas del dataset como la cantidad de variables con valor no nulo (count), la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
+A partir de VarQ Curado estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes. En la tabla \ref{tab:descripcion_varq} podemos ver distintas métricas sobre las variables continuas del dataset como la cantidad de variables con valor no nulo (count), la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
  & SASA & SASA\% & BFACTOR & SWITCH & AGG & CONS & ENE \\ \hline
-count & 7070.0 & 7070.0 & 7070.0 & 6704.0 & 5335.0 & 2742.0 & 7418.0 \\ \hline
 mean & 32.11 & 0.15 & 56.45 & 0.38 & 5.02 & 0.33 & 2.91 \\ \hline
 std & 39.15 & 0.18 & 71.76 & 0.89 & 17.61 & 0.19 & 4.84 \\ \hline
 min & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.13 & -12.64 \\ \hline
@@ -61,7 +60,7 @@ min & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.13 & -12.64 \\ \hline
 75\% & 52.15 & 0.27 & 61.14 & 0.28 & 0.16 & 0.37 & 3.89 \\ \hline
 max & 246.41 & 0.75 & 755.61 & 8.72 & 100.0 & 4.77 & 57.51 \\ \hline
 \end{tabular}
-\caption{Descripción de variables continuas del dataset VarQ Reducido.}
+\caption{Descripción de variables continuas del dataset \textit{VarQ Curado}.}
 \label{tab:descripcion_varq}
 \end{table}
 
@@ -70,7 +69,7 @@ Otro de los puntos importantes durante la exploración del dataset es la detecci
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.55]{documents/latex/figures/3/proporcion_nulos.pdf}
-    \caption{Proporción de variantes con valor nulo por variable del dataset VarQ Reducido.}
+    \caption{Proporción de variantes con valor nulo por variable del dataset VarQ Curado.}
     \label{fig:proporcion_nulos_varq}
 \end{figure}
 
@@ -79,44 +78,52 @@ Otro factor importante a considerar es cuantas variables nulas tienen cada una d
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.55]{documents/latex/figures/3/nulos_varq.pdf}
-    \caption{Histograma de cantidad de variables nulas del dataset VarQ Reducido.}
+    \caption{Histograma de cantidad de variables nulas del dataset VarQ Curado.}
     \label{fig:nulos_varq}
 \end{figure}
 
-\subsection{Modelo creado a partir del dataset Reducido}
+\subsection{Modelo creado a partir del dataset Varq Curado}
 
-Una vez definido el dataset, podemos usar aprendizaje automático con el objetivo de generar un predictor de variantes patogénicas. Si bien el dataset se encuentra altamente desbalanceado, dado que la cantidad de variantes patogénicas es mucho mayor que la cantidad de variantes benignas, decidimos generar un modelo para poder evaluar de forma preliminar la dificultad del problema. 
+Una vez definido el dataset, podemos emplear técnicas de aprendizaje automático con el objetivo de generar un predictor de variantes patogénicas. Cabe destacar, que en este dataset VarQ Curado hay una sobrerrepresentación de variantes patogénicas, es decir, que presenta un desbalance (mayor número de variantes patogénicas que benignas) que invierte las propociones observadas en el dataset de humsavar. Empezaremos generando un modelo para poder evaluar de forma preliminar la dificultad del problema. 
 
 Para esto evaluamos diferentes algoritmos de aprendizaje automático: SVM, Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoritmos tuvo tres fases: 
 
 \begin{itemize}
     \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
     \item \textbf{Imputación de las variables}: Se reemplazaron los valores nulos de cada variable por su mediana en caso de las continuas y por el valor más frecuente en el caso de las variables categóricas.
-    \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escalar los datos de acuerdo a la distancia intercuartil.
+    \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escalar los datos de acuerdo a la distancia intercuartil como se observa en la ecuación \ref{eq:robust_scalr}.
+    
+    \begin{equation}
+        RobustScaling(x_i) = \frac{x_i - Q_2(\textbf{x})}{Q_3(\textbf{x}) - Q_1(\textbf{x})} 
+        \label{eq:robust_scalr}
+    \end{equation}
+    
+    
+    
 \end{itemize}
 
-Luego del preprocesamiento, para cada uno de los algormitmos se realizó una búsqueda de hiperparámetros óptimos a partir de estos datos con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar los todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). En la figura \ref{fig:resultados_varq} podemos observar los resultados obtenidos. Random Forest fue el mejor por una leve diferencia. 
+Luego del preprocesamiento, para cada uno de los algormitmos se realizó una búsqueda de hiperparámetros óptimos a partir de estos datos con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). Random Forest fue el mejor por una leve diferencia. 
 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/resultados_varq.pdf}
-    \caption{Área bajo la curva ROC para cada uno de los algoritmos evaluados: \textit{Random Forest} (RF), \textit{Logistic Regression} (LR) y \textit{Support Vector Classifier} (SVC)}
-    \label{fig:resultados_varq}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.55]{documents/latex/figures/3/resultados_varq.pdf}
+%     \caption{Área bajo la curva ROC para cada uno de los algoritmos evaluados: \textit{Random Forest} (RF), \textit{Logistic Regression} (LR) y \textit{Support Vector Classifier} (SVC)}
+%     \label{fig:resultados_varq}
+% \end{figure}
 
 \begin{figure}
 \centering
 
-\begin{minipage}[b]{0.5\textwidth}
+\begin{minipage}[b]{0.8\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/auc_varq.pdf}
     \caption{Curva AUC del algoritmo Random Forest del dataset VarQ.}
     \label{fig:auc_varq}
 \end{minipage}
 
 \hfill
+\hfill
 
-\begin{minipage}[b]{0.5\textwidth}
+\begin{minipage}[b]{\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/importances_varq.pdf}
     \caption{Los atributos más importantes del dataset VarQ usando un modelo Random Forest.}
     \label{fig:importance_varq}
@@ -130,27 +137,33 @@ Luego del preprocesamiento, para cada uno de los algormitmos se realizó una bú
 \begin{tabular}{|l|l|l|l|}
 \hline
               & Precisión & Recall & F1-score \\ \hline
-Patogénicas   & 0.62      & 0.27   & 0.38     \\ \hline
-Benignas      & 0.71      & 0.92   & 0.80     \\ \hline
-Promedio      & 0.68      & 0.69   & 0.65     \\ \hline   
+Benignas      & 0.57      & 0.26   & 0.36     \\ \hline
+Patogénicas   & 0.77      & 0.93   & 0.84     \\ \hline
+Promedio      & 0.71      & 0.74   & 0.71     \\ \hline   
 \end{tabular}
-\caption{Reporte de métricas del modelo usando el dataset VarQ.}
+\caption{Reporte de métricas del modelo usando el dataset VarQ Curado.}
 
 \label{fig:metrics_varq}
 \end{table}
 
-En la figura \ref{fig:importance_varq}, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al impacto energético de la mutación.  
-
+En la figura \ref{fig:importance_varq}, la importancia de los features reportado por el algoritmo Random Forest puso en primer lugar con una gran diferencia a la variable que hace referencia al 3DID, que como mencionamos anteriormente determina si la posición sirve para una interfaz proteína-proteína.  
 
 \newpage
 
 \section{Modelo usando Propiedades Estructurales de la Proteína}
 
-En esta sección generamos un nuevo dataset buscando nuevas fuentes de información de carácter estructural de las proteínas. Para el análisis de estas variables usamos la tabla Humsavar completa, compuesto por 68,523 variantes (o ``mutantes'') de las cuales 39,655 son benignas (58\%) y 28,868 (42\%) están asociadas a enfermedades. 
+En esta sección generamos un nuevo dataset buscando nuevas fuentes de información de carácter estructural de las proteínas. Estas variables provienen de dos fuentes principales:
+
+\begin{itemize}
+    \item El módulo ProtParam proveniente de la biblioteca Biopython,
+    \item La base de datos SNVBox del laboratorio Karchin.
+\end{itemize}
+
+Para el análisis de estas variables usamos la tabla Humsavar completa, compuesto por 68,523 variantes (o ``mutantes'') de las cuales 39,655 son benignas (58\%) y 28,868 (42\%) están asociadas a enfermedades. 
 
 \subsection{Extracción de variables usando Biopython}
 
-La primera fuente que utilizamos, por su relativa facilidad en la extracción de un conjunto de variables físico químicas de la proteína, fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python, desarrollada por colaboradores para el área de la bioinformática, y posee una licencia de uso libre \todo{[ref]}.
+La primera fuente que utilizamos, por su relativa practicidad de uso en la extracción de un conjunto de variables físico químicas de la proteína, fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python, desarrollada por colaboradores para el área de la bioinformática, y posee una licencia de uso libre \todo{[ref]}.
 El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la proteína) y está basado en la herramienta del server proteómico Expasy \todo{[ref]}. Requiere el \textit{accession number} de la proteína (identificador único) o una subsecuencia de la misma, para poder acceder a los parámetros calculados \todo{[ref]}, que son los siguientes:
 
 \begin{itemize}
@@ -176,7 +189,7 @@ Para poder utilizar el módulo ProtParam recurrimos a Uniprot con el fin de cons
 \end{verbatim}
 
 
-A partir del proteoma obtenido \todo{[ref]} se extrajeron las secuencias correspondientes a las proteínas del dataset Humsavar, y para cada una de ellas se tomó una subsecuencia de la misma alrededor de la posición donde se produjo la variante.
+A partir del proteoma obtenido se extrajeron las secuencias correspondientes a las proteínas del dataset Humsavar, y para cada una de ellas se tomó una subsecuencia de la misma alrededor de la posición donde se produjo la variante.
 
 \vspace{2mm}
 \todo{
@@ -188,7 +201,7 @@ Para cada una de los parámetros calculados en ProtParam, generamos dos variable
 
 \subsection{Extracción de variables usando SNVBox}
 
-Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. \todo{Mencionar algunos papers que usaron esta base}. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV \cite{Wong2011}, como datos sobre la estructura de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano, lo que nos permitió una cobertura alta para las variantes del dataset con el que trabajamos. Las variables utilizadas fueron:
+Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox \todo{[ref]}. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. \todo{Mencionar algunos papers que usaron esta base}. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV \cite{Wong2011}, como datos sobre la estructura de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano, lo que nos permitió una cobertura alta para las variantes del dataset con el que trabajamos. Las variables utilizadas fueron:
 
 \subsubsection{Variables sobre cambios en la sustitución del Aminoácido (Estructura Primaria)}
 \begin{itemize}
@@ -251,10 +264,10 @@ Diagrama de SNVBOX
 }
 \vspace{2mm}
 
-\subsection{Descripción estadística del \textit{Dataset Estructural}}
+\subsection{Descripción estadística del Dataset Estructural}
 
 Luego del proceso del extracción de variables generamos un nuevo dataset cruzando estos atributos con las variantes de Humsavar. En el caso de los atributos relativos a los aminoácidos, pudimos cruzarlos usando la columna del dataset referente al identificador de la proteína, la posición de la variante, y el par de aminoácidos que se intercambiaron. Con los atributos relativos al genoma, pudimos cruzar la información usando la columna RSID (Reference SNP cluster ID). Esta columna identifica a un cluster de variaciones de un sólo nucleótido que pertenece a la misma posición en el genoma (o conjunto de posiciones) \cite{Ostell2007}. 
-El dataset resultante (denominado \textit{Dataset Estructural}) está compuesto por 68,5 mil variantes y 28 variables incluyendo la variable de respuesta (o tipo), de los cuales 39,6 mil son benignas (no se encontraron reportes de enfermedades en la literatura), y 28,8 mil variantes están asociadas a alguna enfermedad. 
+El dataset resultante (denominado \textit{Dataset Estructural}) está compuesto por 68,5 mil observaciones y 28 variables incluyendo la variable de respuesta (o tipo), de los cuales 39,6 mil son benignas (no se encontraron reportes de enfermedades en la literatura), y 28,8 mil variantes están asociadas a alguna enfermedad. 
 Una de las formas que nos permite ver que tan bien las variables de este dataset están separando nuestros tipos de SNPs, es usar reducción de dimensionalidad. El primer método que probamos fue el análisis de componentes principales (PCA), con el que generamos dos componentes, que son combinaciones lineales de nuestras variables iniciales de forma de maximizar la varianza, es decir el par de componentes que mejor explican la información completa.
 
 \todo{TODO: Poner gráfico de PCA}
@@ -262,104 +275,119 @@ Una de las formas que nos permite ver que tan bien las variables de este dataset
 \subsection{Generación del Modelo}
 
 Con este dataset generamos un modelo basado en un predictor Random Forest. 
-Se eligió inicialmente este tipo de predictor por ser el que obtuvo los mejores resultados en el dataset \textit{VarQ Reducido}  con respecto a otros predictores (SVMs y Regresión Logística). Otras de las ventajas que aporta este modelo
-es su facilidad para explicar la importancia de las variables y su relativa baja complejidad computacional \todo{[Citar?]}. 
+Se eligió inicialmente este tipo de predictor por ser el que obtuvo los mejores resultados en el dataset \textit{VarQ Curado}  con respecto a otros predictores (SVMs y Regresión Logística). Otras de las ventajas que aporta este modelo es su facilidad para explicar la importancia de las variables y su relativa baja complejidad computacional \todo{[Citar?]}. 
 
-Para esto volvimos a generar un Pipeline muy similar al de la sección anterior.
+Para esto volvimos a generar un Pipeline muy similar al de la sección anterior:
 
-Para la búsqueda de hiperparámetros usamos \textit{Grid-Search} (búsqueda ``en cuadrícula''). \todo{TODO: Evaluar RandomSearch}. Las variables se imputaron usando la mediana, y no fueron escalados al no ser necesario en algoritmos de clasificacion basados en árboles de decisión, dado que se evalúan las variables de forma independiente (\todo{cita?}). 
+\begin{itemize}
+\item Para la búsqueda de hiperparámetros usamos \textit{Grid-Search} (búsqueda ``en cuadrícula''). \todo{TODO: Evaluar RandomSearch}. 
+\item Las variables se imputaron usando la mediana en el caso de las variables continuas, y con el valor más frecuente para las variables categóricas. 
+\item Las variables no fueron escaladas al no ser necesario en algoritmos de clasificacion basados en árboles de decisión, dado que se evalúan las variables de forma independiente. 
+\end{itemize}
 
-Como puede observarse en la figura 3.4, a partir de este modelo se obtuvo un AUC de 0,71, que supera lo obtenido por el modelo usando el dataset VarQ. Las métricas observadas en la tabla 3.2 permiten dar cuenta de una precisión del 34\% con respecto a las variantes patogénicas, es decir, el modelo está reportando una 66\% cantidad de variables como patogénicas que no lo son (también conocido como error de tipo I), y un recall de 63\%, lo que indica que existe un 34\% de variables patogénicas en nuestro dataset que no están siendo detectadas por nuestro modelo (error de tipo II). \todo{TODO: Diagrama de errores}.
+
+\subsection{Resultados del Modelo Estructural}
+
+Como puede observarse en la figura \ref{fig:auc_structural}, a partir de este modelo se obtuvo un AUC de 0,71, que supera lo obtenido por el modelo usando el dataset VarQ. Las métricas observadas en la tabla \ref{structural_table} permiten dar cuenta de una precisión del 34\% con respecto a las observaciones patogénicas, es decir, el modelo está reportando una 66\% cantidad de variantes como patogénicas que no lo son (también conocido como error de tipo I), y un recall de 63\%, lo que indica que existe un 34\% de variantes patogénicas en nuestro dataset que no están siendo detectadas por nuestro modelo (error de tipo II). \todo{TODO: Diagrama de errores}.
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
               & Precisión & Recall & F1-score \\ \hline
-Patogénicas   & 0.34      & 0.63   & 0.44     \\ \hline
-Benignas      & 0.88      & 0.67   & 0.76     \\ \hline
-Promedio      & 0.76      & 0.67   & 0.70     \\ \hline
+Benignas      & 0.68      & 0.81   & 0.74     \\ \hline
+Patogénicas   & 0.65      & 0.47   & 0.54     \\ \hline
+Promedio      & 0.66      & 0.67   & 0.66     \\ \hline
 \end{tabular}
 \caption{Métricas del modelo Random Forest aplicado al dataset estructural.}
-\label{my-label}
+\label{structural_table}
 \end{table}
 
-% \subsection{Resultados}
 
-\begin{figure}[h]
+\subsection{Importancia de los atributos}
+
+El algoritmo Random Forest nos permite identificar los mejores atributos dado su rango en cada uno de los árboles del clasificador. En este caso, podemos ver que los primeros cuatro atributos refieren a matrices de sustitución. Los siguientes features pertenecen a ProtParam, como la aromaticidad, la flexibilidad y la hidrofobicidad. La hidrofobicidad, o la capacidad de repeler el agua de la subsecuencia de los aminoácidos, es uno de las variables consideradas relevantes para definir la patogenicidad de una proteína, de acuerdo a \cite{Wang2016}. También en la figura \ref{fig:importances_structural}, se observan variables con un nivel de importancia muy similar, como es el caso de PAM250, EX y BLOSUM. Estas variables corresponden a matrices de sustitución. y en la figura \ref{fig:corrplot_structural} podemos corroborar que existe una alta correlación entre ellas. \todo{TODO: Evaluar formas de variar el modelo usando variables que no esten correlacionadas. MRMR?} 
+
+\begin{figure}
+\centering
+\begin{minipage}[b]{0.8\textwidth}
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_1.pdf}
-    \caption{Curva AUC del algoritmo Random Forest aplicado al dataset estructural. La línea punteada corresponde a un predictor Random.\todo{TODO: Correr modelo con un solo set train y test.}}
-    \label{fig:auc_1}
+    \includegraphics[width=\textwidth]{documents/latex/figures/3/auc_structural.pdf}
+    \caption{Curva AUC del algoritmo Random Forest aplicado al dataset estructural. La línea punteada corresponde a un predictor Random.}
+    \label{fig:auc_structural}
+\end{minipage}
+
+\hfill
+\hfill
+
+\begin{minipage}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{documents/latex/figures/3/importances_structural.pdf}
+    \caption{Los 10 atributos más importantes del modelo Random Forest usando el dataset estructural.}
+    \label{fig:importances_structural}
+\end{minipage}
+
 \end{figure}
 
-% \subsection{Importancia de los atributos}
-
-El algoritmo nos permite identificar los mejores atributos dado su rango en cada uno de los árboles del clasificador. En este caso, podemos ver que los primeros tres atributos refieren a matrices de sustitución. Los siguientes features pertenecen a ProtParam, como la aromaticidad, la flexibilidad y la hidrofobicidad. La hidrofobicidad, o la capacidad de repeler el agua de la subsecuencia de los aminoácidos, es uno de las variables consideradas relevantes para definir la patogenicidad de una proteína, de acuerdo a \cite{Wang2016}. Por el otro lado, podemos observar variables con un nivel de importancia muy similar, como es el caso de PAM25, EX y BLOSUM. Estas variables corresponden a matrices de sustitución, y en la figura 3.6 podemos observar que existe una alta correlación entre ellas. \todo{TODO: Evaluar formas de variar el modelo usando variables que no esten correlacionadas. MRMR?} 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/importance_1.pdf}
-    \caption{Los 10 atributos más importantes del modelo Random Forest usando el dataset estructural. \todo{Falta eje x}}
-    \label{fig:importance_1}
-\end{figure}
 
 % \subsection{Correlación}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{documents/latex/figures/3/corrplot_1.pdf}
-    \caption{Test de Correlación de Pearson (Significación: 0,05) sobre las variables del dataset estructural. Los valores en blanco poseen un p-valor por debajo del nivel de significación. Se puede observar que GRANTHAM se encuentra altamente anti-correlacionado con las matrices PAM y BLOSUM, mientras que estas se encuentran correlacionadas al igual que con EX.}
-    \label{fig:corrplot_1}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.8]{documents/latex/figures/3/corrplot_1.pdf}
+%     \caption{Test de Correlación de Pearson sobre las variables del dataset estructural. Se puede observar que GRANTHAM se encuentra altamente anti-correlacionado con las matrices PAM y BLOSUM, mientras que estas se encuentran correlacionadas al igual que con EX.}
+%     \label{fig:corrplot_structural}
+% \end{figure}
 
 \newpage
 
 \section{Modelo usando Variables Genómicas}
 
-Otra de las preguntas que nos hicimos al momento de comenzar este trabajo fue si las variables genómicas podían hacer un aporte al modelo, siendo que en los genes es donde se produce la mutación que finalmente da origen a la variante en la proteína. Como mencionamos preciamente, en la tabla Humsavar existe, para la mayoría de las mutaciones, el RSID o Reference SNP ID. Este identificador agrupa los distintos reportes que hagan referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37). A partir del RSID fue posible la consulta a la base de datos dbSNP (Versión snp150) con el que obtuvimos mayores detalles como ser el cromosoma, la posición y el cambio de nucleótido de la variante. 
+Otra de las preguntas que nos hicimos fue si las variables genómicas podían hacer un aporte al modelo, siendo en los genes es donde se produce la mutación que finalmente da origen a la variante en la proteína. En la tabla Humsavar existe, para la mayoría de las mutaciones, el identificador RSID o Reference SNP ID. Un identificador RSID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) datos como ser el cromosoma, la posición y el cambio de nucleótido de la variante. 
 
 
 \subsection{Variables de Conservación}
 
-En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). Esta \textit{conservación} es un término biológico que refiere a las secuencias conservadas, es decir secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica a en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (el caballo). En base a este alineamiento se usan dos medidas distintas de conservación, \textbf{PhastCons} \cite{siepel2005evolutionarily} y \textbf{PhyloP} \cite{Pollard2010}, que buscan detectar aquellas regiones en el genoma con mayor nivel de conservación entre las distintas especies. Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California, Santa Cruz \cite{Karolchik2004}.
+En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). Esta \textit{conservación} es un término biológico que refiere a las secuencias conservadas, es decir secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (el caballo). En base a este alineamiento se usan dos medidas distintas de conservación, \textbf{PhastCons} \cite{siepel2005evolutionarily} y \textbf{PhyloP} \cite{Pollard2010}, que buscan detectar aquellas regiones en el genoma con mayor nivel de conservación entre las distintas especies. Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California, Santa Cruz \cite{Karolchik2004}.
 
 \subsection{Variables relativas a la Clase Funcional}
 
 También tomamos en consideración la función de la posición dentro del gen. La base de datos dbSNP define cada SNP de acuerdo a su clase funcional. Si la variación se encuentra cerca del intervalo de un transcripto, pero no en la región codificante, la clase funcional va a depender de la posición de la variación relativa a la estructura del transcripto \cite{Ostell2007}. Por otro lado, si la variación se encuentra en una zona codificante, la clase funcional se va a definir en base a si el alelo de la variación va a resultar en una sustitución sinónima (es decir, el nuevo codón va a formar el mismo aminoácido), una sustitución no sinónima (es decir, el nuevo codón va a formar un aminoácido distinto) o una sustitución sin sentido (en donde la mutación genera un codón de terminación prematuro).
 
-\subsection{Variables de SNVBox}
+\subsection{Extracción de variables usando SNVBox}
 
 Por último, usamos variables genómicas del dataset SNVBox, que calculan la conservación a 46 vías a nivel de exones, y la cantidad de SNPs conocidos en el exón donde se produjo la variante. \todo{TODO: Describir lista de variables del dataset}
 
-\subsection{Descripción estadística del dataset}
+\subsection{Descripción estadística del \textit{Dataset Genómico}}
 
-A partir del dataset generado (llamado dataset genómico) podemos observar también como las variables permiten separar el dataset en dos clusters mucho mejor discriminados gracias a una combinación entre PCA y t-SNE.
+A partir del dataset generado (\textit{Dataset Genómico}) podemos observar también cómo las variables permiten separar el dataset en dos clusters mucho mejor discriminados gracias a una combinación entre las técnicas de reducción de dimensionalidad PCA y t-SNE.
 
 \todo{TODO: Poner gráficos de PCA y t-SNE}
 
 
 \subsection{Generación del Modelo}
 
-Luego de una primera aproximación al problema de encontrar las variables patogénicas generamos un modelo basado en Random Forest (volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ y para facilitar la comparación entre datasets). En este caso volvimos a imputar las variables con su respectiva mediana.Por las razones descriptas en el capítulo anterior tampoco se escalaron las variables. Como se puede observar en la figura 3.7 obtuvimos un AUC de 0,89. 
-Analizando la importancia de las variables (figura 3.8) en el modelo podemos observar que las variables de conservación están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados. Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ no genera un rendimiento similar?
+Luego de realizada la exploración del dataset generamos un modelo basado en Random Forest. Volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ y para facilitar la comparación entre datasets. Este modelo se compone de un \textit{pipeline} de dos fases principales: Imputación, y Entrenamiento. En la fase de imputación se reemplazo los valores nulos por el valor más frecuente en el caso de las variables categóricas (por ejemplo las referentes a las clases funcionales) y con la mediana para las variables continuas. Las variables no fueron escaladas dado que en los algoritmos que involucran árboles de decisión, como Random Forest, las variables son evaluadas una a una y por lo tanto la escala de cada una de ellas no afecta la evaluación de las demás.
+
+Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0,89. Este resultado es muy superior a los obtenidos en los modelos anteriores, tanto en \textit{VarQ Curado} como el \textit{Estructural}. 
+Analizando la importancia de las variables en el modelo, en la figura \ref{fig:importances_genomic} podemos observar que las variables de conservación están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados. Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ no genera un rendimiento similar?
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_2.pdf}
+    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_genomic.pdf}
     \caption{Curva AUC del algoritmo Random Forest usando el dataset genómico. La línea punteada corresponde a un predictor Random.}
-    \label{fig:auc_2}
+    \label{fig:auc_genomic}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/importance_2.pdf}
-    \caption{Los 10 atributos más importantes del dataset genómico usando un modelo Random Forest. \todo{Falta eje X}}
-    \label{fig:importance_2}
+    \includegraphics[scale=0.55]{documents/latex/figures/3/importances_genomic.pdf}
+    \caption{Los 10 atributos más importantes del dataset genómico usando un modelo Random Forest.}
+    \label{fig:importances_genomic}
 \end{figure}
 
-Como podemos observar en la figura 3.8, el poder informativo de las variables de conservación es muy similar. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? La figura \todo{[x]} da una respuesta afirmativa a esta pregunta \todo{TODO: Hacer gráfico de correlación}. 
+Como podemos observar en la figura \ref{fig:importances_genomic}, el poder informativo de las variables de conservación es muy similar. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? En la figura \todo{[x]} podemos observar que estas variables se encuentran correlacionadas.  \todo{TODO: Hacer gráfico de correlación}. 
 
 \todo{TODO: Gráfico de correlación y observaciones}
 
@@ -372,20 +400,24 @@ Como podemos observar en la figura 3.8, el poder informativo de las variables de
 
 \section{Integrando el dataset estructural y el genómico}
 
-Finalmente, unimos los dos conjuntos de variables para ver si representan una mejora frente a los ya excelentes resultados del modelo genómico. El modelo utilizado fue nuevamente Random Forest con imputación usando la mediana. Como se puede observar en la figura 3.9, no hubo una mejora significativa con respecto a los otros modelos. Las variables de conservación siguen encabezando la lista de las variables más importantes del modelo. Una posible hipótesis que explicaría estos resultados es que las variables del dataset genómico terminan ``eclipsando'' las del dataset estructural, y por lo tanto se pierde el subconjunto de variantes detectados por este último. Una forma de observar este efecto es cuantificar dichas variantes, es decir, ver si efectivamente el dataset estructural esta detectando una cantidad significativa de variantes no encontradas por el model genómico que no aparecen en este nuevo modelo. 
+Finalmente, unimos los dos conjuntos de variables para ver si la integración de ambos datasets representan una mejora frente a los resultados del modelo genómico. A este nuevo dataset lo denominamos \textit{Dataset Integral}. Las variantes usadas fueron las encontradas en la tabla Humsavar. 
+
+\subsection{Generación del Modelo}
+
+Para este modelo preliminar volvimos a utilizar Random Forest, repitiendo las dos fases de imputación y entrenamiento. En la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. Como se puede observar en la figura \ref{fig:auc_integral}, no hubo una mejora significativa con respecto a los otros modelos. Un análisis de \textit{Feature Importance} muestra que las variables de conservación siguen encabezando la lista de las variables más importantes del modelo (ver figura \ref{fig:importances_integral}). Una posible hipótesis que explicaría estos resultados es que las variables del dataset genómico aparecen en la mayoría de los árboles y permiten dividir mucho más eficientemente las variantes que las del dataset estructural, y por lo tanto se pierde el subconjunto de observaciones detectadas por la información de este dataset. Una forma de observar este efecto es cuantificar dichas variantes, es decir, ver si efectivamente el dataset estructural esta detectando una cantidad significativa de variantes no encontradas por el model genómico que no aparecen en este nuevo modelo. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_3.pdf}
+    \includegraphics[scale=0.55]{documents/latex/figures/3/auc_integral.pdf}
     \caption{Curva AUC del algoritmo Random Forest del dataset integral. La línea punteada corresponde a un predictor Random.}
-    \label{fig:auc_3}
+    \label{fig:auc_integral}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/importance_3.pdf}
+    \includegraphics[scale=0.55]{documents/latex/figures/3/importances_integral.pdf}
     \caption{Los 10 atributos más importantes del dataset integral.}
-    \label{fig:importance_3}
+    \label{fig:importances_integral}
 \end{figure}
 
 Ante esta situación una posible solución es usar algún método de ensamble que consiga potenciar al mejor de los dos modelos agregando las demás. Decidimos probar una serie de métodos clásicos de ensambling: Stacking, Bagging, y Boosting.
