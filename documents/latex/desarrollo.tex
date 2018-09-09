@@ -68,17 +68,6 @@ ENE     & 2.91  & 4.84  & -12.64 & 0.26  & 1.51  & 3.89 & 57.21 & 0.68\\ \hline
 \label{tab:descripcion_varq_cont}
 \end{table}
 
-Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top). Para este tipo de variables quisimos también cuantificar su poder predictivo individual. El cálculo mediante AUC no es posible dado que los únicos valores posibles de estas variables son dos, por lo que no tiene sentido considerar modificar el \textit{threshold} en sólo un punto de corte. Por lo tanto decidimos calcular el \textit{Balanced Accuracy} como medida de poder predictivo considerando el valor de la variable como predictor de la variante. En la tabla \ref{tab:descripcion_varq_cat} podemos ver que el BACC de las variables 3DID y PDB es bajo. 
-
-\pagebreak
-
-El \textit{Balanced Accuracy} (BACC) es igual a:
-\begin{equation*}
-    \frac{1}{2} (\frac{TP}{P} + \frac{TN}{N})
-\end{equation*}
-
-
-
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
@@ -90,6 +79,15 @@ PDB  & False  & 6696 & 0.49\\ \hline
 \caption{Descripción de variables categóricas del dataset \textit{VarQ Curado}.}
 \label{tab:descripcion_varq_cat}
 \end{table}
+
+Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top). Para este tipo de variables quisimos también cuantificar su poder predictivo individual. El cálculo mediante AUC no es posible dado que los únicos valores posibles de estas variables son dos, por lo que no tiene sentido considerar modificar el \textit{threshold} en sólo un punto de corte. Por lo tanto decidimos calcular el \textit{Balanced Accuracy} como medida de poder predictivo considerando el valor de la variable como predictor de la variante. En la tabla \ref{tab:descripcion_varq_cat} podemos ver que el BACC de las variables 3DID y PDB es de 0.51 y 0.49 respectivamente. 
+
+\newpage
+
+El \textit{Balanced Accuracy} (BACC) es igual a:
+\begin{equation*}
+    \frac{1}{2} (\frac{TP}{P} + \frac{TN}{N})
+\end{equation*}
 
 Otro de los puntos importantes durante la exploración del dataset es la detección de variables con muy poca cobertura. En la figura \ref{fig:proporcion_nulos_varq} podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variante (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
 
@@ -109,16 +107,20 @@ Otro factor importante a considerar es cuantas variables nulas tienen cada una d
     \label{fig:nulos_varq}
 \end{figure}
 
-Finalmente, también queremos conocer que tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98.
+
+
+\subsubsection{Correlación entre las variables de VarQ}
+
+También queremos conocer que tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/varq_corrplot.pdf}
+    \includegraphics[scale=0.8]{documents/latex/figures/3/varq/varq_corrplot.pdf}
     \caption{Correlación de Spearman para las variables de VarQ Curado.}
     \label{fig:varq_corrplot}
 \end{figure}
 
-\pagebreak
+\newpage
 
 \subsection{Modelo creado a partir del dataset Varq Curado}
 
@@ -176,7 +178,6 @@ Patogénicas   & 0.77      & 0.93   & 0.84     \\ \hline
 Promedio      & 0.71      & 0.74   & 0.71     \\ \hline
 \end{tabular}
 \caption{Reporte de métricas del modelo Random Forest usando el dataset VarQ Curado.}
-
 \label{tab:metrics_varq}
 \end{table}
 
@@ -189,12 +190,12 @@ La precisión del modelo indica un número marcadamente bajo (0.57) en la clase 
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}{0.8\textwidth}
+\begin{subfigure}{0.7\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/varq/auc_varq.pdf}
     \caption{Curva ROC del algoritmo Random Forest del dataset VarQ. La línea punteada corresponde a la curva ROC de un estimador aleatorio, o \textit{Random}, cuyo AUC es igual a 0.5.}
     \label{fig:auc_varq}
 \end{subfigure}
-\begin{subfigure}{0.8\textwidth}
+\begin{subfigure}{0.7\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/varq/importances_varq.pdf}
     \caption{Los atributos del dataset VarQ en orden de importancia usando un modelo Random Forest. La barra de error corresponde al desvío estándar del \textit{Feature Importance} de cada uno de los árboles del modelo.}
     \label{fig:importance_varq}
@@ -242,23 +243,31 @@ Para poder utilizar el módulo ProtParam recurrimos a Uniprot con el fin de cons
 A partir del proteoma obtenido se extrajeron las secuencias correspondientes a las proteínas del dataset Humsavar, y para cada una de ellas se tomó una subsecuencia de la misma alrededor de la posición donde se produjo la variante.
 
 
-    % \begin{figure}
-    % \begin{textopo}
-    %   \labelstyle{hl}{diamond}{Black}{Blue}{White}{}
-    %   \sequence{PQALPSV[LQIAMAFGLAIGTLVQALG]HV%
-    %   SGAH[([NNE,30]hl[box[Black,Blue]:Half loop[White]]=INPAVTVACL)]VGCHVSFLR}
-    %   \Nterm{extra} \hideNterm \hideCterm \hidelegend \labelTM{1}{II}
-    %   \labeloutside[right]{extra}
-    % \end{textopo}
-    % \caption{A `half loop' example}\label{fighalf}
-    % \end{figure}
 
 
-\vspace{2mm}
-\todo{
-TODO: Esquema de la subsecuencia
-} 
-\vspace{2mm}
+% \begin{figure}
+% \begin{textopo}
+%   \labelstyle{hl}{diamond}{Black}{Blue}{White}{}
+%   \sequence{PQALPSV[LQIAMAFGLAIGTLVQALG]HV%
+%   SGAH[([NNE,30]hl[box[Black,Blue]:Half loop[White]]=INPAVTVACL)]VGCHVSFLR}
+%   \Nterm{extra} \hideNterm \hideCterm \hidelegend \labelTM{1}{II}
+%   \labeloutside[right]{extra}
+% \end{textopo}
+% \caption{A `half loop' example}\label{fighalf}
+% \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.50]{documents/latex/figures/3/structural/sequence_window.png}
+    \caption{Secuencia de aminoácidos de la proteína Arilacetamida deacetilasa (Q5VUY0). La ventana de la subsecuencia esta marcada en rojo, y la posición verde es la mutación estudiada. En este caso la Metionina en la posición 307 fue reemplazada por una Isoleucina.}
+    \label{fig:sequence_window}
+\end{figure}
+
+% \vspace{2mm}
+% \todo{
+% TODO: Esquema de la subsecuencia
+% } 
+% \vspace{2mm}
 
 Para cada una de los parámetros calculados en ProtParam, generamos dos variables que buscan reflejar la diferencia generada por la variante. 
 
@@ -345,6 +354,7 @@ Luego del proceso del extracción de variables generamos un nuevo dataset cruzan
 \subsubsection{Variables extraídas de Protparam}
 
 \begin{table}[H]
+\centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
 Variable & mean & std & min & 25\% & 50\%  & 75\%  & AUC \\ \hline
@@ -366,6 +376,7 @@ FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.53 \\ \hline
 \subsubsection{Variables extraídas de SNVBox relativas a sustitución de aminoácidos}
 
 \begin{table}[H]
+\centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
 Variable & mean   & std    & min    & 25\%  & 50\%   & 75\%   & AUC    \\ \hline
@@ -385,7 +396,7 @@ TRANSITION        & 0.00   & 0.00   & 0.00   & 0.00  & 0.00   & 0.00   & 0.53   
 
 \subsubsection{Variables extraídas de SNVBox relativas a proteínas}
 
-Estas variables son todas categóricas de tipo \textit{Boolean} por lo que destacamos dos datos de relevancia. Todas estas variables tienen un coverage del 31.5\% del dataset, y cada una de ellas poseen valor Falso para un porcentaje superior al 90\% de las variantes de la tabla, exceptuando la variable \textbf{TRANSMEM} (82\%), \textbf{REP} (87\%), \textbf{REGIONS} (70\%) y \textbf{PPI} (87\%).
+Estas variables son todas categóricas de tipo \textit{Boolean} por lo que destacamos dos datos de relevancia. Todas estas variables tienen una cobertura para aproximadamente el 31.5\% de las variantes del dataset, y cada una de ellas poseen valor Falso para un porcentaje superior al 90\% de las variantes de la tabla, exceptuando las variables \textbf{TRANSMEM} (82\%), \textbf{REP} (87\%), \textbf{REGIONS} (70\%) y \textbf{PPI} (87\%).
 
 
 \subsubsection{Correlación entre las variables}
@@ -393,11 +404,11 @@ Estas variables son todas categóricas de tipo \textit{Boolean} por lo que desta
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.25]{documents/latex/figures/3/structural/structural_corr.pdf}
-    \caption{Correlación de Spearman para las variables del Dataset Estructural.}
+    \caption{Correlación de Spearman para las variables continuas del Dataset Estructural.}
     \label{fig:corrplot_structural}
 \end{figure}
 
-Por último, deseamos analizar la correlación entre las variables. Para esto usamos la correlación de Spearman dado que nos permite identificar correlaciones monotónicas. En la figura \ref{fig:corrplot_structural} podemos apreciar un cluster principal de variables altamente correlacionadas: Las matrices de sustitución (Grantham, BLOSUM, JM, y EX). Por otro lado, encontramos a las variables POLARITY y HYDROPHOBICITY correlacionadas entre sí (0.79), como también a las variables CHARGE y ISOELECTRIC\_POINT\_LOG\_RATIO (0.78).
+Por último, deseamos analizar la correlación entre las variables. Para esto usamos la correlación de Spearman dado que nos permite identificar correlaciones monotónicas. En la figura \ref{fig:corrplot_structural} podemos apreciar un cluster principal de variables altamente correlacionadas: Las matrices de sustitución (Grantham, BLOSUM, JM, y EX). Por otro lado, encontramos a las variables POLARITY y HYDROPHOBICITY correlacionadas entre sí (0.79), como también a las variables CHARGE y ISOELECTRIC\_POINT\_LOG\_RATIO (0.78). Para este análisis decidimos excluir a las variables categóricas por tratarse de variables de tipo binarias con baja cobertura. 
 
 
 % \subsubsection{Análisis de reducción de dimensionalidad}
@@ -405,7 +416,7 @@ Por último, deseamos analizar la correlación entre las variables. Para esto us
 % Una de las formas que nos permite ver que tan bien las variables de este dataset están separando nuestros tipos de SNPs, es usar reducción de dimensionalidad. El primer método que probamos fue el análisis de componentes principales (PCA), con el que generamos dos componentes, que son combinaciones lineales de nuestras variables iniciales de forma de maximizar la varianza, es decir el par de componentes que mejor explican la información completa.
 
 
-% \newpage
+\newpage
 
 
 \subsection{Generación del Modelo}
@@ -436,7 +447,7 @@ Benignas      & 0.68      & 0.81   & 0.74     \\ \hline
 Patogénicas   & 0.65      & 0.47   & 0.54     \\ \hline
 Promedio      & 0.66      & 0.67   & 0.66     \\ \hline
 \end{tabular}
-\caption{Métricas del modelo Random Forest aplicado al dataset estructural.}
+\caption{Métricas del modelo Random Forest aplicado al Dataset Estructural.}
 \label{structural_table}
 \end{table}
 
@@ -449,7 +460,7 @@ El algoritmo Random Forest nos permite identificar los mejores atributos dado su
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.8\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/structural/auc_structural.pdf}
     \caption{Curva AUC del algoritmo Random Forest aplicado al dataset estructural. La línea punteada corresponde a un predictor Random.}
@@ -459,7 +470,7 @@ El algoritmo Random Forest nos permite identificar los mejores atributos dado su
 \hfill
 \hfill
 
-\begin{subfigure}[b]{\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/structural/importances_structural.pdf}
     \caption{Los 10 atributos más importantes del modelo Random Forest usando el dataset estructural.}
@@ -468,18 +479,20 @@ El algoritmo Random Forest nos permite identificar los mejores atributos dado su
 
 \end{figure}
 
+\newpage
+
 \section{Modelo usando Variables Genómicas}
 
 Otra de las preguntas que nos hicimos fue si las variables genómicas podían hacer un aporte al modelo, siendo en los genes es donde se produce la mutación que finalmente da origen a la variante en la proteína. En la tabla Humsavar existe, para la mayoría de las mutaciones, el identificador rsID o Reference SNP ID. Un identificador rsID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) datos como el cromosoma, la posición y el cambio de nucleótido de la variante. 
 
 \subsection{Variables de Conservación}
 
-En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). Esta \textit{conservación} es un término biológico que refiere a las secuencias conservadas, es decir secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (el caballo). En base a este alineamiento se usan dos medidas distintas de conservación:
+En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). La \textit{conservación} es un término biológico que refiere a las secuencias conservadas, es decir secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (el caballo). En base a este alineamiento se usan dos medidas distintas de conservación:
 \begin{itemize}
     \item \textbf{PhastCons-46-Way} \cite{siepel2005evolutionarily}
     \item \textbf{PhyloP-46-Way} \cite{Pollard2010}
 \end{itemize}
-Ambas variables buscan detectar aquellas regiones en el genoma con mayor nivel de conservación entre las distintas especies. Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California, Santa Cruz \cite{Karolchik2004}.
+Ambas variables buscan detectar aquellas regiones en el genoma (ADN) con mayor nivel de conservación entre las distintas especies. Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California en Santa Cruz (UCSC). \cite{Karolchik2004}.
 
 \subsection{Variables relativas a la Clase Funcional}
 
@@ -503,91 +516,116 @@ También tomamos en consideración la función de la posición dentro del gen. L
 
 \subsection{Extracción de variables usando SNVBox}
 
-Por último, usamos variables genómicas del dataset SNVBox, en particular de la tabla \texttt{Exon\_Features}. Las variables usadas son:
+Por último, usamos variables genómicas del dataset SNVBox, específicamente de \texttt{Exon\_Features}. 
+Las variables usadas son:
 \begin{itemize}
-    \item ExonConservation (CONS): Score de Conservación para el exón completo calculado a partir de una alineación filogenética a 46 vías.
+    \item ExonConservation (CONS): Score de Conservación para el exón completo calculado a partir de una alineación filogenética a 46 vías, usando el \textit{Genome Browser}. Si bien existe una gran similitud con las variables de conservación que ya incluimos en el dataset decidimos incluir esta variable debido a su baja correlación con las mencionadas anteriormente (ver descripción estadística del dataset).
     \item ExonHapMapSnpDensity (HAPMAP\_SNP\_DEN): Número de SNPs (verificados en HapMap) en el exón donde ocurre la mutación dividido por la longitud del exón.
     \item ExonSnpDensity (SNP\_DEN): Número de SNPs en el exón donde ocurre la mutación dividido por la longitud del exón.
 \end{itemize}
 
-Estas variables estaban definidas a nivel de exón, por lo que cada una de ellas poseía dos  identificadores UID (identificador de la secuencia proteica) y EXON (identificador del exón dentro de cada transcripto mRNA). Estos identicadores permitían en cruce con la tabla \texttt{Transcript\_Exon} dentro de la base SNVBox. Esta tabla a su vez obtener el número del cromosoma del exón, y la posición de inicio y fin del exón dentro del cromosoma. Una vez obtenidos estos datos, pudimos extraer todos los rsID dentro de esa subsecuencia. Finalmente, le asignamos el valor de la variable a todos los rsIDs en nuestra tabla Humsavar. Para algunos casos obtuvimos más de un valor para un mismo rsID, por lo que tomamos la decisión de promediarlos.
+Estas variables estaban definidas a nivel de exón, por lo que cada una de ellas poseía dos identificadores: UID (identificador de la secuencia proteica a la que pertenece) y EXON (identificador del exón dentro de cada transcripto mRNA). Estos identicadores permitían el cruce con la tabla \texttt{Transcript\_Exon} dentro de la base SNVBox. Esta tabla a su vez obtener el número del cromosoma del exón, y la posición de inicio y fin del exón dentro del cromosoma. Una vez obtenidos estos datos, pudimos extraer todos los rsID dentro de esa subsecuencia. Finalmente, le asignamos el valor de la variable a todos los rsIDs en nuestra tabla Humsavar. Para algunos casos obtuvimos más de un valor para un mismo rsID, por lo que tomamos la decisión de promediarlos.
 
 \todo{Esquema de acceso a la variable}
 
 \subsection{Construcción del Dataset Genómico}
 
-Con los atributos mencionados anteriormente, pudimos cruzar la información usando la columna rsID (Reference SNP cluster ID). Esta columna identifica a un cluster de variaciones de un sólo nucleótido que pertenece a la misma posición en el genoma (o conjunto de posiciones) \cite{Ostell2007}. Filtramos las variantes de Humsavar que no poseían este identificador. Finalmente el Dataset Genómico se compone de 55,382 variantes de las cuales 37,572 (68\%) variantes son benignas y 17,807 (32\%) son patogénicas.
+Con los atributos mencionados anteriormente, pudimos cruzar la información usando la columna rsID (Reference SNP cluster ID). Esta columna identifica a un cluster de variaciones de un sólo nucleótido que pertenece a la misma posición en el genoma (o conjunto de posiciones) \cite{Ostell2007}. Filtramos las variantes de Humsavar que no poseían este identificador. Finalmente el Dataset Genómico se compone de 55,382 variantes de las cuales 37,572 (68\%) variantes son benignas y 17,807 (32\%) son patogénicas. 
 
 \subsection{Descripción estadística del Dataset Genómico}
+
+A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas. Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), y los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). También incluimos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional.
 
 \subsubsection{Variables de Conservación}
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
-Variable & count & mean   & std    & min    & 25\%  & 50\%   & 75\%   & max    \\ \hline
-PHYLOP46WAY &  54389 &  2.16 &  2.29 & -8.22 &  0.29 &  1.81 &  4.23 &  6.42 \\ \hline
-PHASTCONS46WAY &  54389 &  0.67 &  0.44 &  0.00 &  0.06 &  0.99 &  1.00 &  1.00 \\ \hline
-\end{tabular}
-\end{table}
-
-
-
-\subsubsection{Variables relativas a la Clase Funcional}
-\begin{table}[H]
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
-\hline
-Variable     & count    & mean & std  & min  & 25\% & 50\% & 75\% & max  \\ \hline
-INTRON       & 54849.00 & 0.14 & 0.34 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-MISSENSE     & 54849.00 & 0.99 & 0.10 & 0.00 & 1.00 & 1.00 & 1.00 & 1.00 \\ \hline
-NEAR-GENE    & 54849.00 & 0.06 & 0.24 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-NCRNA        & 54849.00 & 0.17 & 0.38 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-CODING-SYNON & 54849.00 & 0.02 & 0.14 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-UNTRANSLATED & 54849.00 & 0.05 & 0.23 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-NONSENSE     & 54849.00 & 0.01 & 0.07 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-SPLICE       & 54849.00 & 0.00 & 0.02 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
-STOP-LOSS    & 54849.00 & 0.00 & 0.01 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+Variable & mean & std & min & 25\%  & 50\% & 75\%  & max & AUC \\ \hline
+PHYLOP46WAY & 2.16 &  2.29 & -8.22 &  0.29 &  1.81 &  4.23 &  6.42 & 0.47 \\ \hline
+PHASTCONS46WAY & 0.67 & 0.44 &  0.00 &  0.06 &  0.99 &  1.00 &  1.00 & 0.48 \\ \hline
 \end{tabular}
 \end{table}
 
 \subsubsection{Variables extraídas de SNVBox a nivel de Exón}
 \begin{table}[H]
+\centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
-Variable         & count    & mean & std  & min  & 25\% & 50\% & 75\% & max  \\ \hline
-CONS             & 54326.00 & 0.65 & 0.09 & 0.14 & 0.59 & 0.66 & 0.72 & 0.90 \\ \hline
-SNP\_DEN         & 54326.00 & 0.06 & 0.10 & 0.00 & 0.03 & 0.04 & 0.06 & 1.04 \\ \hline
-HAPMAP\_SNP\_DEN & 54326.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 \\ \hline
+Variable         & mean & std  & min  & 25\% & 50\% & 75\% & max & AUC  \\ \hline
+CONS             & 0.65 & 0.09 & 0.14 & 0.59 & 0.66 & 0.72 & 0.90 & 0.47 \\ \hline
+SNP\_DEN         & 0.06 & 0.10 & 0.00 & 0.03 & 0.04 & 0.06 & 1.04 & 0.47 \\ \hline
+HAPMAP\_SNP\_DEN & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 & 0.49 \\ \hline
 \end{tabular}
 \end{table}
 
-
-
+% \subsubsection{Variables relativas a la Clase Funcional}
+% \begin{table}[H]
+% \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+% \hline
+% Variable     & count    & mean & std  & min  & 25\% & 50\% & 75\% & max  \\ \hline
+% INTRON       & 54849.00 & 0.14 & 0.34 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% MISSENSE     & 54849.00 & 0.99 & 0.10 & 0.00 & 1.00 & 1.00 & 1.00 & 1.00 \\ \hline
+% NEAR-GENE    & 54849.00 & 0.06 & 0.24 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% NCRNA        & 54849.00 & 0.17 & 0.38 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% CODING-SYNON & 54849.00 & 0.02 & 0.14 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% UNTRANSLATED & 54849.00 & 0.05 & 0.23 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% NONSENSE     & 54849.00 & 0.01 & 0.07 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% SPLICE       & 54849.00 & 0.00 & 0.02 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% STOP-LOSS    & 54849.00 & 0.00 & 0.01 & 0.00 & 0.00 & 0.00 & 0.00 & 1.00 \\ \hline
+% \end{tabular}
+% \end{table}
 
 
 \subsubsection{Correlación entre las variables}
 
+Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta correlación entre las variables de conservación phyloP y phastCons (0.82). Por otro lado, la correlación entre ExonHapMapSnpDensity y ExonSnpDensity es muy baja (0.06), pese a que su construcción es muy similar.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/genomic/genomic_corr.pdf}
+    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/genomic_corr.pdf}
     \caption{Correlación de Spearman para las variables continuas del Dataset Genómico.}
     \label{fig:corrplot_genomic}
 \end{figure}
+
+% \newpage
 
 \subsection{Generación del Modelo}
 
 Luego de realizada la exploración del dataset generamos un modelo basado en Random Forest. Volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ y para facilitar la comparación entre datasets. Este modelo se compone de un \textit{pipeline} de dos fases principales: Imputación, y Entrenamiento. En la fase de imputación se reemplazo los valores nulos por el valor más frecuente en el caso de las variables categóricas (por ejemplo las referentes a las clases funcionales) y con la mediana para las variables continuas. Las variables no fueron escaladas dado que en los algoritmos que involucran árboles de decisión, como Random Forest, las variables son evaluadas una a una y por lo tanto la escala de cada una de ellas no afecta la evaluación de las demás.
 
-Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0,89. Este resultado es muy superior a los obtenidos en los modelos anteriores, tanto en VarQ Curado como el Dataset Estructural. 
-Analizando la importancia de las variables en el modelo, en la figura \ref{fig:importances_genomic} podemos observar que las variables de conservación están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados. Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ no genera un rendimiento similar?
+\subsection{Resultados del Modelo Genómico}
 
-Como podemos observar en la figura \ref{fig:importances_genomic}, el poder informativo de las variables de conservación es muy similar. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? En la figura \ref{fig:corrplot_genomic} podemos observar que estas variables se encuentran correlacionadas. 
+Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0,89. Este resultado es muy superior a los obtenidos en los modelos anteriores, tanto en VarQ Curado como el Dataset Estructural. En la tabla \ref{tab:metrics_genomic} vemos los valores de \textit{precision}, \textit{recall} y el \textit{f1-score} para las dos clases. En este caso podemos advertir una mejora total en cada una de las métricas comparando los obtenidos con el Modelo Estructural. En particular destacamos la mejora en precisión de la detección de variables benignas, que pasó de un 0.68 en el Modelo Estructural a un 0.83 en el Modelo Genómico, es decir un 15\% de mejora; como así también el crecimiento en el \textit{recall} de variantes patogénicas, que saltó de un 0.47 en el Modelo Estructural a un 0.64, lo que representa un 17\% de mejora.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+             & precision & recall & f1-score \\ \hline
+Benignas     & 0.83      & 0.87   & 0.85     \\ \hline
+Patogénicas  & 0.69      & 0.64   & 0.67     \\ \hline
+Promedio     & 0.79      & 0.79   & 0.79     \\ \hline
+\end{tabular}
+\caption{Reporte de métricas del modelo Random Forest usando el Dataset Genómico.}
+\label{tab:metrics_genomic}
+\end{table}
+
+% Otra de las razones que explican esta diferencia es la forma en que son calculadas. El dataset VarQ usa una variable basada a nivel de proteínas 
+
+
+\subsection{Importancia de los atributos}
+Analizando la importancia de las variables en el modelo, en la figura \ref{fig:importances_genomic} podemos observar que las variables de conservación (phastCons y phyloP) están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados. 
+
+El poder informativo sumado de estas variables equivale a un porcentaje superior al 80\% de la importancia total. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? En la figura \ref{fig:corrplot_genomic} podemos observar que estas variables se encuentran muy correlacionadas (0.82), lo que podría significar que su nivel de importancia es en cierta forma redundante. 
+
+Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ no genera un rendimiento similar? Una de las principales razones que encontramos es en el nivel de cobertura de la variable. En el caso de las variables de conservación genómica, la cobertura de las mismas llega a un nivel superior al 95\%, mientras que en el caso de la conservación en el dataset VarQ este número no llega al 40\%. 
 
 \newpage
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.8\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/genomic/auc_genomic.pdf}
     \caption{Curva AUC del algoritmo Random Forest aplicado al dataset genómico. La línea punteada corresponde a un predictor Random.}
@@ -597,7 +635,7 @@ Como podemos observar en la figura \ref{fig:importances_genomic}, el poder infor
 \hfill
 \hfill
 
-\begin{subfigure}[b]{\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/genomic/importances_genomic.pdf}
     \caption{Los 10 atributos más importantes del modelo Random Forest usando el dataset genómico.}
@@ -606,28 +644,58 @@ Como podemos observar en la figura \ref{fig:importances_genomic}, el poder infor
 
 \end{figure}
 
+\newpage
 
 % \subsection{Descripción}
 % \subsection{Correlación}
 % \subsection{Resultados}
 
-
-% \newpage
-
 \section{Integrando el dataset estructural y el genómico}
 
-Finalmente, unimos los dos conjuntos de variables para ver si la integración de ambos datasets representan una mejora frente a los resultados del modelo genómico. A este nuevo dataset lo denominamos Dataset Integral. Las variantes usadas fueron las encontradas en la tabla Humsavar. 
+Finalmente, unimos los dos conjuntos de variables para evaluar si la integración de ambos datasets representan una mejora frente a los resultados del modelo genómico. A este nuevo dataset lo denominamos Dataset Integral. Las variantes usadas fueron nuevamente las encontradas en la tabla Humsavar. 
+
+\subsection{Creación del Dataset Integral}
+
+El Dataset Integral posee 68,508 variantes (la misma cantidad de variantes del Dataset Estructural), con 64 variables, que son las variables sumadas de los datasets Genómico (14), Estructural (49) y la variable de respuesta. Del total de las variantes, 39,653 (58\%) son benignas y 28,855 (42\%) son patogénicas. 
 
 \subsection{Generación del Modelo}
 
-Para este modelo preliminar volvimos a utilizar Random Forest, repitiendo las dos fases de imputación y entrenamiento. En la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. Como se puede observar en la figura \ref{fig:auc_integral}, no hubo una mejora significativa con respecto a los otros modelos. Un análisis de \textit{Feature Importance} muestra que las variables de conservación siguen encabezando la lista de las variables más importantes del modelo (ver figura \ref{fig:importances_integral}). Una posible hipótesis que explicaría estos resultados es que las variables del dataset genómico aparecen en la mayoría de los árboles y permiten dividir mucho más eficientemente las variantes que las del dataset estructural, y por lo tanto se pierde el subconjunto de observaciones detectadas por la información de este dataset. Una forma de observar este efecto es cuantificar dichas variantes, es decir, ver si efectivamente el dataset estructural esta detectando una cantidad significativa de variantes no encontradas por el model genómico que no aparecen en este nuevo modelo. 
+Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, repitiendo las mismas fases de imputación y entrenamiento usadas previamente en los modelos Genómico y Estructural. Es decir, que en la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. El entrenamiento consistió en una búsqueda de hiperparámetros óptimos usando \textit{GridSearch} en un diccionario de posibles parámetros, evaluados en una triple validación cruzada usando el AUC como métrica a optimizar. El dataset de Entrenamiento posee 45,900 variantes, aproximadamente dos tercios del dataset completo. Una vez entrenado el modelo usando este \textit{pipeline}, se evaluaron las variantes del dataset de Test, es decir, el tercio restante del dataset completo.
+
+\subsection{Resultados del Modelo Integral}
+
+El modelo obtuvo un AUC de 0.88. Esto representa una mejora con respecto al Modelo Genómico (0.85) y al Modelo Estructural (0.72). Si comparamos las métricas obtenidas en el Modelo Genómico con las de este modelo (figura \ref{tab:metrics_integral}), se puede apreciar un nuevo salto en el \textit{recall} de las variables patogénicas, que pasa de un 0.64 en el Modelo Genómico al 0.80, lo que representa un 16\% de mejora. También mejora la precisión con respecto a la detección de esta clase, que pasa de 0.69 a 0.76. La única métrica que decae es el \textit{recall} de la clase Benigna, que pasa de 0.87 a 0.82, lo que representa una leve caída del \textit{f1-score}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+             & precision & recall & f1-score \\ \hline
+Benignas     & 0.85      & 0.82   & 0.83     \\ \hline
+Patogénicas  & 0.76      & 0.80   & 0.78     \\ \hline
+Promedio     & 0.81      & 0.81   & 0.81     \\ \hline
+\end{tabular}
+\caption{Reporte de métricas del modelo Random Forest usando el Dataset Integral.}
+\label{tab:metrics_integral}
+\end{table}
 
 
-\newpage
+\subsection{Importancia de las Variables}
+
+Pasamos a analizar las importancias descriptas en la figura \ref{fig:importances_integral}. Nuevamente encontramos en primer lugar a las variables de conservación genómicas, resultado esperable dado su nivel de importancia en el Dataset Genómico y su nivel de AUC conseguido. La suma de los scores de estas variables suman casi 0.65. También encontramos en un segundo escalón a las variables de conservación a nivel de exones, y a una variable que considera el número de SNPs en el exón donde ocurre la mutación. Luego encontramos al grupo de matrices de sustitución de aminoácidos (EX, GRANTHAM, BLOSUM y PAM250), que también aparecieron en los primeros lugares en el Modelo Estructural. Por último encontramos una variable relativa a la clase funcional a nivel genómico (MISSENSE) y otra relativa a la proteína donde ocurre la variante (POLARITY), por lo que encontramos en nuestro ranking una lista de variables transversal a los dos datasets usados. 
+% Dada la alta correlación entre algunas variables que observamos en los modelos anteriores, en esta ocasión 
+
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.6]{documents/latex/figures/3/integral/integral_importance_cluster.pdf}
+%     \caption{Importancia de variables clusterizadas (basados en correlación de Spearman) usando permutación.}
+%     \label{fig:importance_cluster_integral}
+% \end{figure}
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral/auc_integral.pdf}
     \caption{Curva AUC del algoritmo Random Forest del Dataset Integral. La línea punteada corresponde a un predictor Random.}
@@ -635,27 +703,55 @@ Para este modelo preliminar volvimos a utilizar Random Forest, repitiendo las do
 \end{subfigure}
 \hfill
 \hfill
-\begin{subfigure}[b]{0.9\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral/importances_integral.pdf}
     \caption{Los 10 atributos más importantes del Dataset Integral.}
     \label{fig:importances_integral}
 \end{subfigure}
+
+
 \end{figure}
 
+\section{Integrando las nuevas variables al Dataset VarQ Curado}
+En esta sección buscamos evaluar si el modelo mejora aún más sumando las variables de VarQ al conjunto de variables con los que trabajamos, usando el dataset VarQ Curado.
+
+\subsection{Creación del Dataset Integral+VarQ Curado}
+Para generar este dataset cruzamos las variantes de ambos datasets quedándonos con las variantes de VarQ. El dataset resultante posee 73 variables, que corresponden a las 63 variables del dataset Integral sumado a las 9 variables del dataset VarQ Curado y la variable de respuesta. Este dataset posee 7,418 variantes de las cuales 5,377 (72\%) son patogénicas y 2,041 (28\%) son benignas. 
+\subsection{Generación del Modelo}
+Como a lo largo de todo este trabajo volvimos a repetir el pipeline de Random Forest con imputación de variables continuas con la mediana y con el valor más frecuente en el caso de las variables categóricas. El dataset de entrenamiento posee 4970 variantes (66\%), y el tercio restante se destinó al dataset de test. Estas variables fueron elegidas al azar, con una semilla pseudoaleatoria para poder replicar el experimento.  
+
+\subsection{Resultados}
+El dataset de test arrojó un AUC de 0.87, que representa una mejora sensible con respecto al modelo realizado con el dataset VarQ Curado (0.74). Con respecto a las métricas de análisis, en la figura \ref{tab:metrics_integral_varq} observamos una mejora generalizada, especialmente en la precisión en la detección de variantes benignas, que pasa de 0.57 a 0.81 en el nuevo modelo, y también en el \textit{recall}, que pasa de 0.26 a 0.53. Si bien sigue siendo un número bajo, es posible modificar el \textit{threshold} para obtener un \textit{recall} más alto sacrificando precisión. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+             & precision & recall & f1-score \\ \hline
+Benignas     & 0.81      & 0.53   & 0.64     \\ \hline
+Patogénicas  & 0.84      & 0.95   & 0.89     \\ \hline
+Promedio     & 0.83      & 0.83   & 0.82     \\ \hline
+\end{tabular}
+\caption{Reporte de métricas del modelo Random Forest usando el Dataset Integral+VarQ.}
+\label{tab:metrics_integral_varq}
+\end{table}
+
+\subsection{Importancia de las Variables}
+La información proporcionada por la librería acerca de la importancia de las variables en el modelo \textit{scikit-learn} están presentadas en la \ref{fig:importances_integral_varq}. En este ranking de las 10 variables más relevantes encontramos otra vez en primer lugar con amplia ventaja a las variables de conservación genómica, aunque también se mantiene la variación de energía y al porcentaje de SASA, que son variables pertenecientes al dataset VarQ Curado y que habían aparecido en el ranking de dicho modelo.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.6]{documents/latex/figures/3/integral_varq/integral_varq_importance_cluster.pdf}
+%     % \caption{.}
+%     \label{fig:importance_cluster_integral_varq}
+% \end{figure}
 
 
-
-
-\section{Uniendo las variables al Dataset VarQ}
-
-Una vez generado el Dataset Integral, nos resta evaluar si el modelo mejora aún más sumando las variables de VarQ al conjunto de variables con los que trabajamos.
-
-\pagebreak
-
+\newpage
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.8\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral_varq/auc_varq_integral.pdf}
     \caption{Curva AUC del algoritmo Random Forest del Dataset Integral. La línea punteada corresponde a un predictor Random.}
@@ -663,16 +759,10 @@ Una vez generado el Dataset Integral, nos resta evaluar si el modelo mejora aún
 \end{subfigure}
 \hfill
 \hfill
-\begin{subfigure}[b]{0.9\textwidth}
+\begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral_varq/importances_varq_integral.pdf}
     \caption{Los 10 atributos más importantes del Dataset Integral.}
     \label{fig:importances_integral_varq}
 \end{subfigure}
 \end{figure}
-
-
-
-
-
-
