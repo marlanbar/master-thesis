@@ -5,6 +5,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage[left=2cm,right=2cm,bottom=3.5cm,top=3.5cm]{geometry}
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{color}
 \usepackage{epigraph}
 \usepackage{float}
 \usepackage{titlesec}
@@ -13,13 +15,9 @@
 \usepackage{caption}
 \usepackage{subcaption,mwe}
 \usepackage{longtable}
+\usepackage{listings}
 \usepackage{amsmath}
-% \usepackage{textopo}
 
-
-
-% \usepackage{todonotes}
-% \usepackage[obeyFinal]{easy-todo}
 \usepackage{xcolor}
 \newcommand\todo[1]{\textcolor{red}{#1}}
 
@@ -28,7 +26,7 @@
 %%%% CARATULA
 \def\titulo{Licenciado}
 \def\autor{Martín Ezequiel Langberg}
-\def\tituloTesis{Predicción de patogenicidad en polimorfismos de un sólo nucleótido usando Aprendizaje Automático}
+\def\tituloTesis{Predicción de patogenicidad en SNPs usando aprendizaje automático}
 \def\runtitulo{Predicción de patogenicidad en polimorfismos de un sólo nucleótido usando aprendizaje automático}
 \def\director{Ariel Berenstein}
 \def\codirector{Pablo Turjanski}
@@ -37,7 +35,7 @@
 
 %%%% ABSTRACTS, AGRADECIMIENTOS Y DEDICATORIA
 \frontmatter
-\pagestyle{plain}
+\pagestyle{empty}
 \input{documents/latex/abs_esp.tex}
 
 % \cleardoublepage
@@ -49,8 +47,8 @@
 % \cleardoublepage
 % \input{dedicatoria.tex}  % OPCIONAL: comentar si no se quiere
 
-% \cleardoublepage
-% \tableofcontents
+\cleardoublepage
+\tableofcontents
 
 \mainmatter
 \pagestyle{headings}
@@ -59,29 +57,15 @@
 
 \chapter{Introducción}
 \label{ch:introduccion}
-\include{documents/latex/introduccion}
+\input{documents/latex/introduccion}
 
-\chapter{Materiales y Métodos}
-\label{ch:materiales}
-\include{documents/latex/materiales}
-
-\chapter{Desarrollo y Resultados}
+\chapter{Desarrollo y resultados}
 \label{ch:desarrollo}
-\include{documents/latex/desarrollo}
+\input{documents/latex/desarrollo}
 
-\chapter{Discusión y Trabajo Futuro}
-\label{ch:discusion}
-\include{documents/latex/discusion}
-
-\chapter{Conclusiones}
+\chapter{Conclusiones y trabajo futuro}
 \label{ch:conclusiones}
-\include{documents/latex/conclusiones}
-
-\chapter{Apéndice}
-\label{ch:apendice}
-\include{documents/latex/apendice}
-
-
+\input{documents/latex/conclusiones}
 
 %%%% BIBLIOGRAFIA
 
@@ -92,6 +76,8 @@
 
 \bibliographystyle{abbrv}
 
-
+\chapter{Apéndice}
+\label{ch:apendice}
+\input{documents/latex/apendice}
 
 \end{document}
