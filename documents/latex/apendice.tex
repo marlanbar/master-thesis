@@ -1,3 +1,77 @@
-% \section{Coeficiente de Correlación de Pearson}
-% \section{Prueba U de Mann-Whitney}
-% \section{Alineamientos Múltiples de Secuencias}
+\section{Diccionario de hiperparámetros usados}
+
+Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
+\begin{itemize}
+    \item Random Forest
+        \begin{itemize}
+            \item Profundidad del árbol: [3, 5, 7]
+            \item Estimadores: [10, 50, 100]
+            \item Cantidad de variables por árbol: [4, $\sqrt{n}$, $0.2*n$] con n la cantidad total de variables
+        \end{itemize} 
+    \item Regresión logística:
+    \item SVC:
+\end{itemize}
+
+
+\section{Lista de Variables de SNVBox}
+
+\subsubsection{Variables sobre cambios en la sustitución del Aminoácido (Estructura Primaria)}
+\begin{itemize}
+    \item Score BLOSUM (AABLOSUM)
+    \item Carga (AACharge)
+    \item Volumen (AAVolume)
+    \item Hidrofobia (AAHydrophobicity)
+    \item Score Grantham (AAGrantham)
+    \item Polaridad (Polarity)
+    \item Score Ex (AAEx)
+    \item Score PAM250 (AAPAM250)
+    \item Score MJ (AAMJ)
+    \item Score HGMD2003 (AAHGMD2003)
+    \item Score VB (AAVB)
+    \item Transición (Transition)
+    \item COSMIC
+    \item COSMICvsSWISSPROT
+    \item HAPMAP
+    \item COSMICvsHAPMAP
+\end{itemize}
+
+\subsubsection{Variables a nivel de Proteína (sin considerar sustitución)}
+
+\begin{itemize}
+    \item BINDING
+    \item ACTIVE\_SITE
+    \item SITE
+    \item LIPID
+    \item BINDING
+    \item ACT\_SITE
+    \item SITE
+    \item LIPID
+    \item METAL
+    \item CARBOHYD
+    \item DNA\_BIND
+    \item NP\_BIND
+    \item CA\_BIND
+    \item DISULFID
+    \item SE\_CYS
+    \item MOD\_RES
+    \item PROPEP
+    \item SIGNALP
+    \item TRANSMEM
+    \item COMPBIAS
+    \item REP
+    \item MOTIF
+    \item ZN\_FING
+    \item REGIONS
+    \item PPI
+    \item RNABD
+    \item TF
+    \item LOC
+    \item MMBRBD
+\end{itemize}
+
+% \vspace{2mm}
+% \todo{
+% TODO:
+% Diagrama de SNVBOX
+% }
+% \vspace{2mm}
