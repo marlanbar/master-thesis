@@ -6,7 +6,7 @@ La medicina personalizada o de precisión es un modelo médico en donde las inte
 
 \subsubsection{El dogma central de la biología}
 
-El genoma esta compuesto por el ADN (ácido desoxirribonucleico), en los 23 pares de cromosomas (moléculas de ADN), dentro del núcleo celular sumado a una molécula de ADN que se encuentra en las mitocondrias (ADN mitocondrial). El ADN a su vez se compone de 4 bases: Adenina, Timina, Citosina, y Guanina. Estas bases se representan con su letra inicial (A, T, C y G), y podemos considerarlas como letras de un alfabeto. Cada una de estas bases está unido a otra (Adenina-Timina y Citosina-Guanina) formando pares de bases en forma helicoidal. Esta tira de ``letras'' se divide en distintos genes, que son secuencias de ADN que codifican una molécula funcional.
+El genoma humano esta compuesto por el ADN (ácido desoxirribonucleico), en los 23 pares de cromosomas (moléculas de ADN), dentro del núcleo celular sumado a una molécula de ADN que se encuentra en las mitocondrias (ADN mitocondrial). El ADN a su vez se compone de 4 bases: Adenina, Timina, Citosina, y Guanina. Estas bases se representan con su letra inicial (A, T, C y G), y podemos considerarlas como letras de un alfabeto. Cada una de estas bases está unido a otra (Adenina-Timina y Citosina-Guanina) formando pares de bases en forma helicoidal. Esta tira de ``letras'' se divide en distintos genes, que son secuencias de ADN que codifican una molécula funcional.
 
 Para entender un poco como funciona el proceso por el cual la información genética se expresa en el organismo recurrimos al llamado "Dogma central de la biología", esbozado por Francis Crick en 1958 y revisado en 1970 \cite{CRICK1970}. Este dogma, si bien fue ampliado a lo largo del tiempo, explica de forma general este proceso. Como vemos en la figura, el ADN (ácido desoxirribonucleico) se transcribe en forma de ARN para luego formar una proteína. El ARN (ácido ribonucleico), es una mólecula polimérica, al igual que el ADN, y también posee las mismas bases que el ADN, excepto la timina (T) que se reemplaza por el uracilo (U). Finalmente, el ARN es utilizado para unir los aminoácidos que forman la secuencia proteica, en un proceso denominado Traducción. La secuencia del ARN se compone de tripletes adyacentes de bases que se denominan codones, y cada aminoácido está codificado por uno de estos codones. 
 
@@ -49,7 +49,7 @@ En el marco de esta tesis estudiaremos los polimorfismos de un sólo nucleótido
 
 En la figura \todo{X} podemos ver los distintos tipos de SNP. De acuerdo al lugar, pueden ocurrir en una zona codificante, es decir una porción del gen que codifica una proteína, o en una zona no codificante, como los intrones (partes del gen no codificante).
 
-Dentro de las sustituciones en la zona codificante, algunas mutaciones pueden ser sinónimas, es decir que existe un cambio en uno de los nucleótidos del ADN pero dicho nucleótido es reemplazado por uno igual. También puede ocurrir una sustitución no sinónima, en donde el nucleótido es reemplazado por uno distinto. Esto no necesariamente genera un cambio en el aminoácido que lo codifica. Podemos ver en la tabla \todo{X} que el muchos codones codifican el mismo aminoácido, por ejemplo, los codones AAU, AUC y AUA codifican el aminoácido isoleucina. Luego, si en la cadena de ADN, el codón AUA sufre una mutación en su último nucleótido, pasando a ser AUC, dicho codón seguirá codificando para el mismo aminoácido (ver tabla \todo{X}). Estas sustituciones se denominan sustituciones no sinónimas silenciosas (\textit{silent}).
+Dentro de las sustituciones en la zona codificante, algunas mutaciones pueden ser sinónimas, es decir que existe un cambio en uno de los nucleótidos del ADN pero dicho nucleótido es reemplazado por uno igual. También puede ocurrir una sustitución no sinónima, en donde el nucleótido es reemplazado por uno distinto. Esto no necesariamente genera un cambio en el aminoácido que lo codifica. Podemos ver en la tabla \ref{fig:table_codon} que el muchos codones codifican el mismo aminoácido, por ejemplo, los codones AAU, AUC y AUA codifican el aminoácido isoleucina. Luego, si en la cadena de ADN, el codón AUA sufre una mutación en su último nucleótido, pasando a ser AUC, dicho codón seguirá codificando para el mismo aminoácido (ver tabla \ref{fig:table_codon}). Estas sustituciones se denominan sustituciones no sinónimas silenciosas (\textit{silent}).
 
 En particular estudiaremos los SNPs con cambio de sentido (\textit{missense}), es decir aquellos que deriven en un cambio de aminoácido en la proteína producida por la variante del gen. \textbf{El problema que intentaremos atacar es detectar aquellos SNPs cuyo cambio en el aminoácido de la proteína generada pueda estar asociado a alguna patogénesis}. 
 
@@ -67,7 +67,7 @@ Utilizamos este enfoque en particular dado que es el que utilizan los trabajos q
 Existen diferentes formas de categorizar los algoritmos de aprendizaje automático. Una de las formas posibles es la categorización de acuerdo a la cantidad de tipo de supervisión durante la fase de entrenamiento. Este aprendizaje puede ser \cite{Barber2011}:
 
 \begin{itemize}
-\item Supervisado, en donde se utilizan ejemplos previos que están "rotulados", es decir que posee una variable de respuesta conocida y se busca conseguir una predicción lo más certera posible sobre nuevos datos. 
+\item Supervisado, en donde se utilizan ejemplos previos que están ``rotulados'', es decir que posee una variable de respuesta conocida y se busca conseguir una predicción lo más certera posible sobre nuevos datos. 
 \item No supervisado, donde el objetivo es encontrar distintos grupos o clusters dentro de los datos.
 \item Semi-supervisado, en el que se trabaja con un pequeño conjunto de datos etiquetados y un conjunto mucho mayor de datos no etiquetados. El objetivo está en usar este último conjunto para mejorar el clasificador construido con los datos etiquetados.
 \item Por refuerzo, donde un \textit{agente} observa el entorno y realiza diferentes acciones para maximizar la recompensa. El modelo a aprender entonces es la estrategia que le permite tomar decisiones ante determinadas situaciones. 
@@ -113,9 +113,31 @@ Una de las principales ventajas de Random Forest es su interpretabilidad. Esto s
 
 % Cada uno de estos métodos involucran una fase de entrenamiento en donde se genera la función de decisión del modelo. En nuestro trabajo la fase de entrenamiento consta de 
 
-% \subsubsection{Métricas de evaluación}
+\subsubsection{Métricas de evaluación}
 
-\newpage
+Las medidas son las siguientes:
+
+\begin{itemize}
+    \item \textbf{Precisión}: La Precisión del modelo, está medida como la cantidad de positivos correctamente calificados (verdaderos positivos) sobre la cantidad de instancias calificadas como positivas (verdaderos positivos y falsos positivos).
+    
+    \begin{equation*}
+        \frac{VP}{VP + FP}
+    \end{equation*}
+    
+% \pagebreak
+    \item \textbf{Recall}: El Recall corresponde a la cantidad de verdaderos positivos sobre el total de positivos (verdaderos positivos y falsos negativos).
+    
+    \begin{equation*}
+        \frac{VP}{VP + FN}
+    \end{equation*}
+    
+    \item \textbf{F1-Score}: El F1-Score es el promedio armónico entre la Precisión y el Recall. Usamos el promedio armónico de manera de afectar negativamente el resultado si alguno de los valores es especialmente bajo. Posee un rango de 0 a 1. 
+    
+    \begin{equation*}
+        F_1 = \frac{2}{\tfrac{1}{\mathrm{recall}} + \tfrac{1}{\mathrm{precision}}} = 2 \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{\mathrm{precision} + \mathrm{recall}}
+    \end{equation*}
+    
+\end{itemize}
 
 \section{Trabajos relacionados}
 
@@ -140,7 +162,7 @@ VEST (\textit{Variant Effect Scoring Tool}) es un predictor de efectos funcional
 
 FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es también un predictor de efectos funcionales de SNPs con cambio de sentido, en regiones codificantes y no codificantes. Fue desarrollado en la Universidad de Bristol. Proponen un método integrador combinando los scores de diferentes predictores (entre ellos VEST).
 
-\newpage
+% \newpage
 
 
 \section{Objetivos y estructura del trabajo}
@@ -148,9 +170,10 @@ FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es tambi�
 El objetivo del trabajo se centra en responder una serie de interrogantes generados a partir del estudio de los trabajos previos:
 
 \begin{itemize}
-    \item Sumar variantes al dataset de VarQ, ¿mejora la performance?
     \item El dataset de VarQ se concentra en variables de tipo estructural. ¿Podemos enriquecerlo con variables de otras dimensiones (físico-químicas, genómicas, filogenéticas)?
     \item ¿Cómo afectan las distintas variables a nuestros modelos? ¿Cuáles son las más importantes?
+    \item ¿Cuáles son los mejores algoritmos de aprendizaje automático para resolver este tipo de problemas y cuáles son sus parámetros?
+    
 \end{itemize}
 
 Intentaremos responder estas preguntas en este trabajo, que se encuentra dividido en 5 partes principales:

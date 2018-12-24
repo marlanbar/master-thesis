@@ -4,7 +4,7 @@ Comenzamos nuestro trabajo analizando el dataset construido en la tesis de Santi
 
 \subsection{Variables del dataset VarQ Completo}
 
-A continuación damos una descripción detallada de las variables originales encontradas en el dataset. A continuación presentamos un extracto del trabajo de Santiago Moreno en donde se describen dichas variables [\todo{TOMADO DE TESIS DE SANTI}]: 
+A continuación damos una descripción detallada de las variables originales encontradas en el dataset. Presentamos un extracto del trabajo de Santiago Moreno en donde se describen dichas variables [\todo{TOMADO DE TESIS DE SANTI}]: 
 
 \begin{itemize}
     \item Variación de Energía (ENE): En VarQ, las mutaciones son modeladas con el software FoldX, que construye un modelo a partir de una estructura dada y luego muta residuos específicos. Luego el software predice el impacto energético de la mutación en la estabilidad de la proteína o, en caso de tratarse de un complejo, en la estabilidad del mismo.
@@ -66,16 +66,16 @@ ENE     & 2.91  & 4.84  & -12.64 & 0.26  & 1.51  & 3.89 & 57.21 & 0.68\\ \hline
 \begin{tabular}{|l|l|l|l|}
 \hline
 Variable & top  & freq. top & BACC \\ \hline
-3DID    & False & 0.8 & 0.51\\ \hline
+3DID & False & 0.8 & 0.51\\ \hline
 PDB  & False  & 0.9 & 0.49\\ \hline
 \end{tabular}
 \caption{Descripción de variables categóricas del dataset \textit{VarQ Curado}.}
 \label{tab:descripcion_varq_cat}
 \end{table}
 
-Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top) y la frecuencia de este valor. Ambas variables son binarias por lo que la parte restante posee el valor restante. Para este tipo de variables quisimos también cuantificar su poder predictivo individual. 
+Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top) y la frecuencia de este valor. Para este tipo de variables quisimos también cuantificar su poder predictivo individual. 
 
-\newpage
+% \newpage
 
 Utilizar AUC en este caso no es posible dado que su cálculo sólo tiene sentido en variables continuas. Por lo tanto, decidimos calcular el \textit{Balanced Accuracy} (BACC) \cite{Brodersen2010} como medida de poder predictivo, considerando el valor de la variable como predictor de la variante. 
 
@@ -123,10 +123,10 @@ También queremos conocer qué tan correlacionadas se encuentras las variables. 
 
 Una vez definido el dataset, podemos emplear técnicas de aprendizaje automático con el objetivo de generar un predictor de variantes patogénicas. Cabe destacar, que en este dataset VarQ Curado hay una sobrerrepresentación de variantes patogénicas, es decir, que presenta un desbalance (mayor número de variantes patogénicas que benignas) que invierte las propociones observadas en el dataset VarQ Completo. De todas formas generaremos un modelo para poder evaluar de forma preliminar la dificultad del problema. 
 
-Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support Vector Classifier (SVC), Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoritmos constó de tres fases: 
+Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support Vector Classifier (SVC), Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoEritmos constó de tres fases: 
 
 \begin{itemize}
-    \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
+    \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales de la variable objetivoE) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
     \item \textbf{Imputación de las variables}: Se reemplazaron los valores nulos de cada variable por su mediana en caso de las continuas y por el valor más frecuente en el caso de las variables categóricas.
     \item \textbf{Estandarización}: Para el caso de los algoritmos paramétricos (Regresión Logística y SVM) se aplicó una estandarización robusta a outliers. Esta estandarización consiste en restar la mediana del valor y escalar los datos de acuerdo a la distancia intercuartil, como se observa en la ecuación \ref{eq:robust_scaler}.
     
@@ -142,31 +142,30 @@ Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support
 
 Luego del preprocesamiento, para cada uno de los algoritmos se realizó una búsqueda de hiperparámetros óptimos, a partir de estos datos, con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). En el apéndice se encuentran los diccionarios de hiperparámetros usados en cada uno de los modelos.
 
+\subsection{Resultados}
+
 Random Forest fue el mejor modelo con un AUC de 0.74. Los parámetros óptimos de este modelo fueron una profundidad de árbol de 7, 100 estimadores y una cantidad máxima de variables por árbol de 4.
 
-La Regresión logística y SVC obtuvieron 0.71 y 0.70 respectivamente. La tabla \ref{tab:metrics_varq} muestra algunas métricas de interés obtenidas del modelo Random Forest para entender mejor los resultados del modelo basados en el predictor generado. Las medidas son las siguientes:
+La Regresión logística y SVC obtuvieron 0.71 y 0.70 respectivamente. Estos modelos se caracterizaron ademas por tener una tendencia a clasificar a las variantes como patogénicas, lo que se puede observar en su alto recall y menor precisión con respecto a Random Forest. En particular, SVC clasificó a todas las variantes del dataset de evaluación como patogénicas.
 
-\begin{itemize}
-    \item \textbf{Precisión}: La Precisión del modelo, está medida como la cantidad de positivos correctamente calificados (verdaderos positivos) sobre la cantidad de instancias calificadas como positivas (verdaderos positivos y falsos positivos).
-    
-    \begin{equation*}
-        \frac{VP}{VP + FP}
-    \end{equation*}
-    
-% \pagebreak
-    \item \textbf{Recall}: El Recall corresponde a la cantidad de verdaderos positivos sobre el total de positivos (verdaderos positivos y falsos negativos).
-    
-    \begin{equation*}
-        \frac{VP}{VP + FN}
-    \end{equation*}
-    
-    \item \textbf{F1-Score}: El F1-Score es el promedio armónico entre la Precisión y el Recall. Usamos el promedio armónico de manera de afectar negativamente el resultado si alguno de los valores es especialmente bajo. Posee un rango de 0 a 1. 
-    
-    \begin{equation*}
-        F_1 = \frac{2}{\tfrac{1}{\mathrm{recall}} + \tfrac{1}{\mathrm{precision}}} = 2 \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{\mathrm{precision} + \mathrm{recall}}
-    \end{equation*}
-    
-\end{itemize}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+Modelo & Precisión & Recall & AUC & F1-score & F2-score & $t_{fit}$ & $t_{pred}$ \\ \hline
+SVC    & 0.72 & \textbf{1.00} & 0.70 & 0.84 & \textbf{0.93} & 2 m 39 s & 0.77s \\ \hline
+LR     & 0.75 & 0.94 & 0.71 & 0.84 & 0.90 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
+RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 0.89 & 9.82 s & 0.11 s \\ \hline
+\end{tabular}
+\label{tab:metrics_model}
+\end{table}
+
+
+
+
+La tabla \ref{tab:metrics_varq} muestra algunas métricas de interés obtenidas del modelo Random Forest para entender mejor los resultados del modelo basados en el predictor generado.
+
+
 
 \begin{table}[H]
 \centering
@@ -181,10 +180,9 @@ Promedio      & 0.71      & 0.74   & 0.71     \\ \hline
 \label{tab:metrics_varq}
 \end{table}
 
+La precisión del modelo indica un número marcadamente bajo (0.57) en la clase benigna, lo que significa que casi una de cada dos variantes detectadas como benignas es en efecto patogénica. El Recall con respecto a las variantes benignas es de 0.26, es decir que el modelo sólo reconoce alrededor de un cuarto de las variantes benignas como tales. Por lo tanto podemos afirmar que este modelo tiene una tendencia a calificar las variantes como patogénicas, generando una gran cantidad de falsos positivos (o Error de tipo I). Es importante remarcar que estas métricas están generadas a partir de una función de decisión o \textit{threshold} fijado por la versión del algoritmo usado (en el caso de la librería \texttt{scikit-learn}, este \textit{threshold} está ubicado en 0.5 de la probabilidad asignada).  La curva ROC, o \textit{Receiver Operating Characteristic} y su AUC asociada, nos permite independizarnos de un \textit{threshold} fijo para evaluar las características del predictor (fig 1.5a).
 
 En la figura \ref{fig:importance_varq} podemos observar la importancia de los features reportado por el algoritmo Random Forest, que ubica en primer lugar con una gran diferencia a la variable que hace referencia a la Variación de Energía (ENE), seguido por el BFACTOR y el porcentaje de SASA (SASA \%). Este dato concuerda parcialmente con sus valores de AUC univariado. Si bien ENE y SASA \% poseen un valor relativamente alto de poder de clasificación univariada, no sucedía lo mismo con BFACTOR. En el modelo multivariado esta situación se invierte.
-
-La precisión del modelo indica un número marcadamente bajo (0.57) en la clase benigna, lo que significa que casi una de cada dos variantes detectadas como benignas es en efecto patogénica. El Recall con respecto a las variantes benignas es de 0.26, es decir que el modelo sólo reconoce alrededor de un cuarto de las variantes benignas como tales. Por lo tanto podemos afirmar que este modelo tiene una tendencia a calificar las variantes como patogénicas, generando una gran cantidad de falsos positivos (o Error de tipo I). Es importante remarcar que estas métricas están generadas a partir de una función de decisión o \textit{threshold} fijado por la versión del algoritmo usado (en el caso de la librería \texttt{scikit-learn}, este \textit{threshold} está ubicado en 0.5 de la probabilidad asignada).  La curva ROC, o \textit{Receiver Operating Characteristic} y su AUC asociada, nos permite independizarnos de un \textit{threshold} fijo para evaluar las características del predictor (fig 1.5a).
 
 \newpage
 
@@ -217,8 +215,8 @@ Para el análisis de estas variables usamos la tabla Humsavar. La tabla Humsavar
 
 \subsection{Extracción de variables usando Biopython}
 
-La primera fuente que utilizamos, por su relativa practicidad de uso en la extracción de un conjunto de variables físico químicas de la proteína, fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python, desarrollada por colaboradores para el área de la bioinformática, y posee una licencia de uso libre.
-El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la proteína) y está basado en la herramienta del server proteómico Expasy. Requiere el \textit{accession number} de la proteína (identificador único) o una subsecuencia de la misma, para poder acceder a los parámetros calculados, que son los siguientes:
+La primera fuente que utilizamos, por su relativa practicidad de uso en la extracción de un conjunto de variables físico-químicas de la proteína, fue el módulo ProtParam de la biblioteca Biopython. Esta biblioteca es un set de herramientas escritas en Python, desarrollada por un equipo internacional de desarrolladores para el área de la bioinformática, y posee una licencia de uso libre.
+El nombre ProtParam proviene de \textit{Protein Parameters} (parámetros de la proteína) y está basado en la herramienta homónima del server proteómico Expasy. Para ser utilizado el módulo requiere el \textit{accession number} de la proteína (identificador único) o una subsecuencia de la misma, para poder acceder a los parámetros calculados, que son los siguientes:
 
 \begin{itemize}
     \item Punto isoeléctrico teórico (ISO\_POINT): pH en el que la proteína (o subsecuencia) tiene carga nula. 
@@ -281,7 +279,7 @@ donde $x$ representa al parámetro original y $x_{var}$ es igual al parámetro d
 
 \subsection{Extracción de variables usando SNVBox}
 
-Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de la Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV (\textit{single nucleotide variant}). Existen distintos criterios para definir un SNV y su diferencia de un SNP, pero en este trabajo los usaremos de forma indistinta. SNVBox posee datos físico-químicos de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano.
+Además de la información obtenida vía ProtParam, recurrimos a una base de datos llamada SNVBox. Esta base de datos fue elaborada y es actualmente mantenida por el Karchin Lab de la Universidad Johns Hopkins. Se encuentra en su versión 3.0 y sigue en desarrollo. SNVBox posee alrededor de 90 variables consideradas relevantes para detectar el impacto biológico de un SNV (\textit{Single Nucleotide Variant}). Existen distintos criterios para definir un SNV y su diferencia de un SNP, pero en este trabajo los usaremos de forma indistinta. SNVBox posee datos físico-químicos de la proteína, a nivel de aminoácido y también a nivel de los sitios de la proteína donde se encuentra la variante. Otra característica destacable de esta fuente es que posee dichas variables para todos los codones del exoma humano.
 
 \subsection{Generación del dataset Físico-Químico}
 
@@ -297,16 +295,16 @@ Luego de la creación del dataset realizamos una exploración estadística del m
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
 Variable & mean & std & min & 25\% & 50\%  & 75\%  & AUC \\ \hline
-AROM\_DIFF  & 0.02  & 0.02  & 0.00 & 0.00 & 0.00  & 0.01  & 0.41 \\ \hline
-AROM\_LOG\_RATIO & 1.97 & 0.33 & 1.00 & 1.94 & 1.94  & 1.94  & 0.47 \\ \hline
-ISO\_POINT\_DIFF & 0.69  & 0.98 & 0.00  & 0.00 & 0.17  & 1.22  & 0.44 \\ \hline
-ISO\_POINT\_LOG\_RATIO & 2.00 & 0.08 & 1.69 & 1.99 & 2.00  & 2.01  & 0.49 \\ \hline
-GRAVY\_DIFF & 0.23 & 0.17 & 0.00 & 0.09 & 0.20  & 0.33  & 0.45 \\ \hline
-GRAVY\_LOG\_RATIO & 1.99x10$^{12}$ & 1.24x$10^{14}$ & -3.39x10$^{15}$ & 1.43 & 1.94 & 2.43 & 0.52 \\\hline
-INST\_DIFF & 14.02 & 13.27 & 0.00 & 4.20 & 10.09 & 20.10 & 0.51 \\ \hline
-INST\_LOG\_RATIO & 2.06 & 2.27 & -84.77 & 1.96 & 2.01  & 2.09  & 0.52 \\ \hline
-FLEX\_DIFF & 0.01 & 0.01 & 0.00 & 0.00 & 0.01  & 0.01  & 0.46 \\ \hline
-FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.53 \\ \hline
+AROM\_DIFF  & 0.02  & 0.02  & 0.00 & 0.00 & 0.00  & 0.01  & 0.59 \\ \hline
+AROM\_LOG\_RATIO & 1.97 & 0.33 & 1.00 & 1.94 & 1.94  & 1.94  & 0.53 \\ \hline
+ISO\_POINT\_DIFF & 0.69  & 0.98 & 0.00  & 0.00 & 0.17  & 1.22  & 0.56 \\ \hline
+ISO\_POINT\_LOG\_RATIO & 2.00 & 0.08 & 1.69 & 1.99 & 2.00  & 2.01  & 0.51 \\ \hline
+GRAVY\_DIFF & 0.23 & 0.17 & 0.00 & 0.09 & 0.20  & 0.33  & 0.55 \\ \hline
+GRAVY\_LOG\_RATIO & 1.99x10$^{12}$ & 1.24x$10^{14}$ & -3.39x10$^{15}$ & 1.43 & 1.94 & 2.43 & 0.48 \\\hline
+INST\_DIFF & 14.02 & 13.27 & 0.00 & 4.20 & 10.09 & 20.10 & 0.49 \\ \hline
+INST\_LOG\_RATIO & 2.06 & 2.27 & -84.77 & 1.96 & 2.01  & 2.09  & 0.48 \\ \hline
+FLEX\_DIFF & 0.01 & 0.01 & 0.00 & 0.00 & 0.01  & 0.01  & 0.54 \\ \hline
+FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.47 \\ \hline
 \end{tabular}
 \caption{Variables extraídas de Protparam}
 \label{tab:protparam_vars}
@@ -314,7 +312,7 @@ FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.53 \\ \hline
 
 \newpage
 
-Con respecto al AUC univariado de las variables extraídas de SNVBox, notamos que las mejores variables en este respecto son las matrices de sustitución (GRANTHAM, EX, PAM250 y BLOSUM). En este caso son buenos predictores, lo que indica que una sustitución ``rara'' indica una mayor posibilidad de ser patogénica (tabla \ref{tab:snvbox_amino}). 
+Con respecto al AUC univariado de las variables extraídas de SNVBox, notamos que las mejores variables en este respecto son las aportadas por algunas de las matrices de sustitución (EX, PAM250 y BLOSUM). En este caso son buenos anti-predictores, lo que indica que un valor bajo en esta matrix aporta una mayor probabilidad de ser patogénica (tabla \ref{tab:snvbox_amino}). El mejor predictor en este set de variables es la valor en la matriz de distancias GRANTHAM.  
 
 % \newpage
 
@@ -326,16 +324,16 @@ Con respecto al AUC univariado de las variables extraídas de SNVBox, notamos qu
 \hline
 Variable & mean   & std    & min    & 25\%  & 50\%   & 75\%   & AUC    \\ \hline
 CHARGE            & 0.00  & 0.71   & -2.00  & 0.00  & 0.00   & 0.00   & 0.50   \\ \hline
-VOLUME            & -0.16  & 1.70   & -5.59  & -1.40 & -0.16  & 0.96   & 0.52   \\ \hline
-HYDROPHOBICITY    & -0.63  & 6.81   & -15.70 & -3.10 & -0.40  & 1.90   & 0.48  \\ \hline
-GRANTHAM          & 79.96  & 48.06  & 5.00   & 43.00 & 74.00  & 102.00 & 0.37 \\ \hline
-POLARITY          & -0.25  & 2.72   & -8.10  & -2.20 & -0.10  & 1.10   & 0.48   \\ \hline
-EX                & 28.99  & 10.95  & -1.00  & 21.00 & 29.00  & 35.00  & 0.65  \\ \hline
-PAM250            & 0.16   & 1.68   & -5.40  & -1.00 & 0.20   & 1.40   & 0.64   \\ \hline
-BLOSUM            & -0.58  & 1.65   & -4.00  & -2.00 & -1.00  & 1.00   & 0.65   \\ \hline
-JM                & 0.80   & 1.24   & -1.73  & -0.50 & 1.05   & 1.66   & 0.60   \\ \hline
-VB                & 19.78  & 14.64  & 0.00   & 8.00  & 17.00  & 29.00  & 0.58  \\ \hline
-TRANSITION        & 0.00   & 0.00   & 0.00   & 0.00  & 0.00   & 0.00   & 0.53   \\ \hline
+VOLUME            & -0.16  & 1.70   & -5.59  & -1.40 & -0.16  & 0.96   & 0.48   \\ \hline
+HYDROPHOBICITY    & -0.63  & 6.81   & -15.70 & -3.10 & -0.40  & 1.90   & 0.52  \\ \hline
+GRANTHAM          & 79.96  & 48.06  & 5.00   & 43.00 & 74.00  & 102.00 & \textbf{0.63} \\ \hline
+POLARITY          & -0.25  & 2.72   & -8.10  & -2.20 & -0.10  & 1.10   & 0.52   \\ \hline
+EX                & 28.99  & 10.95  & -1.00  & 21.00 & 29.00  & 35.00  & \textbf{0.35}  \\ \hline
+PAM250            & 0.16   & 1.68   & -5.40  & -1.00 & 0.20   & 1.40   & \textbf{0.36}   \\ \hline
+BLOSUM            & -0.58  & 1.65   & -4.00  & -2.00 & -1.00  & 1.00   & \textbf{0.35}   \\ \hline
+JM                & 0.80   & 1.24   & -1.73  & -0.50 & 1.05   & 1.66   & 0.40   \\ \hline
+VB                & 19.78  & 14.64  & 0.00   & 8.00  & 17.00  & 29.00  & 0.42  \\ \hline
+TRANSITION        & 0.00   & 0.00   & 0.00   & 0.00  & 0.00   & 0.00   & 0.47   \\ \hline
 \end{tabular}
 \caption{Variables extraídas de SNVBox relativas a sustitución de aminoácidos.}
 \label{tab:snvbox_amino}
@@ -405,7 +403,7 @@ El algoritmo Random Forest nos permite identificar los mejores atributos en cada
 
 También en la figura \ref{fig:importances_structural}, se observan variables con un nivel de importancia muy similar, como es el caso de PAM250, EX, BLOSUM y GRANTHAM. Todas estas variables corresponden a matrices de sustitutción, por lo que no es de extrañar que también exista un alto nivel de correlación entre ellas (ver figura \ref{fig:corrplot_structural}). 
 
-Para analizar el impacto de clusters de variables altamente correlacionadas, usamos la herramienta \texttt{rfpimp} desarrollada por Terrence Parr y otros. Esta herramienta permite agrupar variables y analizar su importancia realizando permutaciones sobre las variables escogidas y reportando la perdida de precisión en el modelo. En la figura \ref{fig:importances_structural_cluster} vemos como las variables de hidrofobicidad y polaridad se ubican a la par de la matriz GRANTHAM. También aparecen nuevas variables en nivel de importancia, como DNA\_BIND y TRANSMEM.
+Para analizar el impacto de clusters de variables altamente correlacionadas, usamos la herramienta \texttt{rfpimp} desarrollada por Terrence Parr y otros. Esta herramienta permite agrupar variables y analizar su importancia realizando permutaciones sobre las variables escogidas y reportando la perdida de precisión en el modelo. En la figura \ref{fig:importances_structural_cluster} vemos como las variables de hidrofobicidad y polaridad se ubican a la par de la matriz GRANTHAM. También aparecen nuevas variables en nivel de importancia, como DNA\_BIND y TRANSMEM (Sitio de unión de la proteína y region transmembrana respectivamente).
 
 
 \pagebreak
@@ -444,11 +442,11 @@ Para analizar el impacto de clusters de variables altamente correlacionadas, usa
 
 \section{Modelo usando variables genómicas}
 
-Otra de las preguntas que nos hicimos fue si las variables genómicas podían hacer un aporte al modelo, siendo que en los genes donde se produce la mutación que finalmente da origen a la variante en la proteína. En la base de datos Humsavar existe, para la mayoría de las mutaciones, el identificador rsID o Reference SNP ID. Un identificador rsID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37, en nuestro caso). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) \cite{dbSNP}, datos como el cromosoma, la posición, el cambio de nucleótido de la variante y su clasificacion funcional, como se detalla en la subsección 1.3.2. 
+Otra de las preguntas que nos hicimos fue si las variables genómicas podían hacer un aporte al modelo, siendo que es en los genes donde se produce la mutación que finalmente da origen a la variante en la proteína. En la base de datos Humsavar existe, para la mayoría de las mutaciones, el identificador rsID o Reference SNP ID. Un identificador rsID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37, en nuestro caso). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) \cite{dbSNP}, datos como el cromosoma, la posición, el cambio de nucleótido de la variante y su clasificacion funcional.
 
 \subsection{Variables de conservación}
 
-En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). La \textit{conservación} es un concepto biológico que refiere a las secuencias conservadas, es decir, secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común (esta \textit{familia} de especies también se denomina árbol filogenético). La conservación puede ser cuantificada con distintos tipos de enfoques, pero en lo que nos concierne, dos de los más utilizados son 1) a través de alineamientos múltiples de secuencias y 2), mediante el uso de árboles filogenéticos.
+En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). La \textit{conservación} es un concepto biológico que refiere a las secuencias conservadas, es decir, secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común. La conservación puede ser cuantificada con distintos tipos de enfoques, pero en lo que nos concierne, dos de los más utilizados son 1) a través de alineamientos múltiples de secuencias y 2), mediante el uso de árboles filogenéticos.
 
 En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (caballo). En base a este alineamiento se usan dos medidas distintas que buscan detectar aquellas regiones en el genoma (ADN) con mayor nivel de conservación entre las distintas especies. Las medidas son las siguientes:
 \begin{itemize}
@@ -497,7 +495,7 @@ Con los atributos mencionados anteriormente, pudimos cruzar la información usan
 
 \subsection{Descripción estadística del dataset Genómico}
 
-A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas (tablas \ref{conservacion_vars} y \ref{snvbox_vars}). Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). También incluimos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional.
+A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas (tablas \ref{conservacion_vars} y \ref{snvbox_vars}). Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). También incluimos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional (tablas \ref{conservacion_vars} y \ref{snvbox_vars}). El AUC univariado de las variables de conservación (PHYLOP46WAY, PHASTCONS46WAY y CONS) es alto, lo que significa que variantes en zonas de alta conservación son buenos indicadores de patogenicidad.
 
 % \subsubsection{Variables de Conservación}
 \begin{table}[H]
@@ -505,8 +503,8 @@ A continuación presentamos, como en las secciones anteriores, una descripción 
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
 Variable & mean & std & min & 25\%  & 50\% & 75\%  & max & AUC \\ \hline
-PHYLOP46WAY & 2.16 &  2.29 & -8.22 &  0.29 &  1.81 &  4.23 &  6.42 & 0.17 \\ \hline
-PHASTCONS46WAY & 0.67 & 0.44 &  0.00 &  0.06 &  0.99 &  1.00 &  1.00 & 0.22 \\ \hline
+PHYLOP46WAY & 2.16 &  2.29 & -8.22 &  0.29 &  1.81 &  4.23 &  6.42 & 0.83 \\ \hline
+PHASTCONS46WAY & 0.67 & 0.44 &  0.00 &  0.06 &  0.99 &  1.00 &  1.00 & 0.78 \\ \hline
 \end{tabular}
 \caption{Variables de Conservación del dataset Genómico.}
 \label{conservacion_vars}
@@ -518,9 +516,9 @@ PHASTCONS46WAY & 0.67 & 0.44 &  0.00 &  0.06 &  0.99 &  1.00 &  1.00 & 0.22 \\ \
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
 Variable         & mean & std  & min  & 25\% & 50\% & 75\% & max & AUC  \\ \hline
-CONS             & 0.65 & 0.09 & 0.14 & 0.59 & 0.66 & 0.72 & 0.90 & 0.35 \\ \hline
-SNP\_DEN         & 0.06 & 0.10 & 0.00 & 0.03 & 0.04 & 0.06 & 1.04 & 0.44 \\ \hline
-HAPMAP\_SNP\_DEN & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 & 0.52 \\ \hline
+CONS             & 0.65 & 0.09 & 0.14 & 0.59 & 0.66 & 0.72 & 0.90 & 0.65 \\ \hline
+SNP\_DEN         & 0.06 & 0.10 & 0.00 & 0.03 & 0.04 & 0.06 & 1.04 & 0.56 \\ \hline
+HAPMAP\_SNP\_DEN & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 & 0.48 \\ \hline
 \end{tabular}
 \caption{Variables extraídas de SNVBox a nivel de Exón}
 \label{snvbox_vars}
@@ -590,7 +588,7 @@ Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por l
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
+    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
     \caption{Variación en la precisión al permutar clusters de variables correlacionadas ($>$ 0.90) del dataset Genómico.}
     \label{fig:importance_genomic_cluster}
 \end{figure}
@@ -637,9 +635,9 @@ El dataset Integral posee 68,508 variantes (la misma cantidad de variantes del d
 
 \subsection{Generación del modelo}
 
-Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, repitiendo las mismas fases de imputación y entrenamiento usadas previamente en los modelos Genómico y Físico-Químico. Es decir, que en la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. El entrenamiento consistió en una búsqueda de hiperparámetros óptimos usando \textit{GridSearch} en un diccionario de posibles parámetros, evaluados en una triple validación cruzada basándonos en el AUC como métrica a optimizar. El dataset de entrenamiento posee 45,900 variantes, aproximadamente dos tercios del dataset completo. Una vez entrenado el modelo usando este \textit{pipeline}, se evaluaron las variantes del dataset de testeo, es decir, el tercio restante del dataset completo.
+Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, repitiendo las mismas fases de imputación y entrenamiento usadas previamente en los modelos Genómico y Físico-Químico. Es decir, que en la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. El entrenamiento consistió en una búsqueda de hiperparámetros óptimos usando \textit{GridSearch} en un diccionario de posibles parámetros, evaluados en una triple validación cruzada basándonos en el AUC como métrica a optimizar. El dataset de entrenamiento posee 45,900 variantes, aproximadamente dos tercios del dataset completo. Una vez entrenado el modelo usando este \textit{pipeline}, se evaluaron las variantes del dataset de testeo, es decir, el tercio restante del dataset completo. Posteriormente utilizamos un método de boosting, Extreme Gradient Boosting (xgboost). Los hiperparámetros de este método fueron elegidos usando una búsqueda randomizada (Randomized Grid Search). Este método de optimización fue elegido dado que las combinaciones que se evalúan en el método Grid Search son demasiadas. La búsqueda randomizada evalúa las mismas alternativas pero eligiendo combinaciones de forma aleatoria, sin probar todas las combinaciones. También es posible evaluar valores tomados de acuerdo a una distribución específica.
 
-\subsection{Resultados del modelo Integral}
+\subsection{Resultados del modelo Integral [\todo{Faltan resultados de xgboost}]}
 
 El modelo obtuvo un AUC de 0.88. Esto representa una mejora con respecto al modelo Genómico (0.85) y al modelo Físico-Químico (0.72). Si comparamos las métricas obtenidas en el modelo Genómico con las de este modelo (figura \ref{tab:metrics_integral}), se puede apreciar un nuevo salto en el \textit{recall} de las variables patogénicas, que pasa de un 0.64 en el modelo Genómico al 0.80, lo que representa un 16\% de mejora. También mejora la precisión con respecto a la detección de esta clase, que pasa de 0.69 a 0.76. La única métrica que decae es el \textit{recall} de la clase Benigna, que pasa de 0.87 a 0.82, lo que representa una leve caída del \textit{f1-score}.
 
@@ -647,7 +645,7 @@ El modelo obtuvo un AUC de 0.88. Esto representa una mejora con respecto al mode
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-             & precision & recall & f1-score \\ \hline
+Clase        & precision & recall & f1-score \\ \hline
 Benignas     & 0.85      & 0.82   & 0.83     \\ \hline
 Patogénicas  & 0.76      & 0.80   & 0.78     \\ \hline
 Promedio     & 0.81      & 0.81   & 0.81     \\ \hline
@@ -694,7 +692,6 @@ En la figura \ref{fig:importance_cluster_integral} unimos las variables de alta 
     \label{fig:importances_integral}
 \end{subfigure}
 
-
 \end{figure}
 
 \section{Integrando las nuevas variables al dataset VarQ Curado}
@@ -705,10 +702,10 @@ En esta sección buscamos cuantificar en qué medida el esfuerzo realizado a lo 
 Para generar este dataset cruzamos las variantes de ambos datasets quedándonos con las variantes de VarQ. El dataset resultante posee 73 variables, que corresponden a las 63 variables del dataset Integral sumado a las 9 variables del dataset VarQ Curado y la variable de respuesta. Este dataset posee 7,418 variantes de las cuales 5,377 (72\%) son patogénicas y 2,041 (28\%) son benignas. 
 
 \subsection{Generación del Modelo}
-Como a lo largo de todo este trabajo, volvimos a repetir el pipeline de Random Forest con imputación de variables continuas con la mediana y con el valor más frecuente en el caso de las variables categóricas. El dataset de entrenamiento posee 4,970 variantes (66\%), y el tercio restante se destinó al dataset de test. Estas variables fueron elegidas al azar, con una semilla pseudoaleatoria para poder replicar el experimento.  
+Como a lo largo de todo este trabajo, volvimos a repetir el pipeline de Random Forest con imputación de variables continuas con la mediana y con el valor más frecuente en el caso de las variables categóricas. También evaluamos el dataset usando xgboost de la misma forma que con el modelo Integral. El dataset de entrenamiento posee 4,970 variantes (66\%), y el tercio restante se destinó al dataset de test. Estas variables fueron elegidas al azar, con una semilla pseudoaleatoria para poder replicar el experimento.  
 
-\subsection{Resultados}
-El dataset de test arrojó un AUC de 0.87, que representa una mejora sensible con respecto al modelo realizado con el dataset VarQ Curado (0.74), sin superar lo obtenido por el dataset Integral (0.88). Con respecto a las métricas de análisis, en la tabla \ref{tab:metrics_integral_varq} observamos una mejora generalizada, especialmente en la precisión en la detección de variantes benignas, que pasa de 0.57 a 0.81 en el nuevo modelo, y también en el \textit{recall}, que pasa de 0.26 a 0.53. Si bien sigue siendo un número bajo, es posible modificar el \textit{threshold} en la función de decisión para obtener un \textit{recall} más alto sacrificando precisión. 
+\subsection{Resultados  [\todo{Faltan resultados de xgboost}]}
+El dataset de test arrojó un AUC de 0.87 para RF y 0.88 con xgboost, que representa una mejora sensible con respecto al modelo realizado con el dataset VarQ Curado (0.74), sin superar lo obtenido por el dataset Integral (0.90 con xgboost). Con respecto a las métricas de análisis, en la tabla \ref{tab:metrics_integral_varq} observamos una mejora generalizada, especialmente en la precisión en la detección de variantes benignas, que pasa de 0.57 a 0.81 en el nuevo modelo, y también en el \textit{recall}, que pasa de 0.26 a 0.53. Si bien sigue siendo un número bajo, es posible modificar el \textit{threshold} en la función de decisión para obtener un \textit{recall} más alto sacrificando precisión. 
 
 \begin{table}[H]
 \centering
