@@ -1,4 +1,18 @@
-En este trabajo comenzamos tomando un dataset con el objetivo de elaborar un primer modelo de predicción. Los resultados iniciales no fueron satisfactorios, y empezamos a evaluar distintas alternativas para mejorarlos. En este sentido generamos un nuevo dataset con un número mucho mayor de variantes. Este nuevo dataset no derivó en una mejora sustancial, si comparamos los resultados del dataset Físico-Químico con los obtenidos en el dataset VarQ Curado. Luego exploramos nuevas dimensiones que el dataset original no poseía. Estas nuevas variables genómicas si representaron una mejora sustancial con el dataset Físico-Químico, y estas mejoras se mantuvieron al sumarlas al dataset original. Estas mejoras pueden observarse en las figuras \ref{fig:curvas_auc_humsavar} y \ref{fig:curvas_auc_varq}. En particular las variables que aportaron las mejoras más significativas son las de conservación a nivel filogenético como también las matrices de sustitución de aminoácidos.
+En el presente trabajo hemos explorado diferentes aristas relativas al problema de predicción planteado con el objetivo de responder nuestros interrogantes iniciales. 
+
+% \begin{itemize}
+%     \item El dataset de VarQ se concentra en variables de tipo estructural. ¿Podemos enriquecerlo con variables de otras dimensiones (físico-químicas, genómicas, filogenéticas)?
+%     \item ¿Cómo afectan las distintas variables a nuestros modelos? ¿Cuáles son las más importantes?
+%     \item ¿Cuáles son los mejores algoritmos de aprendizaje automático para resolver este tipo de problemas y cuáles son sus parámetros?
+    
+% \end{itemize}
+
+La primer pregunta era acerca de la posibilidad de enriquecer el dataset con nuevas fuentes de datos. Esta pregunta fue respondida afirmativamente, dado que agregar nuevas dimensiones demostró ser efectivo en la mejora del modelo. 
+En particular, el modelo que usó variables genómicas, arrojó un AUC de 0.85 (RF). El otro conjunto de variables analizado, las Físico-Químicas, también demostraron ser de utilidad, alcanzando un AUC de 0.72 (RF). El modelo Integral, que combinó ambos datasets, resultó ser superior a los anteriores. Luego sumar estas variables al dataset VarQ también mostró una mejora, pasando de un AUC de 0.74 a 0.88 (xgboost). Ver figuras \ref{fig:curvas_auc_humsavar} y \ref{fig:curvas_auc_varq}. [\todo{Faltan curvas de xgboost}]
+
+Otra de las preguntas que nos hicimos al comienzo del trabajo, sobre la importancia de las variables, nos aportó información sobre como estas afectan al modelo, en el que detectamos en particular variables de conservación (phastCons y phyloP), la variación de la energía (del dataset varQ, obtenida vía PDB) y las matrices de sustitución o distancia (GRANTHAM, PAM250, BLOSUM, EX, JM y VB) como las más relevantes. Si bien el dataset VarQ ya poseía variables de conservación, estas pertenecen a familias de proteínas (Pfam).
+
+Por último, pero no menos importante, este trabajo nos permitió comparar distintos métodos de aprendizaje automático, de los cuales obtuvimos los mejores resultados con métodos de ensamble, inicialmente con Random Forest y luego con el uso de xgboost para el modelo Integral. La descripción estadística del dataset nos permitió entender como el metodo tradicional para calcular importancia de variables en métodos de ensamble se ve afectado en variables altamente correlacionadas.  
 
 \subsection{Trabajo Futuro}
 
@@ -6,10 +20,7 @@ Uno de los principales productos de este trabajo es la generación de un nuevo d
 
 También creemos que los trabajos futuros que deriven de este deberían hacer énfasis en la generación de modelos que mejoren la selección de hiperparámetros (en particular sugerimos el uso de técnicas de optimización bayesiana), y un tratamiento de nulos en variables categóricas más avanzado en comparación al usado en este trabajo. 
 
-
 \newpage
-
-
 
 \begin{figure}[H]
 \centering
@@ -29,7 +40,6 @@ También creemos que los trabajos futuros que deriven de este deberían hacer é
     \caption{Comparación de curvas ROC entre los datasets VarQ Curado y VarQ Curado + Integral.}
     \label{fig:curvas_auc_varq}
 \end{subfigure}
-
 \end{figure}
 
 
