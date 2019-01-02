@@ -4,7 +4,7 @@ Comenzamos nuestro trabajo analizando el dataset construido en la tesis de Santi
 
 \subsection{Variables del dataset VarQ Completo}
 
-A continuación damos una descripción detallada de las variables originales encontradas en el dataset. Presentamos un extracto del trabajo de Santiago Moreno en donde se describen dichas variables [\todo{TOMADO DE TESIS DE SANTI}]: 
+A continuación damos una descripción detallada de las variables originales encontradas en el dataset. Presentamos un extracto del trabajo de Santiago Moreno en donde se describen dichas variables: 
 
 \begin{itemize}
     \item Variación de Energía (ENE): En VarQ, las mutaciones son modeladas con el software FoldX, que construye un modelo a partir de una estructura dada y luego muta residuos específicos. Luego el software predice el impacto energético de la mutación en la estabilidad de la proteína o, en caso de tratarse de un complejo, en la estabilidad del mismo.
@@ -92,7 +92,7 @@ Otro de los puntos importantes durante la exploración del dataset es la detecci
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/varq/proporcion_nulos.pdf}
+    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/proporcion_nulos.pdf}
     \caption{Proporción de variantes con valor nulo por variable del dataset VarQ Curado.}
     \label{fig:proporcion_nulos_varq}
 \end{figure}
@@ -101,8 +101,8 @@ Otro factor importante a considerar es cuántas variables nulas tienen cada una 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/3/varq/nulos_varq.pdf}
-    \caption{Histograma de cantidad de variables nulas del dataset VarQ Curado.}
+    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/nulos_varq.pdf}
+    \caption{Histograma de cantidad de variables nulas por fila del dataset VarQ Curado.}
     \label{fig:nulos_varq}
 \end{figure}
 
@@ -112,7 +112,7 @@ También queremos conocer qué tan correlacionadas se encuentras las variables. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/varq_corrplot.pdf}
+    \includegraphics[scale=0.7]{documents/latex/figures/3/varq/varq_corrplot.pdf}
     \caption{Correlación de Spearman para las variables de VarQ Curado.}
     \label{fig:varq_corrplot}
 \end{figure}
@@ -146,16 +146,16 @@ Luego del preprocesamiento, para cada uno de los algoritmos se realizó una bús
 
 Random Forest fue el mejor modelo con un AUC de 0.74. Los parámetros óptimos de este modelo fueron una profundidad de árbol de 7, 100 estimadores y una cantidad máxima de variables por árbol de 4.
 
-La Regresión logística y SVC obtuvieron 0.71 y 0.70 respectivamente. Estos modelos se caracterizaron ademas por tener una tendencia a clasificar a las variantes como patogénicas, lo que se puede observar en su alto recall y menor precisión con respecto a Random Forest. En particular, SVC clasificó a todas las variantes del dataset de evaluación como patogénicas.
+La Regresión logística y SVC obtuvieron 0.71 y 0.70 respectivamente. Estos modelos se caracterizaron ademas por tener una tendencia a clasificar a las variantes como patogénicas, lo que se puede observar en su alto recall y menor precisión con respecto a Random Forest. En particular, SVC clasificó a todas las variantes del dataset de evaluación como patogénicas. También el tiempo de entrenamiento fue mucho mayor que el del resto de los algoritmos.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-Modelo & Precisión & Recall & AUC & F1-score & F2-score & $t_{fit}$ & $t_{pred}$ \\ \hline
-SVC    & 0.72 & \textbf{1.00} & 0.70 & 0.84 & \textbf{0.93} & 2 m 39 s & 0.77s \\ \hline
-LR     & 0.75 & 0.94 & 0.71 & 0.84 & 0.90 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
-RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 0.89 & 9.82 s & 0.11 s \\ \hline
+Modelo & Precisión & Recall & AUC & F1-score & $t_{fit}$ & $t_{pred}$ \\ \hline
+SVC    & 0.72 & \textbf{1.00} & 0.70 & 0.84 & 2 m 39 s & 0.77s \\ \hline
+LR     & 0.75 & 0.94 & 0.71 & 0.84 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
+RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 9.82 s & 0.11 s \\ \hline
 \end{tabular}
 \label{tab:metrics_model}
 \end{table}
@@ -487,7 +487,13 @@ Por último, usamos variables genómicas del dataset SNVBox, específicamente de
 
 Estas variables se definen a nivel de exón, por lo que cada una de ellas posee dos identificadores: UID (identificador de la secuencia proteica a la que pertenece) y EXON (identificador del exón dentro de cada transcripto mRNA). Estos identicadores permiten el cruce con la tabla \texttt{Transcript\_Exon} dentro de la base SNVBox. Con esta tabla podemos obtener el número del cromosoma del exón, y la posición de inicio y fin del exón dentro del cromosoma. Una vez obtenidos estos datos, pudimos extraer todos los rsID dentro de esa subsecuencia. Finalmente, le asignamos el valor de la variable a todos los rsIDs en nuestra tabla Humsavar. Para algunos casos obtuvimos más de un valor para un mismo rsID, por lo que tomamos la decisión de promediarlos.
 
-\todo{Esquema de acceso a la variable}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[scale=0.55]{documents/latex/figures/3/genomic/exon_diagram.pdf}
+    \caption{Esquema de acceso a las variables genómicas de SNVBox.}
+    \label{fig:exon_diagram}
+\end{figure}
 
 \subsection{Construcción del dataset Genómico}
 
@@ -548,7 +554,7 @@ Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta cor
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/genomic_corr.pdf}
+    \includegraphics[scale=0.7]{documents/latex/figures/3/genomic/genomic_corr.pdf}
     \caption{Correlación de Spearman para las variables continuas del dataset Genómico.}
     \label{fig:corrplot_genomic}
 \end{figure}
@@ -567,7 +573,7 @@ Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0.
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-             & precision & recall & f1-score \\ \hline
+             & Precisión & Recall & F1-score \\ \hline
 Benignas     & 0.83      & 0.87   & 0.85     \\ \hline
 Patogénicas  & 0.69      & 0.64   & 0.67     \\ \hline
 Promedio     & 0.79      & 0.79   & 0.79     \\ \hline
@@ -588,7 +594,7 @@ Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por l
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
+    \includegraphics[scale=0.7]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
     \caption{Variación en la precisión al permutar clusters de variables correlacionadas ($>$ 0.90) del dataset Genómico.}
     \label{fig:importance_genomic_cluster}
 \end{figure}
@@ -635,17 +641,17 @@ El dataset Integral posee 68,508 variantes (la misma cantidad de variantes del d
 
 \subsection{Generación del modelo}
 
-Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, repitiendo las mismas fases de imputación y entrenamiento usadas previamente en los modelos Genómico y Físico-Químico. Es decir, que en la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. El entrenamiento consistió en una búsqueda de hiperparámetros óptimos usando \textit{GridSearch} en un diccionario de posibles parámetros, evaluados en una triple validación cruzada basándonos en el AUC como métrica a optimizar. El dataset de entrenamiento posee 45,900 variantes, aproximadamente dos tercios del dataset completo. Una vez entrenado el modelo usando este \textit{pipeline}, se evaluaron las variantes del dataset de testeo, es decir, el tercio restante del dataset completo. Posteriormente utilizamos un método de boosting, Extreme Gradient Boosting (xgboost). Los hiperparámetros de este método fueron elegidos usando una búsqueda randomizada (Randomized Grid Search). Este método de optimización fue elegido dado que las combinaciones que se evalúan en el método Grid Search son demasiadas. La búsqueda randomizada evalúa las mismas alternativas pero eligiendo combinaciones de forma aleatoria, sin probar todas las combinaciones. También es posible evaluar valores tomados de acuerdo a una distribución específica.
+Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, repitiendo las mismas fases de imputación y entrenamiento usadas previamente en los modelos Genómico y Físico-Químico. Es decir, que en la fase de imputación usamos la mediana para los valores nulos de las variables continuas y el valor más frecuente en las variables categóricas. El entrenamiento consistió en una búsqueda de hiperparámetros óptimos usando \textit{GridSearch} en un diccionario de posibles parámetros, evaluados en una triple validación cruzada basándonos en el AUC como métrica a optimizar. El dataset de entrenamiento posee 45,900 variantes, aproximadamente dos tercios del dataset completo. Una vez entrenado el modelo usando este \textit{pipeline}, se evaluaron las variantes del dataset de testeo, es decir, el tercio restante del dataset completo. Posteriormente utilizamos un método de boosting, Xtreme Gradient Boosting (XGBoost). Los hiperparámetros de este método fueron elegidos usando una búsqueda randomizada (Randomized Grid Search). Este método de optimización fue elegido dado que las combinaciones que se evalúan en el método Grid Search son demasiadas. La búsqueda randomizada evalúa las mismas alternativas pero eligiendo combinaciones de forma aleatoria, sin probar todas las combinaciones. También es posible evaluar valores tomados de acuerdo a una distribución específica.
 
-\subsection{Resultados del modelo Integral [\todo{Faltan resultados de xgboost}]}
+\subsection{Resultados del modelo Integral}
 
-El modelo obtuvo un AUC de 0.88. Esto representa una mejora con respecto al modelo Genómico (0.85) y al modelo Físico-Químico (0.72). Si comparamos las métricas obtenidas en el modelo Genómico con las de este modelo (figura \ref{tab:metrics_integral}), se puede apreciar un nuevo salto en el \textit{recall} de las variables patogénicas, que pasa de un 0.64 en el modelo Genómico al 0.80, lo que representa un 16\% de mejora. También mejora la precisión con respecto a la detección de esta clase, que pasa de 0.69 a 0.76. La única métrica que decae es el \textit{recall} de la clase Benigna, que pasa de 0.87 a 0.82, lo que representa una leve caída del \textit{f1-score}.
+El modelo Random Forest obtuvo un AUC de 0.88. Esto representa una mejora con respecto al modelo Genómico (0.85) y al modelo Físico-Químico (0.72). Si comparamos las métricas obtenidas en el modelo Genómico con las de este modelo (figura \ref{tab:metrics_integral}), se puede apreciar un nuevo salto en el \textit{recall} de las variables patogénicas, que pasa de un 0.64 en el modelo Genómico al 0.80, lo que representa un 16\% de mejora. También mejora la precisión con respecto a la detección de esta clase, que pasa de 0.69 a 0.76. La única métrica que decae es el \textit{recall} de la clase Benigna, que pasa de 0.87 a 0.82, lo que representa una leve caída del \textit{f1-score}. El modelo XGBoost superó la performance de Random Forest alcanzando un AUC de 0.90.
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-Clase        & precision & recall & f1-score \\ \hline
+Clase        & Precisión & Recall & F1-score \\ \hline
 Benignas     & 0.85      & 0.82   & 0.83     \\ \hline
 Patogénicas  & 0.76      & 0.80   & 0.78     \\ \hline
 Promedio     & 0.81      & 0.81   & 0.81     \\ \hline
@@ -668,8 +674,8 @@ En la figura \ref{fig:importance_cluster_integral} unimos las variables de alta 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/integral/integral_importance_cluster.pdf}
-    \caption{Importancia de variables clusterizadas (basados en correlación de Spearman) usando permutación.}
+    \includegraphics[scale=0.8]{documents/latex/figures/3/integral/integral_importance_cluster.pdf}
+    \caption{Importancia de variables clusterizadas (basados en correlación de Spearman) usando permutación. Resultados del modelo usando Random Forest.}
     \label{fig:importance_cluster_integral}
 \end{figure}
 
@@ -680,7 +686,7 @@ En la figura \ref{fig:importance_cluster_integral} unimos las variables de alta 
 \begin{subfigure}[t]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral/auc_integral.pdf}
-    \caption{Curva AUC del algoritmo Random Forest del dataset Integral. La línea punteada corresponde a un predictor Random.}
+    \caption{Comparación de curvas AUC entre algoritmos Random Forest y XGBoost. La línea punteada corresponde a un predictor Random.}
     \label{fig:auc_integral}
 \end{subfigure}
 \hfill
@@ -688,9 +694,11 @@ En la figura \ref{fig:importance_cluster_integral} unimos las variables de alta 
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral/importances_integral.pdf}
-    \caption{Los 10 atributos más importantes del dataset Integral.}
+    \caption{Los 10 atributos más importantes del dataset Integral aportados por el algoritmo Random Forest.}
     \label{fig:importances_integral}
 \end{subfigure}
+
+\caption{Curva AUC y atributos más importantes del modelo Integral.}
 
 \end{figure}
 
@@ -702,16 +710,16 @@ En esta sección buscamos cuantificar en qué medida el esfuerzo realizado a lo 
 Para generar este dataset cruzamos las variantes de ambos datasets quedándonos con las variantes de VarQ. El dataset resultante posee 73 variables, que corresponden a las 63 variables del dataset Integral sumado a las 9 variables del dataset VarQ Curado y la variable de respuesta. Este dataset posee 7,418 variantes de las cuales 5,377 (72\%) son patogénicas y 2,041 (28\%) son benignas. 
 
 \subsection{Generación del Modelo}
-Como a lo largo de todo este trabajo, volvimos a repetir el pipeline de Random Forest con imputación de variables continuas con la mediana y con el valor más frecuente en el caso de las variables categóricas. También evaluamos el dataset usando xgboost de la misma forma que con el modelo Integral. El dataset de entrenamiento posee 4,970 variantes (66\%), y el tercio restante se destinó al dataset de test. Estas variables fueron elegidas al azar, con una semilla pseudoaleatoria para poder replicar el experimento.  
+Como a lo largo de todo este trabajo, volvimos a repetir el pipeline de Random Forest con imputación de variables continuas con la mediana y con el valor más frecuente en el caso de las variables categóricas. También evaluamos el dataset usando XGBoost de la misma forma que con el modelo Integral. El dataset de entrenamiento posee 4,970 variantes (66\%), y el tercio restante se destinó al dataset de test. Estas variables fueron elegidas al azar, con una semilla pseudoaleatoria para poder replicar el experimento.  
 
-\subsection{Resultados  [\todo{Faltan resultados de xgboost}]}
-El dataset de test arrojó un AUC de 0.87 para RF y 0.88 con xgboost, que representa una mejora sensible con respecto al modelo realizado con el dataset VarQ Curado (0.74), sin superar lo obtenido por el dataset Integral (0.90 con xgboost). Con respecto a las métricas de análisis, en la tabla \ref{tab:metrics_integral_varq} observamos una mejora generalizada, especialmente en la precisión en la detección de variantes benignas, que pasa de 0.57 a 0.81 en el nuevo modelo, y también en el \textit{recall}, que pasa de 0.26 a 0.53. Si bien sigue siendo un número bajo, es posible modificar el \textit{threshold} en la función de decisión para obtener un \textit{recall} más alto sacrificando precisión. 
+\subsection{Resultados}
+El dataset de test arrojó un AUC de 0.86 para Random Forest y 0.88 con XGBoost, que representa una mejora sensible con respecto al modelo realizado con el dataset VarQ Curado (0.74), sin superar lo obtenido por el dataset Integral (0.90 con XGBoost). Con respecto a las métricas de análisis, en la tabla \ref{tab:metrics_integral_varq} observamos una mejora generalizada, especialmente en la precisión en la detección de variantes benignas, que pasa de 0.57 a 0.81 en el nuevo modelo, y también en el \textit{recall}, que pasa de 0.26 a 0.53. Si bien sigue siendo un número bajo, es posible modificar el \textit{threshold} en la función de decisión para obtener un \textit{recall} más alto sacrificando precisión. 
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-             & precision & recall & f1-score \\ \hline
+             & Precision & Recall & F1-score \\ \hline
 Benignas     & 0.81      & 0.53   & 0.64     \\ \hline
 Patogénicas  & 0.84      & 0.95   & 0.89     \\ \hline
 Promedio     & 0.83      & 0.83   & 0.82     \\ \hline
@@ -725,8 +733,8 @@ La información proporcionada por la librería acerca de la importancia de las v
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/integral_varq/integral_varq_importance_cluster.pdf}
-    \caption{Variación en la precisión al permutar clusters de variables correlacionadas ($>$ 0.90) del dataset Integral+VarQ Curado.}
+    \includegraphics[scale=0.7]{documents/latex/figures/3/integral_varq/integral_varq_importance_cluster.pdf}
+    \caption{Variación en la precisión al permutar clusters de variables correlacionadas ($>$ 0.90) del dataset Integral+VarQ Curado usando Random Forest.}
     \label{fig:importance_cluster_integral_varq}
 \end{figure}
 
@@ -737,7 +745,7 @@ La información proporcionada por la librería acerca de la importancia de las v
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral_varq/auc_varq_integral.pdf}
-    \caption{Curva AUC del algoritmo Random Forest del dataset Integral+VarQ Curado. La línea punteada corresponde a un predictor Random.}
+    \caption{Curva AUC del algoritmo Random Forest y XGBoost del dataset Integral+VarQ Curado. La línea punteada corresponde a un predictor Random.}
     \label{fig:auc_integral_varq}
 \end{subfigure}
 \hfill
@@ -745,7 +753,9 @@ La información proporcionada por la librería acerca de la importancia de las v
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{documents/latex/figures/3/integral_varq/importances_varq_integral.pdf}
-    \caption{Los 10 atributos más importantes del dataset Integral+VarQ Curado.}
+    \caption{Los 10 atributos más importantes del dataset Integral+VarQ Curado usando Random Forest.}
     \label{fig:importances_integral_varq}
 \end{subfigure}
+
+\caption{Curva AUC y atributos más importantes del dataset Integral+VarQ Curado.}
 \end{figure}

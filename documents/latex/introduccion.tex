@@ -25,8 +25,7 @@ Para entender un poco como funciona el proceso por el cual la información gené
     \label{fig:table_codon}
 \end{figure}
 
-\newpage
-
+\clearpage
 
 \subsubsection{Variaciones genéticas}
 
@@ -43,15 +42,23 @@ Estas variaciones se dividen en tres grupos principales:
 
 Finalmente, cualquiera de estas variaciones pueden ser beneficiosas para el organismo, neutrales (sin efecto alguno) o perjudiciales. 
 
-\subsubsection{Polimorfismos de un sólo nucleótido}
+\subsubsection{Polimorfismos de un sólo nucleótido (SNPs)}
 
 En el marco de esta tesis estudiaremos los polimorfismos de un sólo nucleótido, o SNPs por sus siglas en inglés (Single Nucleotide Polymorphism). 
 
-En la figura \todo{X} podemos ver los distintos tipos de SNP. De acuerdo al lugar, pueden ocurrir en una zona codificante, es decir una porción del gen que codifica una proteína, o en una zona no codificante, como los intrones (partes del gen no codificante).
+En la figura \ref{fig:snp_types} podemos ver los distintos tipos de SNP. De acuerdo al lugar, pueden ocurrir en una zona codificante, es decir una porción del gen que codifica una proteína, o en una zona no codificante, como los intrones (partes del gen no codificante).
 
 Dentro de las sustituciones en la zona codificante, algunas mutaciones pueden ser sinónimas, es decir que existe un cambio en uno de los nucleótidos del ADN pero dicho nucleótido es reemplazado por uno igual. También puede ocurrir una sustitución no sinónima, en donde el nucleótido es reemplazado por uno distinto. Esto no necesariamente genera un cambio en el aminoácido que lo codifica. Podemos ver en la tabla \ref{fig:table_codon} que el muchos codones codifican el mismo aminoácido, por ejemplo, los codones AAU, AUC y AUA codifican el aminoácido isoleucina. Luego, si en la cadena de ADN, el codón AUA sufre una mutación en su último nucleótido, pasando a ser AUC, dicho codón seguirá codificando para el mismo aminoácido (ver tabla \ref{fig:table_codon}). Estas sustituciones se denominan sustituciones no sinónimas silenciosas (\textit{silent}).
 
 En particular estudiaremos los SNPs con cambio de sentido (\textit{missense}), es decir aquellos que deriven en un cambio de aminoácido en la proteína producida por la variante del gen. \textbf{El problema que intentaremos atacar es detectar aquellos SNPs cuyo cambio en el aminoácido de la proteína generada pueda estar asociado a alguna patogénesis}. 
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[scale=0.55]{documents/latex/figures/1/snp_types.pdf}
+    \caption{Tipos de SNP.}
+    \label{fig:snp_types}
+\end{figure}
 
 
 % \subsubsection{Las enfermedades poco frecuentes (EPOF)}
@@ -77,11 +84,11 @@ En este trabajo nos vamos a centrar exclusivamente en el tipo de aprendizaje sup
 
 \subsubsection{Aprendizaje supervisado}
 
-Como mencionamos anteriormente, el aprendizaje supervisado trata de predecir una respuesta usando un modelo generado con datos correctamente etiquetados. Definido de manera formal, dado un set de datos $ \mathcal{D} = \{(x^n, y^n), n = 1...N\}$  buscamos aprender la relación entre el ejemplo $x$ y la variable de respuesta $y$ tal que al recibir un nuevo ejemplo $x^*$ la respuesta predicha $y^*$ sea precisa \cite{Barber2011}. La precisión está definida formalmente por la función de pérdida o \textit{Loss Function}, $L(y^{pred}, y^{true})$. Esta función nos permite medir el costo de errar en la predicción y por lo tanto cuantificar qué tan bueno es nuestro modelo. A continuación haremos un recorrido por los métodos que usamos en esta tesis.
+Como mencionamos anteriormente, el aprendizaje supervisado trata de predecir una respuesta usando un modelo generado con datos correctamente etiquetados. Definido de manera formal, dado un set de datos $ \mathcal{D} = \{(x^n, y^n), n = 1...N\}$  buscamos aprender la relación entre el ejemplo $x$ y la variable de respuesta $y$ tal que al recibir un nuevo ejemplo $x^*$ la respuesta predicha $y^*$ sea precisa \cite{Barber2011}. La precisión está definida formalmente por la función de pérdida o \textit{Loss Function}, $L(y^{pred}, y^{true})$. Esta función nos permite medir el costo de errar en la predicción y por lo tanto cuantificar qué tan bueno es nuestro modelo. A continuación haremos un recorrido por los métodos que utilizaremos en esta tesis.
 
 \subsubsection{Regresión logística}
 
-La regresión logística (LR) es un modelo basado en la regresión lineal. Al igual que este, consiste en buscar los coeficientes de una función de manera que la \textit{loss function} de la función sea el mínimo. A diferencia de la regresión lineal, que usa una función lineal (o polinomial) para aproximar los puntos (que son valores continuos), la regresión logística usa la función logística para aproximar los valores (que son categóricos). Esta función, generalizada para multiples variables predictoras y variable de respuesta binaria se define como:
+La regresión logística (LR) es un modelo basado en la regresión lineal. Al igual que este, consiste en buscar los coeficientes de una función de manera que la \textit{loss function} de la función sea el mínimo. A diferencia de la regresión lineal, que usa una función lineal (o polinomial) para aproximar los puntos (que son valores continuos), la regresión logística usa la función logística para aproximar los valores (que son categóricos). Esta función, generalizada para múltiples variables predictoras y variable de respuesta binaria se define como:
 
 \begin{equation*}
 h_{\theta}(\boldsymbol{X}) = \frac{1}{1 + e^{\theta^{T}\boldsymbol{X}}} = Pr(Y = 1 | \boldsymbol{X}; \theta)
@@ -91,11 +98,11 @@ donde $\boldsymbol{X}$ representa el vector de variables predictoras, $\theta$ e
 
 \subsubsection{Support Vector Machines}
 
-Las Support Vector Machines (SVM) son al igual que la regresión logística, métodos lineales de clasificación. Esto significa que también busca una frontera de decisión (\textit{decision boundary}) que define la clase a la que pertenecen los datos. En este caso no se busca hallar los parámetros de la distribución a modelar sino que el objetivo reside en encontrar el hiperplano (o \textit{Support Vector}) que mejor separe a los datos de entrenamiento. 
+Las Support Vector Machines (SVM) se desarrollaron inicialmente como métodos lineales de clasificación, al igual que la regresión logística. Esto significa que también busca una frontera de decisión (\textit{decision boundary}) que define la clase a la que pertenecen los datos. En este caso no se busca hallar los parámetros de la distribución a modelar sino que el objetivo reside en encontrar el hiperplano (\textit{support vector}) que mejor separe a los datos de entrenamiento. Posteriormente este método fue extendido para buscar un hiperplano en un espacio de variables transformado (método no lineal). Esta transformación se logra reemplazando el producto interno por una función kernel. En este trabajo haremos uso de la función de base radial (RBF, por sus siglas en inglés), que es la más comúnmente usada en este método.
 
 \subsubsection{Random Forest}
 
-A diferencia de los algoritmos anteriores, Random Forest esta basado en un método de clasificación basado en árboles de decisión. Estos métodos se caracterizan por segmentar el espacio de predicción en un número de regiones. Para entender Random Forest, resulta muy útil conocer el funcionamiento de los árboles de decisión. 
+A diferencia de los algoritmos anteriores, Random Forest (RF) esta basado en un método de clasificación basado en árboles de decisión. Estos métodos se caracterizan por segmentar el espacio de predicción en un número de regiones. Para entender Random Forest, resulta muy útil conocer el funcionamiento de éstos árboles. 
 
 Un árbol de decisión se construye dividiendo el espacio de variables de forma recursiva, recorriendo la lista de variables y seleccionando la variable que mejor divide las clases de acuerdo a un criterio determinado. El criterio que decidimos usar en este trabajo, por ser el más usado en tareas de clasificación, es el índice Gini (también referido como pureza):
 
@@ -105,9 +112,23 @@ Un árbol de decisión se construye dividiendo el espacio de variables de forma 
 
 donde $\hat{p}_{mk}$ representa la proporción de la clase $k$ en la región $m$. Uno de los principales problemas que presenta este enfoque es la alta varianza (\textit{variance}) con respecto a los datos de entrenamiento. Si la profundidad del árbol es muy grande, aumenta el riesgo de \textit{overfitting} en los datos que poseemos. 
 
-En el caso de Random Forest, se construyen distintos árboles de decisión con subconjuntos escogidos de forma aleatoria, con el objetivo de disminuir la varianza. A la vez, al ser árboles de poca profundidad (que favorecen el \textit{underfitting}), se genera una cantidad alta de árboles para solucionar el problema de alto sesgo (\textit{bias}).
+En el caso de Random Forest, se construyen distintos árboles de decisión con subconjuntos escogidos de forma aleatoria, con el objetivo de disminuir la varianza. A la vez, al ser árboles de poca profundidad (que favorecen el \textit{underfitting}), se genera una cantidad alta de árboles para solucionar el problema de alto sesgo (\textit{bias}). 
 
-Una de las principales ventajas de Random Forest es su interpretabilidad. Esto se expresa en la posibilidad de calcular fácilmente la importancia de las variables en el modelo. La importancia de una variable (o \textit{feature importance}) se calcula como el promedio del índice Gini en cada uno de los nodos de los árboles donde aparece, expresada proporcionalmente a la importancia máxima de todas las variables \cite{Hastie2001}.  
+Esta técnica consistente en combinar distintos algoritmos para obtener un mejor predictor se la denomina \textit{ensamble}, y en particular, Random Forest se enmarca dentro de la técnica de \textit{bagging}. Esto significa que la predicción final se obtiene a través de un promedio de los predictores que componen el método con igual peso.
+
+Una de las principales ventajas de Random Forest es su interpretabilidad. Esto se expresa en la posibilidad de calcular fácilmente la importancia de las variables en el modelo. La importancia de una variable (o \textit{feature importance}) se calcula como el promedio del índice Gini en cada uno de los nodos de los árboles donde aparece, expresada proporcionalmente a la importancia máxima de todas las variables \cite{Hastie2001}.
+
+\subsubsection{Gradient Boosting y XGBoost}
+
+Gradient Boosting (GB) es otro método de ensamble, que como las otras técnicas de \textit{Boosting}, genera modelos de forma iterativa, modificando el algoritmo para intentar corregir los errores de la iteración anterior. Esta es una diferencia crucial con respecto a los algoritmos de \textit{bagging}, como Random Forest, que genera modelos de forma paralela. La forma en que Gradient Boosting busca mejorar iterativamente es modelando el vector residual (o en otras palabras, la distancia entre la predicción y la variable a predecir) generando de esta manera un modelo aditivo que se puede representar de la siguiente manera:
+
+\begin{equation*}
+    F_{m}(X) = F_{m - 1}(X) + \eta \cdot \Delta_{m}(X) 
+\end{equation*}
+
+donde $F_{m - 1}(X)$ es el modelo del paso anterior, $\Delta_{m}(X)$ es el modelo del vector residual y $\eta$ es el \textit{learning rate}, un hiperparámetro que busca regularizar la importancia de este factor en el modelo final para reducir el \textit{overfitting}. 
+
+En este trabajo vamos a utilizar XGBoost (XGB), una implementación de Gradient Boosting con árboles muy utilizado en competencias Kaggle. 
 
 % \subsubsection{Pipeline de entrenamiento y evaluación}
 
@@ -115,7 +136,7 @@ Una de las principales ventajas de Random Forest es su interpretabilidad. Esto s
 
 \subsubsection{Métricas de evaluación}
 
-Las medidas son las siguientes:
+Las medidas que utilizaremos son las siguientes:
 
 \begin{itemize}
     \item \textbf{Precisión}: La Precisión del modelo, está medida como la cantidad de positivos correctamente calificados (verdaderos positivos) sobre la cantidad de instancias calificadas como positivas (verdaderos positivos y falsos positivos).
@@ -137,6 +158,24 @@ Las medidas son las siguientes:
         F_1 = \frac{2}{\tfrac{1}{\mathrm{recall}} + \tfrac{1}{\mathrm{precision}}} = 2 \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{\mathrm{precision} + \mathrm{recall}}
     \end{equation*}
     
+    \newpage
+    
+    \item \textbf{Área bajo la curva ROC (AUC)}: La curva ROC está generada por dos métricas que varían al mover el umbral o \textit{threshold} del score por el que predecimos positivos o negativos: 
+    
+    \begin{multicols}{2}
+        \begin{equation*}
+        TPR = \frac{VP}{VP + FN}
+        \end{equation*}
+        \break
+        \begin{equation*}
+        FPR = \frac{FP}{FP + VN} 
+        \end{equation*}
+    \end{multicols}
+    
+    
+    
+
+    
 \end{itemize}
 
 \section{Trabajos relacionados}
@@ -147,7 +186,7 @@ VarQ es una herramienta generada en el BIA (Plataforma Bioinformática Argentina
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{documents/latex/figures/1/pipeline.png}
+    \includegraphics[scale=0.45]{documents/latex/figures/1/pipeline.png}
     \caption{Pipeline de extracción de datos de la herramienta VarQ. Esta figura fue extraída de la tesis de doctorado de Leandro Radusky.}
     \label{fig:varq_pipeline}
 \end{figure}
@@ -160,7 +199,7 @@ VEST (\textit{Variant Effect Scoring Tool}) es un predictor de efectos funcional
 
 \subsubsection{FATHMM-MKL \cite{Shihab2015}}
 
-FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es también un predictor de efectos funcionales de SNPs con cambio de sentido, en regiones codificantes y no codificantes. Fue desarrollado en la Universidad de Bristol. Proponen un método integrador combinando los scores de diferentes predictores (entre ellos VEST).
+FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es también un predictor de efectos funcionales de SNPs con cambio de sentido, en regiones codificantes y no codificantes. El modelo está basado en SVM usando una combinación de múltiples kernels (\textit{Multiple Kernel Learning, MKL}). Fue desarrollado en la Universidad de Bristol. 
 
 % \newpage
 
