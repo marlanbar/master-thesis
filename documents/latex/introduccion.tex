@@ -10,6 +10,8 @@ El genoma humano esta compuesto por el ADN (ácido desoxirribonucleico), en los 
 
 Para entender un poco como funciona el proceso por el cual la información genética se expresa en el organismo recurrimos al llamado "Dogma central de la biología", esbozado por Francis Crick en 1958 y revisado en 1970 \cite{CRICK1970}. Este dogma, si bien fue ampliado a lo largo del tiempo, explica de forma general este proceso. Como vemos en la figura, el ADN (ácido desoxirribonucleico) se transcribe en forma de ARN para luego formar una proteína. El ARN (ácido ribonucleico), es una mólecula polimérica, al igual que el ADN, y también posee las mismas bases que el ADN, excepto la timina (T) que se reemplaza por el uracilo (U). Finalmente, el ARN es utilizado para unir los aminoácidos que forman la secuencia proteica, en un proceso denominado Traducción. La secuencia del ARN se compone de tripletes adyacentes de bases que se denominan codones, y cada aminoácido está codificado por uno de estos codones. 
 
+\newpage
+
 \begin{figure}[H]
 \centering
     \includegraphics[scale=0.35]{documents/latex/figures/1/dogma.png}
@@ -25,7 +27,8 @@ Para entender un poco como funciona el proceso por el cual la información gené
     \label{fig:table_codon}
 \end{figure}
 
-\clearpage
+\newpage
+
 
 \subsubsection{Variaciones genéticas}
 
@@ -158,9 +161,9 @@ Las medidas que utilizaremos son las siguientes:
         F_1 = \frac{2}{\tfrac{1}{\mathrm{recall}} + \tfrac{1}{\mathrm{precision}}} = 2 \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{\mathrm{precision} + \mathrm{recall}}
     \end{equation*}
     
-    \newpage
+    % \newpage
     
-    \item \textbf{Área bajo la curva ROC (AUC)}: La curva ROC está generada por dos métricas que varían al mover el umbral o \textit{threshold} del score por el que predecimos positivos o negativos: 
+    \item \textbf{Área bajo la curva ROC (AUC)}: La curva ROC está generada por dos métricas principales, FPR y TPR:
     
     \begin{multicols}{2}
         \begin{equation*}
@@ -172,11 +175,30 @@ Las medidas que utilizaremos son las siguientes:
         \end{equation*}
     \end{multicols}
     
+    En un contexto de clasificación binaria, si ordenamos al score de predicción final de mayor a menor y consideramos positivos a todos aquellos a la izquierda del umbral de decisión (\textit{threshold}), obtendremos una tasa de verdaderos positivos y de falsos positivos (TPR y FPR respectivamente). Esto puede verse en la siguiente figura:
+    
+    \begin{figure}[H]
+    \centering
+        \includegraphics[scale=0.6]{documents/latex/figures/1/threshold_auc.pdf}
+    \caption{Predicciones ordenadas de mayor a menor, donde el \textit{threshold} asigna clasificación positiva y negativa. El color de las instancias indica el valor real. En este caso el $TPR$ es igual a 2/3 y el FPR es igual a $3/8$.}
+    \label{fig:threshold_auc}
+    \end{figure}
+    
+    La curva característica operativa del receptor (ROC) es la representación gráfica de la relación entre el FPR y el TPR al mover el umbral de decisión. Su área (AUC) equivale a la probabilidad de que el modelo clasifique una instancia positiva cualquiera ``mejor'' que una instancia negativa cualquiera. En la figura \ref{fig:example_roc} puede verse la curva que representa el ejemplo de la figura \ref{fig:threshold_auc}.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.4]{documents/latex/figures/1/roc_ejemplo.pdf}
+        \caption{Curva ROC de la clasificación de la figura \ref{fig:threshold_auc}. La línea punteada roja representa el umbral de decisión, que fijó el FPR y TPR en los valores anteriormente mencionados.}
+        \label{fig:example_roc}
+    \end{figure}
     
     
 
-    
 \end{itemize}
+
+\newpage
+
 
 \section{Trabajos relacionados}
 

@@ -33,14 +33,45 @@ Para trabajar con este dataset decidimos verificar la etiqueta de cada una de la
     \label{fig:interseccion_varq}
 \end{figure}
 
-Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas estuviera rotulada incorrectamente introduciría ruido. Como puede observarse en la figura \ref{fig:interseccion_varq}, de las 17,869 variantes del dataset VarQ Completo, logramos encontrar 2,535 en la tabla de Clinvar, de los cuales sólo 2,397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6,650 variantes de los cuales 4,667 corresponden a patogénicas y 1,983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos, a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica, y a menudo presenta conflictos de anotación por discrepancias entre evidencias reportadas. Esto nos deja con un dataset Curado de 7,418 variantes de las cuales 5,377 son patogénicas y 2,041 son benignas. Denominaremos a este dataset \textit{VarQ Curado}. 
+Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontramos un subconjunto importante de variantes que no aparecían en ninguna de las dos fuentes. Estas variantes estaban rotuladas en su gran mayoría (94\%) como benignas, por lo que creemos que se consideraron como variantes benignas a todas aquellas a las que no se encontró un reporte. Decidimos remover estas variantes del dataset por considerar que si alguna de ellas estuviera rotulada incorrectamente introduciría ruido. Como puede observarse en la figura \ref{fig:interseccion_varq}, de las 17,869 variantes del dataset VarQ Completo, logramos encontrar 2,535 en la tabla de Clinvar, de los cuales sólo 2,397 tenían un estado confirmado como patogénicas, y 138 como benignas. Cruzando el dataset con la tabla Humsavar encontramos una intersección de 6,650 variantes de los cuales 4,667 corresponden a patogénicas y 1,983 son benignas. Decidimos mantener la clasificación de Humsavar en la intersección de los tres conjuntos por considerarla de mayor confiabilidad dado que es un reporte único curado por expertos, a diferencia de Clinvar que es una recopilación de variantes de diversa significación clínica, y a menudo presenta conflictos de anotación por discrepancias entre evidencias reportadas. Esto nos dejó con un dataset de 7,418 variantes de las cuales 5,377 son patogénicas y 2,041 son benignas. Denominamos a este dataset VarQ Curado. 
 
 
 \subsection{Descripción estadística del dataset VarQ Curado}
 
-A partir de VarQ Curado estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes. En la tabla \ref{tab:descripcion_varq_cont} podemos ver distintas métricas sobre las variables continuas del dataset, como la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
+A partir de VarQ Curado estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes.
 
-También sumamos a esta descripción el AUC univariado, es decir el área bajo la curva ROC tomando la variable ordenada como estimador de la respuesta.   
+En la figura \ref{fig:proporcion_nulos_varq} podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variante (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/proporcion_nulos.pdf}
+    \caption{Proporción de variantes con valor nulo por variable del dataset VarQ Curado.}
+    \label{fig:proporcion_nulos_varq}
+\end{figure}
+
+Otro factor importante a considerar es cuántas variables nulas tienen cada una de las variantes del dataset. En la figura \ref{fig:nulos_varq} podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas. Decidimos no remover ninguna fila bajo este criterio.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/nulos_varq.pdf}
+    \caption{Histograma de cantidad de variables nulas por fila del dataset VarQ Curado.}
+    \label{fig:nulos_varq}
+\end{figure}
+
+% \subsubsection{Correlación entre las variables de VarQ Curado}
+
+También queremos conocer qué tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98. Mantuvimos las dos variables dado que la relativa baja cantidad de variables de este dataset no nos fuerza a remover variables, y si bien la correlación es muy alta, las variables no son idénticas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{documents/latex/figures/3/varq/varq_corrplot.pdf}
+    \caption{Correlación de Spearman para las variables de VarQ Curado.}
+    \label{fig:varq_corrplot}
+\end{figure}
+
+Finalmente en la tabla \ref{tab:descripcion_varq_cont} podemos ver distintas métricas sobre las variables continuas del dataset, como la media de los valores (mean), el desvío estándar (std), el valor máximo (max) y los cuartiles. 
+
+En esta descripción sumamos el AUC univariado, es decir el área bajo la curva ROC tomando la variable ordenada como estimador de la respuesta.   
 
 Un AUC cercano a 0.5 equivale a una variable de bajo poder predictivo, mientras que un AUC mayor a 0.5 corresponde a un predictor de la variable de respuesta (en este caso una variante patogénica), mientras que un AUC menor a 0.5 corresponde a un anti-predictor, es decir que invertir su respuesta equivale a un predictor de AUC mayor a 0.5. En la columna AUC de la tabla \ref{tab:descripcion_varq_cont} vemos que las variables SASA y SASA \% tienen un poder anti-predictivo relativamente alto (0.34 y 0.33 respectivamente), lo que indica que las variantes que tengan un valor elevado de estas variables tienden a ser benignas, mientras que la variación de energía tiene el mejor poder predictivo univariado entre todas las variables.
 
@@ -88,34 +119,8 @@ Donde VP es igual a la cantidad de verdaderos positivos, P es igual a la cantida
 
 En la tabla \ref{tab:descripcion_varq_cat} podemos ver que el BACC de las variables 3DID y PDB es de 0.51 y 0.49 respectivamente, lo que indica un bajo valor predictivo. 
 
-Otro de los puntos importantes durante la exploración del dataset es la detección de variables con muy poca cobertura. En la figura \ref{fig:proporcion_nulos_varq} podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variante (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/proporcion_nulos.pdf}
-    \caption{Proporción de variantes con valor nulo por variable del dataset VarQ Curado.}
-    \label{fig:proporcion_nulos_varq}
-\end{figure}
 
-Otro factor importante a considerar es cuántas variables nulas tienen cada una de las variantes del dataset. En la figura \ref{fig:nulos_varq} podemos observar que existe aproximadamente un 5 \% de variantes que poseen 7 variables nulas de las 10 que contienen el dataset, es decir, prácticamente no tienen ningún tipo de información, y sólo el 2\% de las variantes posee el total de las variables cubiertas. Por el otro lado, casi el 90\% de las variantes tiene a lo sumo 3 variables nulas.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.6]{documents/latex/figures/3/varq/nulos_varq.pdf}
-    \caption{Histograma de cantidad de variables nulas por fila del dataset VarQ Curado.}
-    \label{fig:nulos_varq}
-\end{figure}
-
-\subsubsection{Correlación entre las variables de VarQ Curado}
-
-También queremos conocer qué tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.7]{documents/latex/figures/3/varq/varq_corrplot.pdf}
-    \caption{Correlación de Spearman para las variables de VarQ Curado.}
-    \label{fig:varq_corrplot}
-\end{figure}
 
 % \newpage
 
@@ -123,7 +128,7 @@ También queremos conocer qué tan correlacionadas se encuentras las variables. 
 
 Una vez definido el dataset, podemos emplear técnicas de aprendizaje automático con el objetivo de generar un predictor de variantes patogénicas. Cabe destacar, que en este dataset VarQ Curado hay una sobrerrepresentación de variantes patogénicas, es decir, que presenta un desbalance (mayor número de variantes patogénicas que benignas) que invierte las propociones observadas en el dataset VarQ Completo. De todas formas generaremos un modelo para poder evaluar de forma preliminar la dificultad del problema. 
 
-Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support Vector Classifier (SVC), Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoEritmos constó de tres fases: 
+Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support Vector Classifier (SVC), Regresión Logística y Random Forest. La construcción del pipeline para cada uno de estos algoritmos constó de tres fases: 
 
 \begin{itemize}
     \item \textbf{Creación del set de entrenamiento y de evaluación}: División (\textit{split}) estratificado (es decir, manteniendo las proporciones originales de la variable objetivoE) del dataset, 66\% para entrenamiento y 33\% para evaluación. 
@@ -158,10 +163,8 @@ LR     & 0.75 & 0.94 & 0.71 & 0.84 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
 RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 9.82 s & 0.11 s \\ \hline
 \end{tabular}
 \label{tab:metrics_model}
+\caption{Comparación de métricas de modelos usando el dataset VarQ Curado. Las variables $t_{fit}$ y $t_{pred}$ corresponden al tiempo de entrenamiento y de predicción de todas las variantes \todo{REFERENCIAR}.}
 \end{table}
-
-
-
 
 La tabla \ref{tab:metrics_varq} muestra algunas métricas de interés obtenidas del modelo Random Forest para entender mejor los resultados del modelo basados en el predictor generado.
 
@@ -287,24 +290,24 @@ Luego del proceso del extracción de variables de Biopython y SNVBox, generamos 
 
 \subsection{Descripción estadística del dataset Físico-Químico}
 
-Luego de la creación del dataset realizamos una exploración estadística del mismo, tal como hicimos en el dataset VarQ Curado. Calculamos la media (\textit{mean}), el desvío estándar (\textit{std}), el mínimo y los cuartiles (25\%, 50\%, y 75\%). También calculamos el AUC univariado para cada una de las variables continuas del dataset. Con respecto al AUC univariado en las variables de Protparam (tabla \ref{tab:protparam_vars}), notamos que la versión DIFF de los parámetros es mejor (anti) predictor que sus versiones LOG\_RATIO en todos los casos.
+Luego de la creación del dataset realizamos una exploración estadística del mismo, tal como hicimos en el dataset VarQ Curado. Calculamos la media (\textit{mean}), el desvío estándar (\textit{std}), el mínimo, el máximo y los cuartiles (25\%, 50\%, y 75\%). También calculamos el AUC univariado para cada una de las variables continuas del dataset. Con respecto al AUC univariado en las variables de Protparam (tabla \ref{tab:protparam_vars}), notamos que la versión DIFF de los parámetros es mejor (anti) predictor que sus versiones LOG\_RATIO en todos los casos.
 
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
-Variable & mean & std & min & 25\% & 50\%  & 75\%  & AUC \\ \hline
-AROM\_DIFF  & 0.02  & 0.02  & 0.00 & 0.00 & 0.00  & 0.01  & 0.59 \\ \hline
-AROM\_LOG\_RATIO & 1.97 & 0.33 & 1.00 & 1.94 & 1.94  & 1.94  & 0.53 \\ \hline
-ISO\_POINT\_DIFF & 0.69  & 0.98 & 0.00  & 0.00 & 0.17  & 1.22  & 0.56 \\ \hline
-ISO\_POINT\_LOG\_RATIO & 2.00 & 0.08 & 1.69 & 1.99 & 2.00  & 2.01  & 0.51 \\ \hline
-GRAVY\_DIFF & 0.23 & 0.17 & 0.00 & 0.09 & 0.20  & 0.33  & 0.55 \\ \hline
-GRAVY\_LOG\_RATIO & 1.99x10$^{12}$ & 1.24x$10^{14}$ & -3.39x10$^{15}$ & 1.43 & 1.94 & 2.43 & 0.48 \\\hline
-INST\_DIFF & 14.02 & 13.27 & 0.00 & 4.20 & 10.09 & 20.10 & 0.49 \\ \hline
-INST\_LOG\_RATIO & 2.06 & 2.27 & -84.77 & 1.96 & 2.01  & 2.09  & 0.48 \\ \hline
-FLEX\_DIFF & 0.01 & 0.01 & 0.00 & 0.00 & 0.01  & 0.01  & 0.54 \\ \hline
-FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.47 \\ \hline
+Variable & mean & std & min & 25\% & 50\%  & 75\% & max & AUC \\ \hline
+AROM\_DIFF  & 0.02  & 0.02  & 0.00 & 0.00 & 0.00  & 0.01 & 0.22  & 0.59 \\ \hline
+AROM\_LOG\_RATIO & 1.97 & 0.33 & 1.00 & 1.94 & 1.94  & 1.94 & 3.66  & 0.53 \\ \hline
+ISO\_POINT\_DIFF & 0.69  & 0.98 & 0.00  & 0.00 & 0.17  & 1.22 & 6.30  & 0.56 \\ \hline
+ISO\_POINT\_LOG\_RATIO & 2.00 & 0.08 & 1.69 & 1.99 & 2.00  & 2.01 & 2.45  & 0.51 \\ \hline
+GRAVY\_DIFF & 0.23 & 0.17 & 0.00 & 0.09 & 0.20  & 0.33 & 1.67  & 0.55 \\ \hline
+GRAVY\_LOG\_RATIO & 2x10$^{12}$ & 1.2x$10^{14}$ & -3.3x10$^{15}$ & 1.43 & 1.94 & 2.43 & 9.6x10$^{15}$ & 0.48 \\\hline
+INST\_DIFF & 14.02 & 13.27 & 0.00 & 4.20 & 10.09 & 20.10 & 139.00 & 0.49 \\ \hline
+INST\_LOG\_RATIO & 2.06 & 2.27 & -84.77 & 1.96 & 2.01  & 2.09 & 453 & 0.48 \\ \hline
+FLEX\_DIFF & 0.01 & 0.01 & 0.00 & 0.00 & 0.01  & 0.01  & 0.05 & 0.54 \\ \hline
+FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 2.03 & 0.47 \\ \hline
 \end{tabular}
 \caption{Variables extraídas de Protparam}
 \label{tab:protparam_vars}
@@ -314,34 +317,49 @@ FLEX\_LOG\_RATIO & 2.00 & 0.01 & 1.97 & 1.99 & 2.00  & 2.01  & 0.47 \\ \hline
 
 Con respecto al AUC univariado de las variables extraídas de SNVBox, notamos que las mejores variables en este respecto son las aportadas por algunas de las matrices de sustitución (EX, PAM250 y BLOSUM). En este caso son buenos anti-predictores, lo que indica que un valor bajo en esta matrix aporta una mayor probabilidad de ser patogénica (tabla \ref{tab:snvbox_amino}). El mejor predictor en este set de variables es la valor en la matriz de distancias GRANTHAM.  
 
+
+
 % \newpage
 
 % \subsubsection{Variables extraídas de SNVBox relativas a sustitución de aminoácidos}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \hline
-Variable & mean   & std    & min    & 25\%  & 50\%   & 75\%   & AUC    \\ \hline
-CHARGE            & 0.00  & 0.71   & -2.00  & 0.00  & 0.00   & 0.00   & 0.50   \\ \hline
-VOLUME            & -0.16  & 1.70   & -5.59  & -1.40 & -0.16  & 0.96   & 0.48   \\ \hline
-HYDROPHOBICITY    & -0.63  & 6.81   & -15.70 & -3.10 & -0.40  & 1.90   & 0.52  \\ \hline
-GRANTHAM          & 79.96  & 48.06  & 5.00   & 43.00 & 74.00  & 102.00 & \textbf{0.63} \\ \hline
-POLARITY          & -0.25  & 2.72   & -8.10  & -2.20 & -0.10  & 1.10   & 0.52   \\ \hline
-EX                & 28.99  & 10.95  & -1.00  & 21.00 & 29.00  & 35.00  & \textbf{0.35}  \\ \hline
-PAM250            & 0.16   & 1.68   & -5.40  & -1.00 & 0.20   & 1.40   & \textbf{0.36}   \\ \hline
-BLOSUM            & -0.58  & 1.65   & -4.00  & -2.00 & -1.00  & 1.00   & \textbf{0.35}   \\ \hline
-JM                & 0.80   & 1.24   & -1.73  & -0.50 & 1.05   & 1.66   & 0.40   \\ \hline
-VB                & 19.78  & 14.64  & 0.00   & 8.00  & 17.00  & 29.00  & 0.42  \\ \hline
-TRANSITION        & 0.00   & 0.00   & 0.00   & 0.00  & 0.00   & 0.00   & 0.47   \\ \hline
+Variable & mean   & std    & min    & 25\%  & 50\%   & 75\% & max & AUC    \\ \hline
+CHARGE            & 0.00  & 0.71   & -2.00  & 0.00  & 0.00   & 0.00 & 2.00 & 0.50   \\ \hline
+VOLUME            & -0.16  & 1.70   & -5.59  & -1.40 & -0.16  & 0.96 & 5.59 & 0.48   \\ \hline
+HYDROPHOBICITY    & -0.63  & 6.81   & -15.70 & -3.10 & -0.40  & 1.90 & 15.70 & 0.52  \\ \hline
+GRANTHAM          & 79.96  & 48.06  & 5.00   & 43.00 & 74.00  & 102.00 & 215.00 &  \textbf{0.63} \\ \hline
+POLARITY          & -0.25  & 2.72   & -8.10  & -2.20 & -0.10  & 1.10   & 8.10 & 0.52   \\ \hline
+EX                & 28.99  & 10.95  & -1.00  & 21.00 & 29.00  & 35.00  & 61.00 & \textbf{0.35}  \\ \hline
+PAM250            & 0.16   & 1.68   & -5.40  & -1.00 & 0.20   & 1.40   & 5.30 & \textbf{0.36}   \\ \hline
+BLOSUM            & -0.58  & 1.65   & -4.00  & -2.00 & -1.00  & 1.00   & 3.00 & \textbf{0.35}   \\ \hline
+JM                & 0.80   & 1.24   & -1.73  & -0.50 & 1.05   & 1.66   & 3.22 & 0.40   \\ \hline
+VB                & 19.78  & 14.64  & 0.00   & 8.00  & 17.00  & 29.00  & 55.00 & 0.42  \\ \hline
+TRANSITION        & 0.00   & 0.00   & 0.00   & 0.00  & 0.00   & 0.00   & 0.01 & 0.47   \\ \hline
 \end{tabular}
 \caption{Variables extraídas de SNVBox relativas a sustitución de aminoácidos.}
 \label{tab:snvbox_amino}
 
 \end{table}
 
-Describimos 21 variables de nuestro dataset. Las 29 variables restantes son extraídas de SNVBox relativas a proteínas y son todas categóricas de tipo \textit{Boolean} por lo que destacamos algunos datos de relevancia (ver apéndice para un listado completo). Todas estas variables tienen una cobertura para aproximadamente el 31.5\% de las variantes del dataset, y cada una de ellas poseen valor Falso para un porcentaje superior al 90\% de las variantes de la tabla, exceptuando las variables \textbf{TRANSMEM} (82\%), \textbf{REP} (87\%), \textbf{REGIONS} (70\%) y \textbf{PPI} (87\%). El \textit{Balanced Accuracy} de estas variables oscilan entre el 0.45 y 0.48, lo que connota un bajo poder predictivo univariado.
+Las variables continuas poseen una cobertura para el 100\% del dataset exceptuando algunas variables calculadas por ProtParam por alcanzar valores extremos (las cuatro variables LOG\_RATIO), en los que se decidió reemplazar por nulos. En la figura \ref{fig:proporcion_nulos_structural} presentamos la proporción de nulos en dichas variables.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{documents/latex/figures/3/structural/proporcion_nulos_structural.pdf}
+    \caption{Variables continuas con menor cobertura.}
+    \label{fig:proporcion_nulos_structural}
+\end{figure}
+
+Describimos 21 variables de nuestro dataset. Las 29 variables restantes son extraídas de SNVBox relativas a proteínas y son todas categóricas de tipo \textit{Boolean} por lo que destacamos algunos datos de relevancia (ver apéndice para un listado completo). 
+
+
+Todas estas variables tienen una cobertura para aproximadamente el 31.5\% de las variantes del dataset, y cada una de ellas poseen valor Falso para un porcentaje superior al 90\% de las variantes de la tabla, exceptuando las variables \textbf{TRANSMEM} (82\%), \textbf{REP} (87\%), \textbf{REGIONS} (70\%) y \textbf{PPI} (87\%). 
+
+El \textit{Balanced Accuracy} de estas variables oscilan entre el 0.45 y 0.48, lo que connota un bajo poder predictivo univariado.
 
 \newpage
 % \subsubsection{Correlación entre las variables}
@@ -503,6 +521,8 @@ Con los atributos mencionados anteriormente, pudimos cruzar la información usan
 
 A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas (tablas \ref{conservacion_vars} y \ref{snvbox_vars}). Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). También incluimos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional (tablas \ref{conservacion_vars} y \ref{snvbox_vars}). El AUC univariado de las variables de conservación (PHYLOP46WAY, PHASTCONS46WAY y CONS) es alto, lo que significa que variantes en zonas de alta conservación son buenos indicadores de patogenicidad.
 
+\newpage
+
 % \subsubsection{Variables de Conservación}
 \begin{table}[H]
 \centering
@@ -550,6 +570,15 @@ HAPMAP\_SNP\_DEN & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 & 0.48 \\ \hli
 
 % \subsubsection{Correlación entre las variables}
 
+Con respecto a los valores nulos, tenemos una cobertura muy alta de todas las variables, con una porcentaje de nulos máximo del 2\%. (figura \ref{fig:proporcion_nulos_genomic}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/proporcion_nulos_genomic.pdf}
+    \caption{Proporción de nulos del dataset Genómico.}
+    \label{fig:proporcion_nulos_genomic}
+\end{figure}
+
 Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta correlación entre las variables de conservación phyloP y phastCons (0.82). Por otro lado, la correlación entre HAPMAP\_SNP\_DEN y SNP\_DEN es muy baja (0.06), pese a que su construcción es muy similar. Esto se debe a la diferencia entre la cantidad total de SNPs en un humano (alrededor de 10 millones) comparados con los que se encuentran en HapMap (~500,000 en total).
 
 \begin{figure}[H]
@@ -559,7 +588,7 @@ Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta cor
     \label{fig:corrplot_genomic}
 \end{figure}
 
-% \newpage
+\newpage
 
 \subsection{Generación del Modelo}
 
@@ -600,7 +629,7 @@ Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por l
 \end{figure}
 
 
-\newpage
+% \newpage
 
 \begin{figure}[H]
 \centering
@@ -646,6 +675,21 @@ Para este modelo preliminar utilizamos nuevamente el algoritmo Random Forest, re
 \subsection{Resultados del modelo Integral}
 
 El modelo Random Forest obtuvo un AUC de 0.88. Esto representa una mejora con respecto al modelo Genómico (0.85) y al modelo Físico-Químico (0.72). Si comparamos las métricas obtenidas en el modelo Genómico con las de este modelo (figura \ref{tab:metrics_integral}), se puede apreciar un nuevo salto en el \textit{recall} de las variables patogénicas, que pasa de un 0.64 en el modelo Genómico al 0.80, lo que representa un 16\% de mejora. También mejora la precisión con respecto a la detección de esta clase, que pasa de 0.69 a 0.76. La única métrica que decae es el \textit{recall} de la clase Benigna, que pasa de 0.87 a 0.82, lo que representa una leve caída del \textit{f1-score}. El modelo XGBoost superó la performance de Random Forest alcanzando un AUC de 0.90.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+Modelo & Precisión & Recall & AUC & F1-score & $t_{fit}$ & $t_{pred}$ \\ \hline
+RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 9.82 s & 0.11 s \\ \hline
+XGB     & 0.75 & 0.94 & 0.71 & 0.84 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
+\end{tabular}
+\label{tab:metrics_model}
+\caption{Comparación de métricas de modelos usando el dataset Integral. Las variables $t_{fit}$ y $t_{pred}$ corresponden al tiempo de entrenamiento y de predicción de todas las variantes \todo{REFERENCIAR}.}
+\end{table}
+
+
 
 \begin{table}[H]
 \centering
