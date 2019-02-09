@@ -3,6 +3,7 @@
 
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
+\usepackage{babelbib}
 \usepackage[spanish]{babel}
 \usepackage[left=2.5cm,right=2.5cm,bottom=3.5cm,top=3.5cm]{geometry}
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
@@ -20,6 +21,7 @@
 \usepackage{dirtree}
 \usepackage{xcolor}
 \usepackage{multicol}
+\usepackage{hyperref}
 
 \newcommand\todo[1]{\textcolor{red}{#1}}
 \newcommand\myicon[1]{{\color{#1}\rule{2ex}{2ex}}}
@@ -63,11 +65,7 @@
 \label{ch:introduccion}
 \input{documents/latex/introduccion}
 
-% \chapter{Desarrollo y resultados}
-% \label{ch:desarrollo}
-% \input{documents/latex/desarrollo}
-
-\chapter{Modelo usando el dataset VarQ}
+\chapter{Modelo basado en el dataset VarQ}
 \label{ch:desarrollo_varq}
 \input{documents/latex/desarrollo_varq_curado.tex}
 
@@ -98,7 +96,7 @@
 \bibliography{references/reference}
 \addcontentsline{toc}{chapter}{Bibliografía}
 
-\bibliographystyle{abbrv}
+\bibliographystyle{babunsrt}
 
 \chapter{Apéndice}
 \label{ch:apendice}

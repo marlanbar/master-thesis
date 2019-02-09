@@ -1,24 +1,23 @@
 \section{Problema biológico}
 
-La biología, y en particular la genética, han tenido un lugar destacado en el siglo XX gracias a enormes avances como ser el descubrimiento de la estructura molecular del ADN, con el aporte de Franklin, Crick y Watson \cite{WATSON1953}. A partir de esos hitos científicos, se sucedieron grandes esfuerzos a nivel internacional, como el Proyecto Genoma Humano \cite{Consortium2001} o ENCODE \cite{Consortium2012}, que tienen como objetivo general el mapeo entre código genético humano y sus elementos funcionales. Estos trabajos, sumados a los recientes avances en las tecnologías de secuenciación masiva, han generado un creciente volumen de datos genómicos que a su vez favorecieron la aparición nuevos tipos de tratamientos en el área de la medicina personalizada \cite{doi:10.1056/NEJMp1006304}. 
+La biología, y en particular la genética, han tenido un lugar destacado en el siglo XX gracias a enormes avances como ser el descubrimiento de la estructura molecular del ADN, con el aporte de Franklin  \cite{FRANKLIN1953}; y Crick y Watson \cite{WATSON1953}. A partir de esos hitos científicos, se sucedieron grandes esfuerzos a nivel internacional, como el Proyecto Genoma Humano \cite{Consortium2001} o ENCODE \cite{Consortium2012}, que tienen como objetivo general el mapeo entre código genético humano y sus elementos funcionales. Estos trabajos, sumados a los recientes avances en las tecnologías de secuenciación masiva, han generado un creciente volumen de datos genómicos que a su vez favorecieron la aparición nuevos tipos de tratamientos en el área de la medicina personalizada \cite{doi:10.1056/NEJMp1006304}. 
 
 La medicina personalizada o de precisión es un modelo médico en donde las intervenciones se realizan a individuos o a grupos en riesgo a diferencia del modelo tradicional que apunta a la población en general. \textbf{Dentro de este área, uno de los objetivos críticos que se busca resolver es la detección de variaciones genéticas que deriven en enfermedades}.
 
-\subsubsection{El dogma central de la biología}
+\subsection{El dogma central de la biología}
 
-El genoma humano esta compuesto por el ADN (ácido desoxirribonucleico), en los 23 pares de cromosomas (moléculas de ADN), dentro del núcleo celular sumado a una molécula de ADN que se encuentra en las mitocondrias (ADN mitocondrial). El ADN a su vez se compone de 4 bases: Adenina, Timina, Citosina, y Guanina. Estas bases se representan con su letra inicial (A, T, C y G), y podemos considerarlas como letras de un alfabeto. Cada una de estas bases está unido a otra (Adenina-Timina y Citosina-Guanina) formando pares de bases en forma helicoidal. Esta tira de ``letras'' se divide en distintos genes, que son secuencias de ADN que codifican una molécula funcional.
+El genoma humano está compuesto por el ADN (ácido desoxirribonucleico), en los 23 pares de cromosomas (moléculas de ADN), dentro del núcleo celular sumado a una molécula de ADN que se encuentra en las mitocondrias (ADN mitocondrial). El ADN a su vez se compone de 4 bases: Adenina, Timina, Citosina, y Guanina. Estas bases se representan con su letra inicial (A, T, C y G), y podemos considerarlas como letras de un alfabeto. Cada una de estas bases está unida a otra (Adenina-Timina y Citosina-Guanina) formando pares de bases en forma helicoidal. Esta tira de ``letras'' se divide en distintos genes, que son secuencias de ADN que codifican una molécula funcional.
 
-Para entender un poco como funciona el proceso por el cual la información genética se expresa en el organismo recurrimos al llamado "Dogma central de la biología", esbozado por Francis Crick en 1958 y revisado en 1970 \cite{CRICK1970}. Este dogma, si bien fue ampliado a lo largo del tiempo, explica de forma general este proceso. Como vemos en la figura, el ADN (ácido desoxirribonucleico) se transcribe en forma de ARN para luego formar una proteína. El ARN (ácido ribonucleico), es una mólecula polimérica, al igual que el ADN, y también posee las mismas bases que el ADN, excepto la timina (T) que se reemplaza por el uracilo (U). Finalmente, el ARN es utilizado para unir los aminoácidos que forman la secuencia proteica, en un proceso denominado Traducción. La secuencia del ARN se compone de tripletes adyacentes de bases que se denominan codones, y cada aminoácido está codificado por uno de estos codones. 
+Para entender un poco como funciona el proceso por el cual la información genética se expresa en el organismo recurrimos al llamado "Dogma central de la biología", esbozado por Francis Crick en 1958 \cite{CRICK1958} y revisado en 1970 \cite{CRICK1970}. Este dogma, si bien fue ampliado a lo largo del tiempo, explica de forma general este proceso. Como vemos en la figura \ref{fig:esquema_dogma}, el ADN (ácido desoxirribonucleico) se transcribe en forma de ARN para luego formar una proteína. El ARN (ácido ribonucleico), es una mólecula polimérica, al igual que el ADN, y también posee las mismas bases que el ADN, excepto la timina (T) que se reemplaza por el uracilo (U). Finalmente, el ARN es utilizado para unir los aminoácidos que forman la secuencia proteica, en un proceso denominado Traducción. La secuencia del ARN se compone de tripletes adyacentes de bases que se denominan codones, y cada aminoácido está codificado por uno de estos codones (ver figura \ref{fig:table_codon}). 
 
 \newpage
 
 \begin{figure}[H]
 \centering
-    \includegraphics[scale=0.35]{documents/latex/figures/1/dogma.png}
+    \includegraphics[width=\textwidth]{documents/latex/figures/1/dogma.png}
     \caption{Transferencia de la información genética. El ADN es transcripto en forma de ARN (ARN mensajero). Luego el ARN mensajero es ``cortado'' uniendo los exones (partes codificantes del gen) en un proceso denominado \textit{splicing}. Por último, los ribosomas usan la información para unir los aminoácidos en forma de proteína. Imagen tomada de OpenStax \cite{OpenStaxCNX}.}
     \label{fig:esquema_dogma}
 \end{figure}
-
 
 \begin{figure}[H]
 \centering
@@ -29,52 +28,68 @@ Para entender un poco como funciona el proceso por el cual la información gené
 
 \newpage
 
+\subsection{Variaciones genéticas}
 
-\subsubsection{Variaciones genéticas}
+Las variaciones genéticas son diferencias en el ADN entre individuos de una población \cite{EMBL}. Estas variaciones pueden ser causadas por mutaciones en el momento de la replicación del material genético, pudiendo ser de carácter permanente. Las mutaciones genéticas suelen representar un porcentaje muy pequeño con respecto a la secuencia completa del genoma (alrededor del 0.5\%), pero muchas de ellas suelen ser responsables de variaciones fenotípicas, es decir, nuestros rasgos ``observables''. 
 
-Las variaciones genéticas son diferencias en el ADN entre individuos de una población \cite{EMBL}. Estas variaciones pueden ser causadas por mutaciones en el momento de la replicación del material genético, siendo éstas de carácter permanente. Las mutaciones genéticas representan un porcentaje muy pequeño con respecto a la secuencia completa del genoma (alrededor del 0.5\%), pero muchas de ellas son responsables de variaciones fenotípicas, es decir, nuestros rasgos ``observables''. 
-
-Estas variaciones se dividen en tres grupos principales:
+Estas variaciones se pueden dividir en tres grupos principales:
 
 \begin{itemize}
     \item Polimorfismos de un sólo nucleotido (SNPs): sustitución de un único par de bases. 
     \item Inserciones o deleciones (indels): pueden ocurrir en un intervalo grande del ADN de entre 2 a 200 pares de bases.
+    
     \item Variaciones estructurales: ocurren en secuencias largas de bases, y pueden ser indels, inversiones, duplicaciones, entre otras.
     
 \end{itemize}
 
 Finalmente, cualquiera de estas variaciones pueden ser beneficiosas para el organismo, neutrales (sin efecto alguno) o perjudiciales. 
 
-\subsubsection{Polimorfismos de un sólo nucleótido (SNPs)}
+\subsection{Polimorfismos de un sólo nucleótido (SNPs)}
 
 En el marco de esta tesis estudiaremos los polimorfismos de un sólo nucleótido, o SNPs por sus siglas en inglés (Single Nucleotide Polymorphism). 
 
 En la figura \ref{fig:snp_types} podemos ver los distintos tipos de SNP. De acuerdo al lugar, pueden ocurrir en una zona codificante, es decir una porción del gen que codifica una proteína, o en una zona no codificante, como los intrones (partes del gen no codificante).
 
-Dentro de las sustituciones en la zona codificante, algunas mutaciones pueden ser sinónimas, es decir que existe un cambio en uno de los nucleótidos del ADN pero dicho nucleótido es reemplazado por uno igual. También puede ocurrir una sustitución no sinónima, en donde el nucleótido es reemplazado por uno distinto. Esto no necesariamente genera un cambio en el aminoácido que lo codifica. Podemos ver en la tabla \ref{fig:table_codon} que el muchos codones codifican el mismo aminoácido, por ejemplo, los codones AAU, AUC y AUA codifican el aminoácido isoleucina. Luego, si en la cadena de ADN, el codón AUA sufre una mutación en su último nucleótido, pasando a ser AUC, dicho codón seguirá codificando para el mismo aminoácido (ver tabla \ref{fig:table_codon}). Estas sustituciones se denominan sustituciones no sinónimas silenciosas (\textit{silent}).
+Dentro de las sustituciones en la zona codificante, algunas mutaciones pueden ser sinónimas, es decir que existe un cambio en uno de los nucleótidos del ADN pero no genera un cambio en el aminoácido que lo codifica. Podemos ver en la tabla \ref{fig:table_codon} que muchos codones codifican el mismo aminoácido, por ejemplo, los codones AAU, AUC y AUA codifican el aminoácido isoleucina. Luego, si en la cadena de ADN, el codón AUA sufre una mutación en su último nucleótido, pasando a ser AUC, dicho codón seguirá codificando para el mismo aminoácido. Otro tipo de sustituciones, denominadas mutaciones sin sentido (\textit{nonsense}) codifican un codón de terminación (\textit{stop}), que resulta en un fin de codificación prematuro y en general una proteína no funcional.
 
-En particular estudiaremos los SNPs con cambio de sentido (\textit{missense}), es decir aquellos que deriven en un cambio de aminoácido en la proteína producida por la variante del gen. \textbf{El problema que intentaremos atacar es detectar aquellos SNPs cuyo cambio en el aminoácido de la proteína generada pueda estar asociado a alguna patogénesis}. 
-
+En particular estudiaremos los SNPs con cambio de sentido (\textit{missense}), es decir aquellos que deriven en un cambio de aminoácido en la proteína producida por la variante del gen. 
 
 \begin{figure}[H]
 \centering
-    \includegraphics[scale=0.55]{documents/latex/figures/1/snp_types.pdf}
+    \includegraphics[scale=0.7]{documents/latex/figures/1/snp_types.pdf}
     \caption{Tipos de SNP.}
     \label{fig:snp_types}
 \end{figure}
 
 
-% \subsubsection{Las enfermedades poco frecuentes (EPOF)}
+\subsection{Bases de datos ómicas}
 
-% \subsubsection{\todo{TODO}}
+En la actualidad existen diferentes bases de datos públicas (dbSNP, SNPedia, HapMap, entre otras) que registran millones de estos SNPs \textit{missense}. Los costos de una secuenciación completa siguen bajando de forma acelerada desde el Proyecto Genoma Humano \cite{sequencingcost} (ver figura \ref{fig:cost_per_genome}). Esto ha permitido generar un número creciente de estudios que permiten asociar polimorfismos genéticos a enfermedades (ver figura \ref{fig:dbsnp_growth_rate}). Diferentes bases, como Humsavar \cite{humsavar} o Clinvar \cite{clinvar}, contienen reportes curados con dichos resultados, que se actualizan periódicamente y pueden variar con nueva evidencia. Sin embargo, todavía existe un gran número de SNPs \textit{missense} de los cuales se desconoce su efecto en el organismo. 
+
+% Side by side figures 
+\begin{figure}[H]
+\begin{minipage}[c]{0.45\linewidth}
+\includegraphics[width=\linewidth]{documents/latex/figures/1/costpergenome_2017.pdf}
+\caption{Costo por secuenciación del genoma, NCBI-NIH, 2017.}
+\label{fig:cost_per_genome}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.45\linewidth}
+\includegraphics[width=\linewidth]{documents/latex/figures/1/increase_dbsnp.pdf}
+\caption{Crecimiento de la base dbSNP a partir del Proyecto Genoma Humano, NCBI-NIH, 2008. }
+\label{fig:dbsnp_growth_rate}
+\end{minipage}%
+\end{figure}
+
+\textbf{El problema que intentaremos atacar es poder predecir aquellos SNPs missense no investigados cuyo cambio en el aminoácido de la proteína generada pueda estar asociado a alguna patogénesis}. 
 
 \section{Enfoque computacional}
 
 Para atacar este problema, decidimos usar métodos de aprendizaje automático. El aprendizaje automático es un método computacional (dentro del área de la inteligencia artificial y la estadística) que consiste en aprender a partir de los datos. 
 
-Utilizamos este enfoque en particular dado que es el que utilizan los trabajos que se realizan en este área. La principal ventaja es la gran cantidad de efectos conocidos de las variantes proteicas, y a su vez la ubicación (\textit{locus}) en el genoma. Estos datos se encuentran (en gran parte) de forma abierta y gratuita. Usando esta fuente de datos intentaremos entrenar un modelo que pueda predecir con un cierto grado de precisión el efecto de una variante no estudiada. 
+Utilizamos este enfoque aprovechando la producción de trabajos previos en el área. La principal ventaja es la existencia de gran cantidad de efectos conocidos de las variantes proteicas, y a su vez su ubicación (\textit{locus}) en el genoma. Estos datos se encuentran (en gran parte) de forma abierta y gratuita. Usando esta fuente de datos intentaremos entrenar un modelo que pueda predecir con un cierto grado de precisión el efecto de una variante no reportada. 
 
-Existen diferentes formas de categorizar los algoritmos de aprendizaje automático. Una de las formas posibles es la categorización de acuerdo a la cantidad de tipo de supervisión durante la fase de entrenamiento. Este aprendizaje puede ser \cite{Barber2011}:
+Existen diferentes formas de categorizar los algoritmos de aprendizaje automático. De acuerdo a Barber \cite{Barber2011}, una de las formas posibles es la categorización de acuerdo a la cantidad de tipo de supervisión durante la fase de entrenamiento. Este aprendizaje puede ser:
 
 \begin{itemize}
 \item Supervisado, en donde se utilizan ejemplos previos que están ``rotulados'', es decir que posee una variable de respuesta conocida y se busca conseguir una predicción lo más certera posible sobre nuevos datos. 
@@ -85,7 +100,9 @@ Existen diferentes formas de categorizar los algoritmos de aprendizaje automáti
 
 En este trabajo nos vamos a centrar exclusivamente en el tipo de aprendizaje supervisado.
 
-\subsubsection{Aprendizaje supervisado}
+% \newpage
+
+\subsection{Aprendizaje supervisado}
 
 Como mencionamos anteriormente, el aprendizaje supervisado trata de predecir una respuesta usando un modelo generado con datos correctamente etiquetados. Definido de manera formal, dado un set de datos $ \mathcal{D} = \{(x^n, y^n), n = 1...N\}$  buscamos aprender la relación entre el ejemplo $x$ y la variable de respuesta $y$ tal que al recibir un nuevo ejemplo $x^*$ la respuesta predicha $y^*$ sea precisa \cite{Barber2011}. La precisión está definida formalmente por la función de pérdida o \textit{Loss Function}, $L(y^{pred}, y^{true})$. Esta función nos permite medir el costo de errar en la predicción y por lo tanto cuantificar qué tan bueno es nuestro modelo. A continuación haremos un recorrido por los métodos que utilizaremos en esta tesis.
 
@@ -97,11 +114,11 @@ La regresión logística (LR) es un modelo basado en la regresión lineal. Al ig
 h_{\theta}(\boldsymbol{X}) = \frac{1}{1 + e^{\theta^{T}\boldsymbol{X}}} = Pr(Y = 1 | \boldsymbol{X}; \theta)
 \end{equation*}
 
-donde $\boldsymbol{X}$ representa el vector de variables predictoras, $\theta$ es el vector de coeficientes y $Y$ es la variable de respuesta. Lo que se busca modelar, es la probabilidad de pertenecer a una clase determinada (simbolizada con '1'), dado que las variables observadas son $\boldsymbol{X}$ y usando los parámetros $\theta$. Los parámetros $\theta$ son obtenidos buscando maximizar la verosimilitud con los parámetros de la distribución real de los datos \cite{Hastie2001}. La probabilidad de pertenecer a la otra clase entonces, es igual a 1 - $h_{\theta}(\boldsymbol{X})$.
+donde $\boldsymbol{X}$ representa el vector de variables predictoras, $\theta$ es el vector de coeficientes ($\theta^{T}$ representa al vector transpuesto) e $Y$ es la variable de respuesta \cite{Barber2011}. Lo que se busca modelar, es la probabilidad de pertenecer a una clase determinada (simbolizada con '1'), dado que las variables observadas son $\boldsymbol{X}$ y usando los parámetros $\theta$. Los parámetros $\theta$ son obtenidos buscando maximizar la verosimilitud con los parámetros de la distribución real de los datos \cite{Hastie2001}. La probabilidad de pertenecer a la otra clase entonces, es igual a 1 - $h_{\theta}(\boldsymbol{X})$.
 
 \subsubsection{Support Vector Machines}
 
-Las Support Vector Machines (SVM) se desarrollaron inicialmente como métodos lineales de clasificación, al igual que la regresión logística. Esto significa que también busca una frontera de decisión (\textit{decision boundary}) que define la clase a la que pertenecen los datos. En este caso no se busca hallar los parámetros de la distribución a modelar sino que el objetivo reside en encontrar el hiperplano (\textit{support vector}) que mejor separe a los datos de entrenamiento. Posteriormente este método fue extendido para buscar un hiperplano en un espacio de variables transformado (método no lineal). Esta transformación se logra reemplazando el producto interno por una función kernel. En este trabajo haremos uso de la función de base radial (RBF, por sus siglas en inglés), que es la más comúnmente usada en este método.
+Las Support Vector Machines (SVM) se desarrollaron inicialmente como métodos lineales de clasificación, al igual que la regresión logística. Esto significa que también buscan una frontera de decisión (\textit{decision boundary}) que define la clase a la que pertenecen los datos. En este caso no se busca hallar los parámetros de la distribución a modelar sino que el objetivo reside en encontrar el hiperplano (\textit{support vector}) que mejor separe a los datos de entrenamiento \cite{Hastie2001}. Posteriormente este método fue extendido para buscar un hiperplano en un espacio de variables transformado (método no lineal). Esta transformación se logra reemplazando el producto interno por una función kernel. En este trabajo haremos uso de la función de base radial (RBF, por sus siglas en inglés), que es la más comúnmente usada en este método.
 
 \subsubsection{Random Forest}
 
@@ -113,9 +130,9 @@ Un árbol de decisión se construye dividiendo el espacio de variables de forma 
     G = \sum_{k = 1}^{K} \hat{p}_{mk}(1 - \hat{p}_{mk})
 \end{equation*}
 
-donde $\hat{p}_{mk}$ representa la proporción de la clase $k$ en la región $m$. Uno de los principales problemas que presenta este enfoque es la alta varianza (\textit{variance}) con respecto a los datos de entrenamiento. Si la profundidad del árbol es muy grande, aumenta el riesgo de \textit{overfitting} en los datos que poseemos. 
+donde $\hat{p}_{mk}$ representa la proporción de la clase $k$ en la región $m$ \cite{Hastie2001}. Uno de los principales problemas que presenta este enfoque es la alta varianza (\textit{variance}) con respecto a los datos de entrenamiento. Si la profundidad del árbol es muy grande, aumenta el riesgo de \textit{overfitting} en los datos que poseemos. 
 
-En el caso de Random Forest, se construyen distintos árboles de decisión con subconjuntos escogidos de forma aleatoria, con el objetivo de disminuir la varianza. A la vez, al ser árboles de poca profundidad (que favorecen el \textit{underfitting}), se genera una cantidad alta de árboles para solucionar el problema de alto sesgo (\textit{bias}). 
+En el caso de Random Forest, se construyen distintos árboles de decisión con subconjuntos de variables escogidos de forma aleatoria, con el objetivo de disminuir la varianza. A la vez, al ser árboles de poca profundidad (que favorecen el \textit{underfitting}), se genera una cantidad alta de árboles para solucionar el problema de alto sesgo (\textit{bias}). 
 
 Esta técnica consistente en combinar distintos algoritmos para obtener un mejor predictor se la denomina \textit{ensamble}, y en particular, Random Forest se enmarca dentro de la técnica de \textit{bagging}. Esto significa que la predicción final se obtiene a través de un promedio de los predictores que componen el método con igual peso.
 
@@ -123,26 +140,28 @@ Una de las principales ventajas de Random Forest es su interpretabilidad. Esto s
 
 \subsubsection{Gradient Boosting y XGBoost}
 
-Gradient Boosting (GB) es otro método de ensamble, que como las otras técnicas de \textit{Boosting}, genera modelos de forma iterativa, modificando el algoritmo para intentar corregir los errores de la iteración anterior. Esta es una diferencia crucial con respecto a los algoritmos de \textit{bagging}, como Random Forest, que genera modelos de forma paralela. La forma en que Gradient Boosting busca mejorar iterativamente es modelando el vector residual (o en otras palabras, la distancia entre la predicción y la variable a predecir) generando de esta manera un modelo aditivo que se puede representar de la siguiente manera:
+Gradient Boosting (GB) es otro método de ensamble, que como las otras técnicas de \textit{boosting}, genera modelos de forma iterativa, modificando el algoritmo para intentar corregir los errores de la iteración anterior. Esta es una diferencia crucial con respecto a los algoritmos de \textit{bagging}, como Random Forest, que genera modelos de forma paralela. La forma en que Gradient Boosting busca mejorar iterativamente es modelando el vector residual (o en otras palabras, la distancia entre la predicción y la variable a predecir) generando de esta manera un modelo aditivo que se puede representar de la siguiente manera:
 
 \begin{equation*}
     F_{m}(X) = F_{m - 1}(X) + \eta \cdot \Delta_{m}(X) 
 \end{equation*}
 
-donde $F_{m - 1}(X)$ es el modelo del paso anterior, $\Delta_{m}(X)$ es el modelo del vector residual y $\eta$ es el \textit{learning rate}, un hiperparámetro que busca regularizar la importancia de este factor en el modelo final para reducir el \textit{overfitting}. 
+donde $F_{m - 1}(X)$ es el modelo del paso anterior, $\Delta_{m}(X)$ es el modelo del vector residual y $\eta$ es el \textit{learning rate}, un hiperparámetro que busca regularizar la importancia de este factor en el modelo final para reducir el \textit{overfitting} \cite{gradient}. 
 
-En este trabajo vamos a utilizar XGBoost (XGB), una implementación de Gradient Boosting con árboles muy utilizado en competencias Kaggle. 
+En este trabajo vamos a utilizar XGBoost (XGB), una implementación de Gradient Boosting con árboles muy utilizado en competencias Kaggle \cite{xgboost}. 
 
 % \subsubsection{Pipeline de entrenamiento y evaluación}
 
 % Cada uno de estos métodos involucran una fase de entrenamiento en donde se genera la función de decisión del modelo. En nuestro trabajo la fase de entrenamiento consta de 
 
-\subsubsection{Métricas de evaluación}
+% \newpage
+
+\subsection{Métricas de evaluación}
 
 Las medidas que utilizaremos son las siguientes:
 
 \begin{itemize}
-    \item \textbf{Precisión}: La Precisión del modelo, está medida como la cantidad de positivos correctamente calificados (verdaderos positivos) sobre la cantidad de instancias calificadas como positivas (verdaderos positivos y falsos positivos).
+    \item \textbf{Precisión}: La Precisión del modelo, está medida como la cantidad de positivos correctamente clasificados (verdaderos positivos) sobre la cantidad de instancias clasificadas como positivas (verdaderos positivos y falsos positivos).
     
     \begin{equation*}
         \frac{VP}{VP + FP}
@@ -175,7 +194,7 @@ Las medidas que utilizaremos son las siguientes:
         \end{equation*}
     \end{multicols}
     
-    En un contexto de clasificación binaria, si ordenamos al score de predicción final de mayor a menor y consideramos positivos a todos aquellos a la izquierda del umbral de decisión (\textit{threshold}), obtendremos una tasa de verdaderos positivos y de falsos positivos (TPR y FPR respectivamente). Esto puede verse en la siguiente figura:
+    En un contexto de clasificación binaria, si ordenamos al score de predicción final de mayor a menor y consideramos positivos a todos aquellos a la izquierda del umbral de decisión (\textit{threshold}), obtendremos una tasa de verdaderos positivos y de falsos positivos (TPR y FPR respectivamente). Esto puede verse en la figura \ref{fig:threshold_auc}.
     
     \begin{figure}[H]
     \centering
@@ -184,7 +203,9 @@ Las medidas que utilizaremos son las siguientes:
     \label{fig:threshold_auc}
     \end{figure}
     
-    La curva característica operativa del receptor (ROC) es la representación gráfica de la relación entre el FPR y el TPR al mover el umbral de decisión. Su área (AUC) equivale a la probabilidad de que el modelo clasifique una instancia positiva cualquiera ``mejor'' que una instancia negativa cualquiera. En la figura \ref{fig:example_roc} puede verse la curva que representa el ejemplo de la figura \ref{fig:threshold_auc}.
+    La curva característica operativa del receptor (ROC, por sus siglas en inglés) es la representación gráfica de la relación entre el FPR y el TPR al mover el umbral de decisión. 
+
+    En la figura \ref{fig:example_roc} puede verse la curva que representa el ejemplo de la figura \ref{fig:threshold_auc}.
     
     \begin{figure}[H]
         \centering
@@ -193,35 +214,42 @@ Las medidas que utilizaremos son las siguientes:
         \label{fig:example_roc}
     \end{figure}
     
+    Su área (AUC, por sus siglas en inglés) equivale a la probabilidad de que el modelo clasifique una instancia positiva cualquiera ``mejor'' que una instancia negativa cualquiera (estadístico Mann-Whitney $U$ \cite{doi:10.1256/003590002320603584}). Dadas dos muestras $n_1$ y $n_2$, el estadístico Mann-Whitney $U$ se define como:
+    
+    \begin{equation*}
+        U = \sum_{i = 1}^{n_1} r_{1i} - \frac{n_1 (n_1 + 1)}{2}
+    \end{equation*}
+    
+    donde $r_{1i}$ es el ranking del elemento $i$ de la muestra $n_1$. La equivalencia con este estadístico viene de considerar a los verdaderos positivos y falsos positivos como muestras $n_1$ y $n_2$ respectivamente. Su distribución es aproximadamente normal para muestras grandes \cite{mann1947}, lo que nos permite calcular su intervalo de confianza y comparar pares de modelos usando esta métrica con relativa facilidad.
     
 
 \end{itemize}
 
-\newpage
+% \newpage
 
 
 \section{Trabajos relacionados}
 
-\subsubsection{VarQ \cite{Radusky2017}}
+\subsubsection{VarQ}
 
-VarQ es una herramienta generada en el BIA (Plataforma Bioinformática Argentina) por Leandro Radusky. Esta herramienta permite extraer datos estructurales de variantes proteicas de un sólo aminoácido (SAS, por sus siglas en inglés) tomando información de diferentes bases de datos o aplicaciones (PDB, PFam, 3DID, entre otras), permitiendo el análisis manual de los diferentes cambios estructurales, como el tipo de actividad, el plegamiento, si pertenece a un sitio activo, o si forma parte en interfaces proteína-proteína. 
+VarQ es una herramienta generada en la BIA (Plataforma Bioinformática Argentina) por Leandro Radusky. Esta herramienta permite extraer datos estructurales de variantes proteicas de un sólo aminoácido (SAS, por sus siglas en inglés) tomando información de diferentes bases de datos o aplicaciones (PDB, PFam, 3DID, entre otras), permitiendo el análisis manual de los diferentes cambios estructurales, como el tipo de actividad, el plegamiento, si pertenece a un sitio activo, o si forma parte en interfaces proteína-proteína, como se ve en la figura \ref{fig:varq_pipeline}. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.45]{documents/latex/figures/1/pipeline.png}
-    \caption{Pipeline de extracción de datos de la herramienta VarQ. Esta figura fue extraída de la tesis de doctorado de Leandro Radusky.}
+    \caption{Pipeline de extracción de datos de la herramienta VarQ. Esta figura fue extraída de la tesis de doctorado de Leandro Radusky \cite{Radusky2017}.}
     \label{fig:varq_pipeline}
 \end{figure}
 
-En la primera parte de esta tesis hacemos uso del trabajo de Santiago Moreno. Uno de sus objetivos principales de fue generar un dataset de variantes a nivel de proteínas (dataset VarQ), y evaluar la performance de un modelo que predice el efecto de la mutación usando las variables que provee esta herramienta. 
+En la primera parte de esta tesis hacemos uso del trabajo de Santiago Moreno. Uno de sus objetivos principales fue generar un dataset de variantes a nivel de proteínas (al que denominaremos dataset VarQ), y evaluar la performance de un modelo que predice el efecto de la mutación usando las variables que provee esta herramienta. En la sección \ref{ch:desarrollo_varq} presentaremos un modelo creado en base a este dataset y encontraremos sus limitaciones para tal fin.
 
-\subsubsection{VEST \cite{Carter2013}}
+\subsubsection{VEST}
 
-VEST (\textit{Variant Effect Scoring Tool}) es un predictor de efectos funcionales de SNPs con cambio de sentido (en regiones codificantes) desarrollado en el Karchin Lab de la Universidad de Johns Hopkins. Con esta herramienta (basada en Random Forest) analizaron aproximadamente 80,000 variantes anotadas de HGMD (\textit{Human Gene Mutation Database}) con variables de tipo genómicas, estructurales y físico-químicas.
+VEST (\textit{Variant Effect Scoring Tool}) \cite{Carter2013} es un predictor de efectos funcionales de SNPs \textit{missense} desarrollado en el Karchin Lab de la Universidad de Johns Hopkins. Con esta herramienta (basada en Random Forest) analizaron aproximadamente 80,000 variantes anotadas de HGMD (\textit{Human Gene Mutation Database}) con variables de tipo genómicas, estructurales y físico-químicas.
 
-\subsubsection{FATHMM-MKL \cite{Shihab2015}}
+\subsubsection{FATHMM-MKL}
 
-FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es también un predictor de efectos funcionales de SNPs con cambio de sentido, en regiones codificantes y no codificantes. El modelo está basado en SVM usando una combinación de múltiples kernels (\textit{Multiple Kernel Learning, MKL}). Fue desarrollado en la Universidad de Bristol. 
+FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) \cite{Shihab2015} es también un predictor de efectos funcionales de SNPs \textit{missense}, en regiones codificantes y no codificantes. El modelo está basado en SVM usando una combinación de múltiples kernels (\textit{Multiple Kernel Learning, MKL}). Fue desarrollado en la Universidad de Bristol. 
 
 % \newpage
 
@@ -231,13 +259,13 @@ FATHMM-MKL (\textit{Functional Analysis through Hidden Markov Models}) es tambi�
 El objetivo del trabajo se centra en responder una serie de interrogantes generados a partir del estudio de los trabajos previos:
 
 \begin{itemize}
-    \item El dataset de VarQ se concentra en variables de tipo estructural. ¿Podemos enriquecerlo con variables de otras dimensiones (físico-químicas, genómicas, filogenéticas)?
-    \item ¿Cómo afectan las distintas variables a nuestros modelos? ¿Cuáles son las más importantes?
+    \item El dataset de VarQ se compone esencialmente de variables de tipo estructural. ¿Es posible enriquecerlo con variables de otras dimensiones (físico-químicas, genómicas, filogenéticas)?
+    \item ¿Cómo afectan las distintas variables a nuestros modelos modelos de predicción de patogenicidad de los SNPs? ¿Cuáles son las más importantes para predecir una variante patogénica?
     \item ¿Cuáles son los mejores algoritmos de aprendizaje automático para resolver este tipo de problemas y cuáles son sus parámetros?
     
 \end{itemize}
 
-Intentaremos responder estas preguntas en este trabajo, que se encuentra dividido en 5 partes principales:
+Estos puntos serán abordados a través del siguiente de trabajo de la siguiente manera:
 
 \begin{itemize}
     \item Modelo usando el dataset VarQ

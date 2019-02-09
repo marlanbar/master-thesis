@@ -1,30 +1,30 @@
 % \section{Modelo usando el dataset VarQ}
 
-Comenzamos nuestro trabajo analizando el dataset construido en la tesis de Santiago Moreno. Este dataset fue construido inicialmente con las variantes originales del sitio de \textit{VarQ}, que consistieron en aproximadamente 400 mutaciones correspondientes a 13 proteínas con 10 variables. Posteriormente en el mismo trabajo se aumentó la cantidad para llegar a las aproximadamente 18 mil variantes del dataset VarQ usando otras fuentes como Clinvar y Humsavar. Llamaremos a este dataset VarQ Completo. 
+Comenzamos nuestro trabajo analizando el dataset construido en la tesis de Santiago Moreno. Este dataset fue construido inicialmente con las variantes originales del sitio de VarQ \cite{varq}, que consistieron en aproximadamente 400 mutaciones correspondientes a 13 proteínas con 10 variables. Posteriormente en el mismo trabajo se aumentó la cantidad para llegar a las aproximadamente 18 mil variantes del dataset VarQ usando otras fuentes como Clinvar \cite{clinvar} y Humsavar \cite{humsavar}. Llamaremos a este dataset VarQ Completo. 
 
 \section{Variables del dataset VarQ Completo}
 
 A continuación damos una descripción detallada de las variables originales encontradas en el dataset. Presentamos un extracto del trabajo de Santiago Moreno en donde se describen dichas variables: 
 
 \begin{itemize}
-    \item Variación de Energía (ENE): En VarQ, las mutaciones son modeladas con el software FoldX, que construye un modelo a partir de una estructura dada y luego muta residuos específicos. Luego el software predice el impacto energético de la mutación en la estabilidad de la proteína o, en caso de tratarse de un complejo, en la estabilidad del mismo.
+    \item Variación de Energía (ENE): En VarQ, las mutaciones son modeladas con el software FoldX \cite{Schymkowitz2005}, que construye un modelo a partir de una estructura dada y luego muta residuos específicos. Luego el software predice el impacto energético de la mutación en la estabilidad de la proteína o, en caso de tratarse de un complejo, en la estabilidad del mismo.
     \item SASA: Es el valor correspondiente a la superficie accesible por parte del solvente, de la cadena lateral del aminoácido. Este valor permite determinar si la cadena lateral se encuentra en la superficie o en el núcleo de la estructura.
     \item Porcentaje de SASA: El porcentaje que representa el SASA sobre el total. Es decir el porcentaje que representa el SASA en función de la estructura de la proteína.
     \item B-Factor (BF): o factor de temperatura, que corresponde a un aminoácido dentro de la proteína. Una mayor temperatura, indica que el aminoácido pertenece a una zona potencialmente de mayor movilidad.
-    \item Switchability (SWI): Evalúa cuán propenso a generar un cambio de hélice alfa a hoja beta es un conjunto de aminoácidos.
-    \item Aggregability (AGG): El software Tango evalúa cuán
+    \item Switchability (SWI): Evalúa cuán propenso a generar un cambio de hélice alfa a hoja beta es un conjunto de aminoácidos \cite{PMID:25082719}.
+    \item Aggregability (AGG): El software Tango \cite{Fernandez-Escamilla2004} evalúa cuán
     propenso es un aminoácido a generar agregación en una proteína desde un punto de vista estructural. La agregación es el proceso por el cual proteínas mal formadas
     adoptan una conformación que causa su polimerización en fibrillas agregadas y organizadas. Muchas enfermedades neurodegenerativas, como por ejemplo la Amiloidosis, están asociadas con la agregación proteica.
-    \item Conservación (CONS): Se calcula en bits, siempre y cuando la mutación pueda ser mapeada a una posición en una familia PFam asignada. Cuando una posición tiene un alto valor en bits y la misma posición coincide con el aminoácido conservado en la secuencia de la proteína interpretamos que dicha posición está altamente conservada. La misma puede estar altamente conservada porque es importante estructuralmente o porque es importante para la actividad enzimática. Los residuos con alta conservación tendrán un impacto mayor sobre la función pues afectan aminoácidos de la familia.
-    \item Sitio Activo (AS): Las posiciones de sitio activo son aquellas que se encuentran marcadas como unidas a ligandos en los archivos PDB o que pertenecen al mismo pocket que se encuentren conteniendo estos residuos nombrados o aquellos que pertenezcan al Catalytic Site Atlas.
-    \item Interfaz 3DID: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de 3DID.
-    \item Interfaz PDB: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de PDB.
+    \item Conservación (CONS): Se calcula en bits, siempre y cuando la mutación pueda ser mapeada a una posición en una familia PFam asignada \cite{Finn2014}. Cuando una posición tiene un alto valor en bits y la misma posición coincide con el aminoácido conservado en la secuencia de la proteína interpretamos que dicha posición está altamente conservada. La misma puede estar altamente conservada porque es importante estructuralmente o porque es importante para la actividad enzimática \cite{Radusky2017}. Los residuos con alta conservación tendrán un impacto mayor sobre la función pues afectan aminoácidos de la familia.
+    \item Sitio Activo (AS): Las posiciones de sitio activo son aquellas que se encuentran marcadas como unidas a ligandos en los archivos PDB o que pertenecen al mismo \textit{pocket} que se encuentren conteniendo estos residuos nombrados o aquellos que pertenezcan al Catalytic Site Atlas \cite{Porter2004}.
+    \item Interfaz 3DID: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de 3DID \cite{Stein2005}.
+    \item Interfaz PDB: Determina si la posición sirve para una interfaz proteína-proteína según la base de datos de PDB \cite{Berman2003}.
 \end{itemize}
 
 
 \section{Limpieza del dataset VarQ Completo}
 
-Para trabajar con este dataset decidimos verificar la etiqueta de cada una de las variantes, de manera de confirmar que su status siguiera vigente. Para esto recurrimos a las fuentes Clinvar y Humsavar. Realizamos un primer filtrado de estas tablas quedándonos con aquellas variables con un status confirmado: en el caso de Humsavar, aquellas que figuran con la expresión \textit{Polymorphism} y \textit{Disease}, mientras que en Clinvar nos quedamos con aquellas que figuraban como \textit{Benign} y \textit{Pathogenic}, eliminando aquellas con caracterización difusa, por ejemplo, ``factor de riesgo''. 
+Para trabajar con este dataset decidimos verificar la etiqueta de cada una de las variantes, de manera de confirmar que su status siguiera vigente. Para esto recurrimos a las fuentes Clinvar y Humsavar. Realizamos un primer filtrado de estas tablas quedándonos con aquellas variables con un status confirmado: en el caso de Humsavar, aquellas que figuran con la expresión \textit{Polymorphism} y \textit{Disease}, mientras que en Clinvar nos quedamos con aquellas que figuraban como \textit{Benign} y \textit{Pathogenic}, eliminando aquellas con caracterización difusa, por ejemplo, \textit{Risk Factor} (factor de riesgo). 
 
 \begin{figure}[H]
     \centering
@@ -40,7 +40,7 @@ Así, cruzamos los datos con las tablas filtradas Humsavar y Clinvar, y encontra
 
 A partir de VarQ Curado estudiaremos sus variables usando estadísticas descriptivas con el objetivo de evaluar la calidad del dataset. La idea es poder tener una noción de la dispersión de nuestros datos, sumado a la cobertura que tenemos de ellos sobre las variantes.
 
-En la figura \ref{fig:proporcion_nulos_varq} podemos observar como la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variante (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
+En la figura \ref{fig:proporcion_nulos_varq} podemos observar cómo la variable de sitio activo (ACTIVE\_SITE) no posee datos para casi ninguna variante (aproximadamente el 95\%), mientras que la variable de conservación (CONS) no posee datos para el 63\% de las variantes. En base a estas observaciones decidimos remover la variable de sitio activo del dataset por considerarla muy poco relevante en términos de cobertura.
 
 \begin{figure}[H]
     \centering
@@ -60,7 +60,7 @@ Otro factor importante a considerar es cuántas variables nulas tienen cada una 
 
 % \subsection{Correlación entre las variables de VarQ Curado}
 
-También queremos conocer qué tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98. Mantuvimos las dos variables dado que la relativa baja cantidad de variables de este dataset no nos fuerza a remover variables, y si bien la correlación es muy alta, las variables no son idénticas.
+También queremos conocer qué tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98. Mantuvimos las dos variables dado que la relativa baja cantidad de variables de este dataset no nos fuerza a removerlas, y si bien la correlación es muy alta, no descartamos a priori poder extraer información util usando ambas.
 
 \begin{figure}[H]
     \centering
@@ -104,23 +104,18 @@ PDB  & False  & 0.9 & 0.49\\ \hline
 \label{tab:descripcion_varq_cat}
 \end{table}
 
-Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top) y la frecuencia de este valor. Para este tipo de variables quisimos también cuantificar su poder predictivo individual. 
+Para el caso de las variables categóricas (PDB y 3DID), analizamos el valor con la frecuencia más alta (top) y el valor de esta frecuencia. Para este tipo de variables quisimos también cuantificar su poder predictivo individual. 
 
 % \newpage
 
-Utilizar AUC en este caso no es posible dado que su cálculo sólo tiene sentido en variables continuas. Por lo tanto, decidimos calcular el \textit{Balanced Accuracy} (BACC) \cite{Brodersen2010} como medida de poder predictivo, considerando el valor de la variable como predictor de la variante. 
+Utilizar AUC en este caso no es posible dado que su cálculo sólo tiene sentido en variables continuas. Por lo tanto, decidimos calcular el \textit{Balanced Accuracy} (BACC) \cite{Brodersen2010} como medida de poder predictivo, considerando el valor de la variable como predictor de la variante.
 
 El \textit{Balanced Accuracy} (BACC) es igual a:
 \begin{equation*}
     \frac{1}{2} (\frac{VP}{P} + \frac{VN}{N})
 \end{equation*}
 
-Donde VP es igual a la cantidad de verdaderos positivos, P es igual a la cantidad de ejemplos etiquetados como positivos, VN es la cantidad de verdaderos negativos y N la cantidad de ejemplos etiquetados como negativos.
-
-En la tabla \ref{tab:descripcion_varq_cat} podemos ver que el BACC de las variables 3DID y PDB es de 0.51 y 0.49 respectivamente, lo que indica un bajo valor predictivo. 
-
-
-
+Al igual que con el AUC, un valor mucho menor a 0.5 indica poder anti-predictivo, por lo que invertir la respuesta daría lugar a un buen predictor. En la tabla \ref{tab:descripcion_varq_cat} podemos ver que el BACC de las variables 3DID y PDB es de 0.51 y 0.49 respectivamente, lo que indica un bajo valor predictivo. 
 
 % \newpage
 
@@ -145,13 +140,13 @@ Para esto recurrimos a diferentes algoritmos de aprendizaje automático: Support
     
 \end{itemize}
 
-Luego del preprocesamiento, para cada uno de los algoritmos se realizó una búsqueda de hiperparámetros óptimos, a partir de estos datos, con la función \texttt{GridSearchCV} de la biblioteca \textit{Scikit-learn}. El objetivo de esta función es evaluar todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). En el apéndice se encuentran los diccionarios de hiperparámetros usados en cada uno de los modelos.
+Luego del preprocesamiento, para cada uno de los algoritmos se realizó una búsqueda de hiperparámetros óptimos, a partir de estos datos, con la función \texttt{GridSearchCV} de la biblioteca \texttt{Scikit-learn} \cite{scikit-learn}. El objetivo de esta función es evaluar todas las combinaciones de hiperparámetros definidos en un diccionario y retornar el estimador que dio mejores resultados (de acuerdo a una métrica escogida, en este caso el área bajo la curva ROC). Esta métrica a su vez es evaluada a través de validación cruzada (\textit{3-fold Cross Validation}). En el apéndice se encuentran los diccionarios de hiperparámetros usados en cada uno de los modelos.
 
 \section{Resultados}
 
-Random Forest fue el mejor modelo con un AUC de 0.74. Los parámetros óptimos de este modelo fueron una profundidad de árbol de 7, 100 estimadores y una cantidad máxima de variables por árbol de 4.
+Random Forest fue el mejor modelo con un AUC de 0.74. Los parámetros óptimos de este modelo fueron una profundidad de árbol de 7, 100 estimadores y una cantidad máxima de variables por árbol de 4. Denominaremos este modelo como Modelo VarQ Curado.
 
-La Regresión logística y SVC obtuvieron 0.71 y 0.70 respectivamente. Estos modelos se caracterizaron ademas por tener una tendencia a clasificar a las variantes como patogénicas, lo que se puede observar en su alto recall y menor precisión con respecto a Random Forest. En particular, SVC clasificó a todas las variantes del dataset de evaluación como patogénicas. También el tiempo de entrenamiento fue mucho mayor que el del resto de los algoritmos.
+La Regresión Logística y SVC obtuvieron 0.71 y 0.70 de AUC respectivamente. Estos modelos se caracterizaron ademas por tener una tendencia a clasificar a las variantes como patogénicas, lo que se puede observar en su alto recall y menor precisión con respecto a Random Forest. En particular, SVC clasificó a todas las variantes del dataset de evaluación como patogénicas. También el tiempo de entrenamiento fue mucho mayor que el del resto de los algoritmos. En la tabla \ref{tab:metricsmodel} presentamos la Precisión y el Recall (con respecto a las variantes patogénicas) y el tiempo de entrenamiento del modelo y de predicción de todas las variantes del dataset de evaluación.
 
 \begin{table}[H]
 \centering
@@ -162,13 +157,11 @@ SVC    & 0.72 & \textbf{1.00} & 0.70 & 0.84 & 2 m 39 s & 0.77s \\ \hline
 LR     & 0.75 & 0.94 & 0.71 & 0.84 & \textbf{1.17 s} & \textbf{0.01 s} \\ \hline
 RF     & \textbf{0.77} & 0.93 & \textbf{0.74} & 0.84 & 9.82 s & 0.11 s \\ \hline
 \end{tabular}
-\label{tab:metrics_model}
-\caption{Comparación de métricas de modelos usando el dataset VarQ Curado. Las variables $t_{fit}$ y $t_{pred}$ corresponden al tiempo de entrenamiento y de predicción de todas las variantes \todo{REFERENCIAR}.}
+\caption{Comparación de métricas de modelos usando el dataset VarQ Curado. Las variables $t_{fit}$ y $t_{pred}$ corresponden al tiempo de entrenamiento y de predicción de todas las variantes.}
+\label{tab:metricsmodel}
 \end{table}
 
 La tabla \ref{tab:metrics_varq} muestra algunas métricas de interés obtenidas del modelo Random Forest para entender mejor los resultados del modelo basados en el predictor generado.
-
-
 
 \begin{table}[H]
 \centering
@@ -183,9 +176,9 @@ Promedio      & 0.71      & 0.74   & 0.71     \\ \hline
 \label{tab:metrics_varq}
 \end{table}
 
-La precisión del modelo indica un número marcadamente bajo (0.57) en la clase benigna, lo que significa que casi una de cada dos variantes detectadas como benignas es en efecto patogénica. El Recall con respecto a las variantes benignas es de 0.26, es decir que el modelo sólo reconoce alrededor de un cuarto de las variantes benignas como tales. Por lo tanto podemos afirmar que este modelo tiene una tendencia a calificar las variantes como patogénicas, generando una gran cantidad de falsos positivos (o Error de tipo I). Es importante remarcar que estas métricas están generadas a partir de una función de decisión o \textit{threshold} fijado por la versión del algoritmo usado (en el caso de la librería \texttt{scikit-learn}, este \textit{threshold} está ubicado en 0.5 de la probabilidad asignada).  La curva ROC, o \textit{Receiver Operating Characteristic} y su AUC asociada, nos permite independizarnos de un \textit{threshold} fijo para evaluar las características del predictor (fig 1.5a).
+La precisión del modelo indica un número marcadamente bajo (0.57) en la clase benigna, lo que significa que casi una de cada dos variantes detectadas como benignas es en efecto patogénica. El Recall con respecto a las variantes benignas es de 0.26, es decir que el modelo sólo reconoce alrededor de un cuarto de las variantes benignas como tales. Por lo tanto podemos afirmar que este modelo tiene una tendencia a clasificar las variantes como patogénicas, generando una gran cantidad de falsos positivos (o Error de tipo I). Es importante remarcar que estas métricas están generadas a partir de una función de decisión o \textit{threshold} fijado por la versión del algoritmo usado (en el caso de la biblioteca \texttt{scikit-learn}, este \textit{threshold} está ubicado en 0.5 de la probabilidad asignada).  La curva ROC, o \textit{Receiver Operating Characteristic} y su AUC asociada, nos permite independizarnos de un \textit{threshold} fijo para evaluar las características del predictor (figura \ref{fig:auc_varq}).
 
-En la figura \ref{fig:importance_varq} podemos observar la importancia de los features reportado por el algoritmo Random Forest, que ubica en primer lugar con una gran diferencia a la variable que hace referencia a la Variación de Energía (ENE), seguido por el BFACTOR y el porcentaje de SASA (SASA \%). Este dato concuerda parcialmente con sus valores de AUC univariado. Si bien ENE y SASA \% poseen un valor relativamente alto de poder de clasificación univariada, no sucedía lo mismo con BFACTOR. En el modelo multivariado esta situación se invierte.
+En la figura \ref{fig:importance_varq} podemos observar la importancia de los features reportado por el algoritmo Random Forest, que ubica en primer lugar con una gran diferencia a la variable que hace referencia a la Variación de Energía (ENE), seguido por el BFACTOR y el porcentaje de SASA (SASA \%). Este dato concuerda parcialmente con sus valores de AUC univariado (tabla \ref{tab:descripcion_varq_cont}). Si bien ENE y SASA \% poseen un valor relativamente alto de poder de clasificación univariada, no sucedía lo mismo con BFACTOR. En el modelo multivariado esta situación se invierte, con BFACTOR en el segundo lugar de importancia.
 
 \newpage
 
@@ -193,12 +186,15 @@ En la figura \ref{fig:importance_varq} podemos observar la importancia de los fe
 \centering
 \begin{subfigure}{0.7\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/varq/auc_varq.pdf}
-    \caption{Curva ROC del algoritmo Random Forest del dataset VarQ Curado. La línea punteada corresponde a la curva ROC de un estimador aleatorio, o \textit{Random}, cuyo AUC es igual a 0.5.}
+    \caption{Curva ROC del modelo. La línea punteada corresponde a la curva ROC de un estimador aleatorio, o \textit{Random}, cuyo AUC es igual a 0.5.}
     \label{fig:auc_varq}
 \end{subfigure}
 \begin{subfigure}{0.7\textwidth}
     \includegraphics[width=\textwidth]{documents/latex/figures/3/varq/importances_varq.pdf}
-    \caption{Los atributos del dataset VarQ Curado en orden de importancia usando un modelo Random Forest. La barra de error corresponde al desvío estándar del \textit{Feature Importance} de cada uno de los árboles del modelo.}
+    \caption{Los atributos del dataset VarQ Curado en orden de importancia. La barra de error corresponde al desvío estándar del \textit{Feature Importance} de cada uno de los árboles del modelo.}
     \label{fig:importance_varq}
 \end{subfigure}
+
+\caption{Curva AUC y atributos más importantes del Modelo VarQ Curado.}
+
 \end{figure}
