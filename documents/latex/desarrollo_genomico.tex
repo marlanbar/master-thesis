@@ -1,15 +1,15 @@
 % \section{Modelo usando variables genómicas}
 
-Otra de las preguntas que nos hicimos fue si las variables genómicas podían hacer un aporte al modelo, siendo que es en los genes donde se produce la mutación que finalmente da origen a la variante en la proteína. En la base de datos Humsavar existe, para la mayoría de las mutaciones, el identificador rsID o Reference SNP ID. Un identificador rsID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37, en nuestro caso). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) \cite{dbSNP}, datos como el cromosoma, la posición, el cambio de nucleótido de la variante y su clasificación funcional.
+Otra de las preguntas que nos hicimos fue si la consideración de variables genómicas, como medidas de conservación de la posición genómica de la variante, de su entorno, del exón en que se encuentra, la cantidad de variantes observadas en el exón, etc, pueden mejorar el poder predictivo de nuestro modelo. Esta pregunta tiene lugar si consideramos que es en los genes donde se produce la mutación que finalmente da origen a la variante en la proteína. En la base de datos Humsavar existe, para la mayoría de las mutaciones, el identificador rsID o Reference SNP ID. Un identificador rsID agrupa los distintos reportes que hacen referencia a la misma posición dentro del mismo genoma de referencia (hg19/GRCh37, en nuestro caso). A partir de este identificador fue posible obtener de la base de datos dbSNP (Versión snp150) \cite{dbSNP}, datos como el cromosoma, la posición, el cambio de nucleótido de la variante y su clasificación funcional.
 
 \section{Variables de conservación}
 
-En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados de predicción (modelos FATHMM-MKL \cite{Shihab2015} o VEST \cite{Carter2013}). La \textit{conservación} es un concepto biológico que refiere a las secuencias conservadas, es decir, secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común. La conservación puede ser cuantificada con distintos tipos de enfoques, pero en lo que nos concierne, dos de los más utilizados son 1) a través de alineamientos múltiples de secuencias y 2), mediante el uso de árboles filogenéticos.
+En la literatura encontramos que dos de las variables genómicas asociadas a la conservación eran las que daban mejores resultados de predicción (modelos FATHMM-MKL \cite{Shihab2015} y VEST \cite{Carter2013}). La \textit{conservación} es un concepto biológico que refiere a las secuencias conservadas, es decir, secuencias tanto genéticas como proteicas que se mantienen de forma similar o idéntica en muchas especies que poseen un ancestro evolutivo en común. La conservación puede ser cuantificada con distintos tipos de enfoques, pero en lo que nos concierne, dos de los más utilizados son 1) a través de alineamientos múltiples de secuencias, y 2) mediante el uso de árboles filogenéticos.
 
 En particular, la composición de estas variables consiste en alineamientos múltiples de secuencias genéticas (MSA) de 46 especies de vertebrados, incluyendo Homo Sapiens y otras como Felis catus (gato doméstico), Danio renus (pez cebra) y Equus Caballus (caballo). En base a este alineamiento se usan dos medidas distintas que buscan detectar aquellas regiones en el genoma (ADN) con mayor nivel de conservación entre las distintas especies. Las medidas son las siguientes:
 \begin{itemize}
-    \item \textbf{PhastCons-46-Way} \cite{siepel2005evolutionarily}: Medida de conservación basado en un modelo oculto de Markov (\textit{phylo-HMM}). Calcula la probabilidad de que un nucleótido pertenezca a un sitio conservado (considerando el entorno).
-    \item \textbf{PhyloP-46-Way} \cite{Pollard2010}: mide la conservación en una columna individual, sin considerar las columnas vecinas.
+    \item \textbf{PhastCons-46-Way}: Medida de conservación basado en un modelo oculto de Markov (\textit{phylo-HMM}). Calcula la probabilidad de que un nucleótido pertenezca a un sitio conservado (considerando el entorno) \cite{siepel2005evolutionarily}.
+    \item \textbf{PhyloP-46-Way}: Mide la conservación considerando un alineamiento múltiple y un modelo de evolución neutral. Además, cada columna se mide individualmente, es decir, sin considerar sus columnas vecinas \cite{Pollard2010} 
 \end{itemize}
 
 Decidimos incluir en nuestro dataset ambas medidas de conservación, usando el Table Browser de la Universidad de California en Santa Cruz (UCSC) \cite{Karolchik2004}.
@@ -37,17 +37,17 @@ Las categorías de clases funcionales que usamos en este caso fueron \cite{table
 
 Por último, usamos variables genómicas del dataset SNVBox, específicamente de la tabla \\ EXON\_FEATURES. Las variables usadas son:
 \begin{itemize}
-    \item ExonConservation (CONS): Score de Conservación para el exón completo calculado a partir de una alineación filogenética a 46 vías, usando el \textit{Genome Browser}. Si bien existe una gran similitud con las variables de conservación que ya incluimos en el dataset decidimos incluir esta variable debido a su baja correlación con las mencionadas anteriormente (ver descripción estadística del dataset más adelante).
+    \item ExonConservation (CONS): Score de Conservación para el exón completo calculado a partir de una alineación filogenética a 46 vías, usando el \textit{Genome Browser}. Si bien existe una gran similitud con las variables de conservación que ya incluimos en el dataset esta se encuentra a nivel de exón, mientras que las dos variables anteriores se encuentran a nivel de nucleótido. También decidimos incluir esta variable debido a su baja correlación con las mencionadas anteriormente (ver descripción estadística del dataset más adelante).
     \item ExonHapMapSnpDensity (HAPMAP\_SNP\_DEN): Número de SNPs (verificados en HapMap) en el exón donde ocurre la mutación dividido por la longitud del exón. Estos SNPs (también llamados tag SNPs) son los que identifican haplotipos. Los haplotipos son bloques de SNPs heredados por un único individuo.
     \item ExonSnpDensity (SNP\_DEN): Número de SNPs en el exón donde ocurre la mutación dividido por la longitud del exón.
 \end{itemize}
 
-Estas variables se definen a nivel de exón, por lo que cada una de ellas posee dos identificadores: UID (identificador de la secuencia proteica a la que pertenece, propia de la base de datos) y EXON ID (identificador del exón dentro de cada transcripto mRNA). Estos identicadores permiten el cruce con la tabla \texttt{Transcript\_Exon} dentro de la base SNVBox. Con esta tabla podemos obtener el número del cromosoma del exón, y la posición de inicio y fin del exón dentro del cromosoma. Una vez obtenidos estos datos, pudimos extraer todos los rsID dentro de esa subsecuencia. Para aproximadamente el 33\% de los rsIDs en nuestra tabla Humsavar existe más de un transcripto que los contiene, por lo que decidimos promediar las variables (Cons, snp\_den y hapmap\_snp\_den) de cada uno de los transcriptos.
+Estas variables se definen a nivel de exón, por lo que cada una de ellas posee dos identificadores: UID (identificador de la secuencia proteica a la que pertenece, propia de la base de datos) y EXON ID (identificador del exón dentro de cada transcripto mRNA). Estos identificadores permiten el cruce con la tabla \texttt{Transcript\_Exon} dentro de la base SNVBox (ver figura \ref{fig:exon_diagram}). Con esta tabla podemos obtener el número del cromosoma del exón, y la posición de inicio y fin del exón dentro del cromosoma. Una vez obtenidos estos datos, pudimos extraer todos los rsID dentro de esa subsecuencia. Para aproximadamente el 33\% de los rsIDs en nuestra tabla Humsavar existe más de un transcripto que los contiene, por lo que decidimos promediar las variables (CONS, SNP\_DEN y HAPMAP\_SNP\_DEN) de cada uno de los transcriptos.
 
 \begin{figure}[H]
 \centering
     \includegraphics[scale=0.40]{documents/latex/figures/3/genomic/exon_diagram.pdf}
-    \caption{Esquema de acceso a las variables genómicas de SNVBox.}
+    \caption{Esquema de acceso a las variables genómicas de SNVBox. Las flechas simbolizan la cardinalidad en la relación entre las entidades: uno a muchos (la flecha con 3 puntas), uno a uno (la flecha que une UID con UID, por ejemplo) y uno a opcionalmente uno (chrom a Chr).}
     \label{fig:exon_diagram}
 \end{figure}
 
@@ -57,7 +57,11 @@ Con los atributos mencionados anteriormente, pudimos cruzar la información usan
 
 \section{Descripción estadística del dataset Genómico}
 
-A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas (ver tablas \ref{conservacion_vars} y \ref{snvbox_vars}). Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). También calculamos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional. El AUC univariado de las variables de conservación (PHYLOP46WAY, PHASTCONS46WAY y CONS) es alto, lo que significa que variantes en zonas de alta conservación son buenos indicadores de patogenicidad. En el caso de las variables categóricas del dataset (las variables relativas a la clase funcional), no encontramos variables con un BACC significativo.
+A continuación presentamos, como en las secciones anteriores, una descripción de las variables usadas (ver tablas \ref{conservacion_vars} y \ref{snvbox_vars}). Para cada uno de los grupos analizamos la media (mean), el desvío estándar (std), los cuartiles (25\%, 50\%, 75\%) y los valores máximos (max) y mínimos (min). En el caso de la variable de conservación PHASTCONS46WAY encontramos que la mediana y el máximo están muy cercanos (0.99 y 1.00), por lo que podemos anticipar que los valores más interesantes (es decir, aquellos que determinen patogenicidad) se encontraran cerca del mínimo. Algo parecido sucede con la otra variable de conservación, PHYLOP46WAY, donde la mediana, el tercer cuartil y el máximo están mucho más cerca que el resto de los valores.
+
+También calculamos el AUC univariado y el \textit{Balanced Accuracy} para las variables categóricas, en este caso las relativas a la clase funcional. El AUC univariado de las variables de conservación (PHYLOP46WAY, PHASTCONS46WAY y CONS) es alto, lo que significa que variantes en zonas de alta conservación son buenos indicadores de patogenicidad. En el caso de las variables categóricas del dataset (las variables relativas a la clase funcional), no encontramos variables con un BACC significativo.
+
+\newpage
 
 % \subsection{Variables de Conservación}
 \begin{table}[H]
@@ -88,7 +92,7 @@ HAPMAP\_SNP\_DEN & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.04 & 0.48 \\ \hli
 
 % \subsection{Correlación entre las variables}
 
-Con respecto a los valores nulos, tenemos una cobertura muy alta de todas las variables, con una porcentaje de nulos máximo del 2\%. (figura \ref{fig:proporcion_nulos_genomic}). 
+Con respecto a los valores nulos, tenemos una cobertura muy alta de todas las variables, con un porcentaje de nulos máximo del 2\%. (figura \ref{fig:proporcion_nulos_genomic}). Si consideramos las variantes removidas por no poseer un identificador rsID, este porcentaje aumenta.
 
 
 % \newpage
@@ -104,7 +108,7 @@ Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta cor
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{documents/latex/figures/3/genomic/genomic_corr.pdf}
+    \includegraphics[scale=0.45]{documents/latex/figures/3/genomic/genomic_corr.pdf}
     \caption{Correlación de Spearman para las variables continuas del dataset Genómico.}
     \label{fig:corrplot_genomic}
 \end{figure}
@@ -113,12 +117,12 @@ Como era de esperarse, la figura \ref{fig:corrplot_genomic} muestra una alta cor
 
 \section{Generación del modelo}
 
-Luego de realizada la exploración del dataset Genómico generamos un modelo basado en Random Forest. Volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ Curado y para facilitar la comparación entre los datasets estudiados. Volvimos a utilizar el Pipeline Tree del capítulo anterior. Nuevamente, las variables no fueron escaladas dado que en los algoritmos que involucran árboles de decisión, como Random Forest, las variables son evaluadas una a una y por lo tanto la escala de cada una de ellas no afecta la evaluación de las demás.
+Luego de realizada la exploración del dataset Genómico generamos un modelo basado en Random Forest. Volvimos a utilizar este algoritmo debido a los resultados obtenidos en el dataset VarQ Curado y para facilitar la comparación entre los datasets estudiados. Volvimos a utilizar el Pipeline Tree descripto en el capítulo anterior. Nuevamente, las variables no fueron escaladas dado que en los algoritmos que involucran árboles de decisión, como Random Forest, las variables son evaluadas una a una y por lo tanto la escala de cada una de ellas no afecta la evaluación de las demás.
 
 \section{Resultados del modelo Genómico}
 
-Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0.85. Los hiperparámetros escogidos en la fase de entrenamiento fueron una profundidad del árbol máxima de 7, una cantidad máxima de variables de 7 y un 100 estimadores.
-Este resultado es muy superior a los obtenidos en los modelos anteriores, tanto en VarQ Curado como en el dataset Físico-Químico. En la tabla \ref{tab:metrics_genomic} vemos los valores de \textit{precision}, \textit{recall} y \textit{f1-score} para las dos clases. En este caso podemos advertir una mejora total en cada una de las métricas comparándolas con las obtenidas en base al modelo Físico-Químico. En particular destacamos la mejora en precisión de la detección de variables benignas, que pasó de un 0.68 en el modelo Físico-Químico a un 0.83 en el modelo Genómico, es decir un 15\% de mejora; como así también el crecimiento en el \textit{recall} de variantes patogénicas, que saltó de un 0.47 en el modelo Físico-Químico a un 0.64, lo que representa un 17\% de mejora.
+Como se puede observar en la figura \ref{fig:auc_genomic} obtuvimos un AUC de 0.85. Los hiperparámetros escogidos en la fase de entrenamiento fueron una profundidad del árbol máxima (\texttt{max\_depth)} de 7, una cantidad máxima de variables de 7 (\texttt{max\_features}) y 100 estimadores (\texttt{\texttt{n\_estimators}}).
+Este resultado es muy superior a los obtenidos en los modelos anteriores, tanto en VarQ Curado como en el dataset Físico-Químico. En la tabla \ref{tab:metrics_genomic} vemos los valores de Precision, Recall y F1-score para las dos clases. En este caso podemos advertir una mejora total en cada una de las métricas comparándolas con las obtenidas en base al modelo Físico-Químico. En particular destacamos la mejora en precisión de la detección de variables benignas, que pasó de un 0.68 en el modelo Físico-Químico a un 0.83 en el modelo Genómico, es decir un aproximadamente un 22\% de mejora; como así también el crecimiento en el Recall de variantes patogénicas, que saltó de un 0.47 en el modelo Físico-Químico a un 0.64, lo que representa casi un 36\% de mejora.
 
 \begin{table}[H]
 \centering
@@ -137,19 +141,20 @@ Promedio     & 0.79      & 0.79   & 0.79     \\ \hline
 
 
 \section{Importancia de los atributos}
-Analizando la importancia de las variables en el modelo, en la figura \ref{fig:importances_genomic} podemos observar que las variables de conservación (PHYLOP46WAY y PHASTCONS46WAY) están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados \cite{Shihab2015} \cite{Carter2013}. 
+Analizando la importancia de las variables en el modelo, en la figura \ref{fig:importances_genomic} podemos observar que las variables de conservación (PHYLOP46WAY y PHASTCONS46WAY) están en los primeros dos puestos, confirmando lo obtenido por los trabajos de investigación antes mencionados \cite{Shihab2015} \cite{Carter2013} y su elevado AUC univariado. 
 
-El poder informativo sumado de estas variables equivale a un porcentaje superior al 80\% de la importancia total. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? En base al análisis de correlación de Spearman (ver figura 2.12), podemos observar que estas variables se encuentran muy correlacionadas (0.82), lo que sugiere un alto grado de redundancia. En la figura \ref{fig:importance_genomic_cluster}, observamos que esta proporción se mantiene al agrupar en clusters a las variables correlacionadas.
+El poder informativo sumado de estas variables equivale a un porcentaje superior al 80\% de la importancia total. La pregunta que nos hacemos en este caso es: ¿Las dos primeras variables de conservación están en los primeros dos lugares porque están altamente correlacionadas o aportan diferente información sobre las variables? En base al análisis de correlación de Spearman (ver figura \ref{fig:corrplot_genomic}), podemos observar que estas variables se encuentran muy correlacionadas (0.82), lo que sugiere un alto grado de redundancia. En la figura \ref{fig:importance_genomic_cluster}, observamos que esta proporción se mantiene al agrupar en clusters a las variables correlacionadas.
 
-Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable \textit{Conservación} del dataset VarQ Curado no genera un rendimiento similar? Una de las principales razones que encontramos es en el nivel de cobertura de la variable. En el caso de las variables de conservación genómica, la cobertura de las mismas llega a un nivel superior al 95\%, mientras que en el caso de la conservación en el dataset VarQ Curado este número no llega al 40\%. La cobertura de estas variables posee aproximadamente la misma proporción para variables patogénicas y benignas que la proporción original en ambos datasets. Otra razón posible a considerar tiene que ver con la naturaleza del cálculo de conservación de VarQ via PFAM, que contiene una heterogeneidad muy grande de especies (alrededor de 16,000 familias), y se basa en secuencias de proteínas, mientras que PHYLOP46WAY y PHASTCONS46WAY se basa en secuencias genómicas.
+Por otro lado, esto genera un interrogante adicional: ¿Cuál es la razón por la que la variable CONSERVATION del dataset VarQ Curado no genera un rendimiento similar? Una de las principales razones que encontramos es en el nivel de cobertura de la variable. En el caso de las variables de conservación genómica, la cobertura de las mismas llega a un nivel superior al 95\%, mientras que en el caso de la conservación en el dataset VarQ Curado este número no llega al 40\%. La cobertura de estas variables posee aproximadamente la misma proporción para variables patogénicas y benignas que la proporción original en ambos datasets. Otra razón posible a considerar tiene que ver con la naturaleza del cálculo de conservación de VarQ via PFAM, que contiene una heterogeneidad muy grande de especies (alrededor de 16,000 familias), y se basa en secuencias de proteínas, mientras que PHYLOP46WAY y PHASTCONS46WAY se basa en secuencias genómicas.
+
+En resumen, hemos encontrado un modelo que supera en AUC ampliamente a los modelos anteriores. Sin embargo, no hay un salto significativo entre el AUC univariado (0.83 en PHYLOP46WAY) y el resultado final al combinar el resto de las variables y el algoritmo Random Forest. En el próximo capítulo evaluaremos la combinación de los datasets usando Humsavar y la posible mejora de un nuevo algoritmo, XGBoost.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.7]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
-    \caption{Variación en la precisión al permutar clusters de variables correlacionadas ($>$ 0.90) del dataset Genómico.}
+    \includegraphics[scale=0.45]{documents/latex/figures/3/genomic/genomic_importance_cluster.pdf}
+    \caption{Variación en el Accuracy al permutar clusters de variables correlacionadas (con un valor de correlación de Spearman superior a 0.60) del dataset Genómico.}
     \label{fig:importance_genomic_cluster}
 \end{figure}
-
 
 \newpage
 

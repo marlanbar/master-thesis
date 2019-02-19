@@ -1,6 +1,6 @@
 \section{Estructura del proyecto}
 
-A continuación detallamos los distintos módulos del proyecto para facilitar la replicación de los resultados obtenidos. Este se encuentra alojado en GitHub (\url{https://github.com/marlanbar/master-thesis}). 
+A continuación detallamos los distintos módulos del proyecto para facilitar la replicación de los resultados obtenidos. Este se encuentra alojado en GitHub en el sitio \url{https://github.com/marlanbar/master-thesis}. 
 
 El proyecto tiene la siguiente estructura:
 
@@ -8,6 +8,9 @@ El proyecto tiene la siguiente estructura:
 \dirtree{%
 .1 master-thesis.
 .2 data.
+.3 external.
+.3 interim.
+.3 processed.
 .2 notebooks.
 .2 results.
 .3 varq.
@@ -20,7 +23,7 @@ El proyecto tiene la siguiente estructura:
 }
 \vspace{0.2cm}
 
-En \texttt{src} se encuentra el código necesario para obtener las variables de la tabla SNVbox y generar las variables a partir de la data externa (por ejemplo, Humsavar) que se encuentra en la carpeta \texttt{data}. Luego, para cada modelo existe una notebook para generar el dataset y otro para evaluar los algoritmos, que almacenan los scores de las variantes en \texttt{results}. El trabajo fue realizado con una notebook Dell XPS 9350 (Intel Core i5 Skylake, 8GB de memoria RAM, disco SSD 128GB). 
+En \texttt{src} se encuentra el código necesario para obtener las variables de la tabla SNVbox y generar las variables a partir de la data externa (por ejemplo, Humsavar) que se encuentra en la carpeta \texttt{data/external}. Las variables procesadas se encuentran en \texttt{data/interim}. Luego, para cada modelo existe una notebook para generar los datasets, ubicados en \texttt{data/processed}, y otro para evaluar los algoritmos, que almacenan los scores de las variantes en cada una de sus respectivas carpetas en \texttt{results}. El trabajo fue realizado con una notebook Dell XPS 9350 (Intel Core i5 Skylake, 8GB de memoria RAM, disco SSD 128GB). 
 
 
 \section{Diccionario de hiperparámetros usados}
@@ -29,9 +32,9 @@ Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
 \begin{itemize}
     \item Random Forest
         \begin{itemize}
-            \item Profundidad del árbol: [3, 5, 7]
-            \item Estimadores: [10, 50, 100]
-            \item Cantidad de variables por árbol: [4, $\sqrt{n}$, 0.2*$n$] con $n$ la cantidad total de variables
+            \item Profundidad del árbol (\texttt{max\_depth}): [3, 5, 7]
+            \item Estimadores (\texttt{n\_estimators}): [10, 50, 100]
+            \item Cantidad de máxima de variables por árbol (\texttt{max\_features}): [4, $\sqrt{n}$, 0.2*$n$] con $n$ la cantidad total de variables
         \end{itemize} 
     \item Regresión logística:
         \begin{itemize}
@@ -54,7 +57,9 @@ Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
 \end{itemize}
 
 
-\section{Lista de Variables de SNVBox}
+\section{Lista de Variables de SNVBox} \label{snvbox_list}
+
+La siguiente sección es una lista detallada de variables de SNVBox que fueron usadas en el trabajo. La lista completa junto con el esquema de la base de datos se encuentra en la wiki del proyecto SNVBox \cite{snvbox}. 
 
 \subsubsection{Variables sobre cambios en la sustitución del Aminoácido (Estructura Primaria)}
 \begin{itemize}
@@ -76,7 +81,7 @@ Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
 \begin{itemize}
     \item BINDING: Sitio de unión.
     \item ACTIVE\_SITE: Actividad enzimática. 
-    \item SITE: Sitio ``interesante''.
+    \item SITE: Sitio de aminoácido ``interesante'' en la secuencia proteica.
     \item LIPID: Unión con un lípido.
     \item METAL: Unión con un metal.
     \item CARBOHYD: Unión con un carbohidrato.
