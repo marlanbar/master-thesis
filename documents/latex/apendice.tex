@@ -1,3 +1,28 @@
+\section{Estructura del proyecto}
+
+A continuación detallamos los distintos módulos del proyecto para facilitar la replicación de los resultados obtenidos. Este se encuentra alojado en GitHub (\url{https://github.com/marlanbar/master-thesis}). 
+
+El proyecto tiene la siguiente estructura:
+
+\vspace{0.2cm}
+\dirtree{%
+.1 master-thesis.
+.2 data.
+.2 notebooks.
+.2 results.
+.3 varq.
+.3 physico\_chemical.
+.3 genomic.
+.3 integral.
+.3 varq\_integral.
+.2 src.
+.3 snvbox\_queries.
+}
+\vspace{0.2cm}
+
+En \texttt{src} se encuentra el código necesario para obtener las variables de la tabla SNVbox y generar las variables a partir de la data externa (por ejemplo, Humsavar) que se encuentra en la carpeta \texttt{data}. Luego, para cada modelo existe una notebook para generar el dataset y otro para evaluar los algoritmos, que almacenan los scores de las variantes en \texttt{results}. El trabajo fue realizado con una notebook Dell XPS 9350 (Intel Core i5 Skylake, 8GB de memoria RAM, disco SSD 128GB). 
+
+
 \section{Diccionario de hiperparámetros usados}
 
 Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
@@ -6,10 +31,26 @@ Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
         \begin{itemize}
             \item Profundidad del árbol: [3, 5, 7]
             \item Estimadores: [10, 50, 100]
-            \item Cantidad de variables por árbol: [4, $\sqrt{n}$, $0.2*n$] con n la cantidad total de variables
+            \item Cantidad de variables por árbol: [4, $\sqrt{n}$, 0.2*$n$] con $n$ la cantidad total de variables
         \end{itemize} 
     \item Regresión logística:
+        \begin{itemize}
+            \item Parámetro de regularización inverso (C): [.001, .01, .1, 1, 10, 100, 1000]
+            \item Peso de las clases: [balanceado, igual a 1]
+        \end{itemize}
     \item SVC:
+        \begin{itemize}
+            \item Parámetro de penalidad (C): [0.001, 0.10, 0.1, 10, 25, 50, 100, 1000]
+            \item Gamma: [0.001, 0.10, 0.1, 10, 25, 50, 100, 1000]
+        \end{itemize}
+    \item XGBoost:
+        \begin{itemize}
+            \item Peso mínimo de las hojas: [1, 5, 10]
+            \item Gamma: [0.5, 1, 1.5, 2, 5]
+            \item Subsample: [0.6, 0.8, 1.0]
+            \item colsample\_bytree: [0.6, 0.8, 1.0]
+            \item Profundidad máxima: [3, 4, 5]
+        \end{itemize}
 \end{itemize}
 
 
@@ -17,56 +58,47 @@ Para los modelos usados, se usaron los siguientes diccionarios de parámetros:
 
 \subsubsection{Variables sobre cambios en la sustitución del Aminoácido (Estructura Primaria)}
 \begin{itemize}
-    \item Score BLOSUM (AABLOSUM)
-    \item Carga (AACharge)
-    \item Volumen (AAVolume)
-    \item Hidrofobia (AAHydrophobicity)
-    \item Score Grantham (AAGrantham)
-    \item Polaridad (Polarity)
-    \item Score Ex (AAEx)
-    \item Score PAM250 (AAPAM250)
-    \item Score MJ (AAMJ)
-    \item Score HGMD2003 (AAHGMD2003)
-    \item Score VB (AAVB)
-    \item Transición (Transition)
-    \item COSMIC
-    \item COSMICvsSWISSPROT
-    \item HAPMAP
-    \item COSMICvsHAPMAP
+    \item Score BLOSUM (AABLOSUM): Score de la matriz BLOSUM 62.
+    \item Carga (AACharge): El cambio en la carga resultante de cambiar el aminoácido de referencia con la mutación.
+    \item Volumen (AAVolume): El cambio en el residuo resultante del cambio de aminoácido (expresado en Angstroms cúbicos).
+    \item Hidrofobia (AAHydrophobicity): El cambio en hidrofobicidad resultante de la mutación.
+    \item Score Grantham (AAGrantham): La distancia Grantham de la referencia a la mutación.
+    \item Polaridad (Polarity): Cambio de polaridad entre la referencia y la mutación.
+    \item Score Ex (AAEx): Score de la matriz EX.
+    \item Score PAM250 (AAPAM250): Score de la matriz PAM250.
+    \item Score MJ (AAMJ): Score de la matriz Miyagawa-Jerningan.
+    \item Score VB (AAVB): Score de la matriz VB (Venkatarajan \& Braun).
+    \item Transición (Transition): Frecuencia de la transición entre dos aminoácidos vecinos basado en todas las proteínas de SwissProt/TrEMBL.
 \end{itemize}
 
 \subsubsection{Variables a nivel de Proteína (sin considerar sustitución)}
 
 \begin{itemize}
-    \item BINDING
-    \item ACTIVE\_SITE
-    \item SITE
-    \item LIPID
-    \item BINDING
-    \item ACT\_SITE
-    \item SITE
-    \item LIPID
-    \item METAL
-    \item CARBOHYD
-    \item DNA\_BIND
-    \item NP\_BIND
-    \item CA\_BIND
-    \item DISULFID
-    \item SE\_CYS
-    \item MOD\_RES
-    \item PROPEP
-    \item SIGNALP
-    \item TRANSMEM
-    \item COMPBIAS
-    \item REP
-    \item MOTIF
-    \item ZN\_FING
-    \item REGIONS
-    \item PPI
-    \item RNABD
-    \item TF
-    \item LOC
-    \item MMBRBD
+    \item BINDING: Sitio de unión.
+    \item ACTIVE\_SITE: Actividad enzimática. 
+    \item SITE: Sitio ``interesante''.
+    \item LIPID: Unión con un lípido.
+    \item METAL: Unión con un metal.
+    \item CARBOHYD: Unión con un carbohidrato.
+    \item DNA\_BIND: Unión con ADN.
+    \item NP\_BIND: Unión con un nucleótido fosfato.
+    \item CA\_BIND: Unión con calcio.
+    \item DISULFID: Sitio de unión con un disulfuro.
+    \item SE\_CYS: Selenocisteína.
+    \item MOD\_RES: Residuo modificado.
+    \item PROPEP: Propéptido.
+    \item SIGNAL: Sitio de señal de localización.
+    \item TRANSMEM: Proteína transmembranal.
+    \item COMPBIAS: Sesgo de composición.
+    \item REP: Región de repetición.
+    \item MOTIF: Sitio de un motif funcional conocido.
+    \item ZN\_FING: Dedo de zinc.
+    \item REGIONS: Región de interés en la secuencia proteica.
+    \item PPI: Interacción proteína-proteína.
+    \item RNABD: Unión RNA.
+    \item TF: Factor de transcripción. 
+    \item LOC: Sitio que determina correcta localización celular de una proteína. 
+    \item MMBRBD: Sitio que se une a la membrana celular.
 \end{itemize}
 
 % \vspace{2mm}

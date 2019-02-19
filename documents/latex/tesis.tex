@@ -3,8 +3,9 @@
 
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
+\usepackage{babelbib}
 \usepackage[spanish]{babel}
-\usepackage[left=2cm,right=2cm,bottom=3.5cm,top=3.5cm]{geometry}
+\usepackage[left=2.5cm,right=2.5cm,bottom=3.5cm,top=3.5cm]{geometry}
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{color}
 \usepackage{epigraph}
@@ -17,9 +18,14 @@
 \usepackage{longtable}
 \usepackage{listings}
 \usepackage{amsmath}
-
+\usepackage{dirtree}
 \usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{hyperref}
+
 \newcommand\todo[1]{\textcolor{red}{#1}}
+\newcommand\myicon[1]{{\color{#1}\rule{2ex}{2ex}}}
+\newcommand{\myfolder}[2]{\myicon{#1}\ {#2}}
 
 \begin{document}
 
@@ -59,9 +65,25 @@
 \label{ch:introduccion}
 \input{documents/latex/introduccion}
 
-\chapter{Desarrollo y resultados}
-\label{ch:desarrollo}
-\input{documents/latex/desarrollo}
+\chapter{Modelo basado en el dataset VarQ}
+\label{ch:desarrollo_varq}
+\input{documents/latex/desarrollo_varq_curado.tex}
+
+\chapter{Modelo usando propiedades físico-químicas de la proteína}
+\label{ch:desarrollo_fisico_quimico}
+\input{documents/latex/desarrollo_fisico_quimico.tex}
+
+\chapter{Modelo usando variables genómicas}
+\label{ch:desarrollo_genomico}
+\input{documents/latex/desarrollo_genomico.tex}
+
+\chapter{Integrando el dataset Físico-Químico y el Genómico}
+\label{ch:desarrollo_integral}
+\input{documents/latex/desarrollo_integral.tex}
+
+\chapter{Integrando las nuevas variables al dataset VarQ Curado}
+\label{ch:desarrollo_integral_varq}
+\input{documents/latex/desarrollo_integral_varq.tex}
 
 \chapter{Conclusiones y trabajo futuro}
 \label{ch:conclusiones}
@@ -74,7 +96,7 @@
 \bibliography{references/reference}
 \addcontentsline{toc}{chapter}{Bibliografía}
 
-\bibliographystyle{abbrv}
+\bibliographystyle{babunsrt}
 
 \chapter{Apéndice}
 \label{ch:apendice}
