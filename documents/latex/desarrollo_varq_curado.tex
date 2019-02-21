@@ -60,7 +60,7 @@ Otro factor importante a considerar es cuántas variables nulas tienen cada una 
 
 % \subsection{Correlación entre las variables de VarQ Curado}
 
-También quisimos conocer qué tan correlacionadas se encuentras las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman, que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98. Mantuvimos las dos variables dado que la relativa baja cantidad de variables de este dataset no nos fuerza a removerlas, y si bien la correlación es muy alta, no descartamos a priori poder extraer información útil usando ambas.
+También queremos conocer qué tan correlacionadas se encuentran las variables. En la figura \ref{fig:varq_corrplot} vemos la correlación de Spearman, que sirve para detectar relaciones monotónicas entre las variables, y así nos permite descartar variables muy similares que no aportan nueva información y ralentizan el entrenamiento del modelo. De esta forma encontramos que la variable SASA y SASA\_PERCENTAGE tienen una correlación de 0.98. Mantuvimos las dos variables dado que la relativa baja cantidad de variables de este dataset no nos fuerza a removerlas, y si bien la correlación es muy alta, no descartamos a priori poder extraer información útil usando ambas.
 
 \begin{figure}[H]
     \centering
