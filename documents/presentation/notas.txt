@@ -1,0 +1,78 @@
+Introducción:
+
+1- Que son los SNPs?
+
+* SNP son polimorfismos de un solo nucleotido
+* Ocurren en el ADN
+* Definen muchos de nuestras individualidades, aunque tambien pueden ser el causante de enfermedades
+
+2- Como se expresan en el organismo?
+
+* ADN -> ARN -> Proteinas
+* Las proteinas estan formadas por cadenas de aminoacidos
+* Estas cadenas son formadas gracias a codones de bases de ARN
+* Una modificacion de una base del ARN da lugar a un aminoácido distinto o a un símbolo de stop
+
+3- Tipos de SNP
+
+* Es por esto que hay distintos tipos de SNP de acuerdo al lugar donde se produce la variante o el nucleótido sustituido
+* Sustituciones sinónimas
+* Sustituciones no sinonimas (missense)
+* Sustituciones nonsense (codon de stop)
+
+4- Enfoque computacional
+
+* Aprendizaje automatico, aprender a partir de los datos
+* Problema de clasificacion
+* Existen variantes del que conocemos su efecto, el objetivo es poder predecir aquellas variantes del que no conocemos
+* Poder identificar las variables que nos permiten predecir el efecto
+
+5- 
+
+* Tomamos el dataset generado por Santiago Moreno
+* Usa el pipeline VarQ para extraer variables de caracter estructural de las proteinas
+* Tenemos estas variables 
+
+6- 
+
+* Entrenamos tres modelos: Regresión Logística, Random Forest y Support Vector Classifier. Implementación de scikit-learn
+* Reemplazamos las variables nulas continuas con la mediana y las categóricas (PDB y 3DID) con la media
+* Realizamos una búsqueda de hiperparámetros con grid search
+* El mejor modelos en términos de AUC (nuestra métrica más relevante) fue Random Forest
+* El tiempo de entrenamiento de SVC fue marcadamente alto con respecto al resto
+
+7-
+
+* Calculamos la importancia de las variables usando el método estándar de Scikit-learn. (Promedio de la reducción del índice gini en cada corte con esa variable normalizado)
+* Las variables más importantes fueron: Variación de la energía, BFACTOR y SASA
+* SASA PERCENTAGE y SASA son variables muy correlacionadas por lo que su calculo de importancia está afectado al ser una métrica normalizada
+
+8-
+
+* Generamos un nuevo dataset basado en propiedades físico-químicas de la proteína
+* Este dataset esta generado a partir de dos fuentes principales: ProtParam y SNVBox
+* A diferencia del modelo anterior, usamos únicamente la tabla humsavar. Esto nos permite entrenar con alrededor de 68 mil variantes.
+
+9-
+
+* Protparam es un módulo de la librería Biopython
+* Calculamos los parámetros en base a una ventana de 7 aminoácidos alrededor de la variante
+
+10-
+
+* 
+
+11-
+
+* Finalmente calculamos la importancia de las variables uniendolas en clusters de acuerdo a que tan correlacionadas están para evitar la situación del dataset VarQ
+* Obtuvimos a las matrices de sustitución como las variables más importantes, alcanzando un AUC de 0.72. 
+
+12-
+
+
+
+
+
+
+
+
