@@ -231,7 +231,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 	* ProtParam (Biopython) 
 	* SNVBox
 * Usando únicamente la tabla Humsavar: 
-	* Más de 75 mil variantes (x10 Varq!)
+	* Más de 68 mil variantes (aprox. x10 Varq!)
 	* Status aportado por Humsavar
 
 ![Extracción de secuencia proteica (ciclofilina) en formato FASTA usando Uniprot ](fasta.pdf){ width=350px }
@@ -364,11 +364,31 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 :::
 
+
 ---
+
+#
+
+\begin{center}
+\Huge Podemos mejorar el modelo genómico integrando las variables físico-químicas?
+\end{center}
+
+
+---
+
+
 
 # Integrando las variables físico-químicas y genómicas
 
-![Unión de los datasets Físico-Químico y Genómico](interseccion_integral.pdf){ width=300px }
+* Dataset Humsavar: 68 mil variantes
+* Cobertura variables genómicas: aprox. 80%
+* Cobertura variable físico-químicas: misma que el dataset físico-químico
+* Evaluamos un nuevo método de aprendizaje automático: XGBoost
+
+
+![Unión de los datasets Físico-Químico y Genómico](interseccion_integral.pdf){ width=250px }
+
+
 
 
 # Resultados del modelo Integral (XGBoost)
