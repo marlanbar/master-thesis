@@ -204,7 +204,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 ::: columns
 
 :::: column
-![](importances_varq.pdf){ width=250px }
+![Importancia de variables usando método estándar de \texttt{scikit-learn}](importances_varq.pdf){ width=250px }
 ::::
 
 :::: column
@@ -391,7 +391,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 
 
-# Resultados del modelo Integral (XGBoost)
+# XGBoost supera a Random Forest
 
 ::: columns
 
@@ -439,7 +439,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 ---
 
-# Conclusiones
+# Conclusión general:
 
 * La combinación de distintas dimensiones del problema aportó buenos resultados, consiguiendo un AUC de 0.90
 * El método estándar de cálculo de importancia de variables usado por scikit-learn puede ser engañoso en el caso de variables altamente correlacionadas
