@@ -1,8 +1,12 @@
 --- 
 title:
-- Predicción de patogenicidad en SNPs 
+- Predicción de patogenicidad en SNPs usando Aprendizaje Automático 
+subtitle: 
+- Tesis de Licenciatura en Ciencias de la Computación
 author:
-- Martín Ezequiel Langberg
+- 'Martín Ezequiel Langberg \newline Directores: Ariel Berenstein y Pablo Turjanski \newline Jurado: Viviana Cotik y Marcelo Martí'
+institute: 
+- Departamento de Computación, FCEyN, UBA
 theme:
 - Boadilla
 colortheme:
@@ -18,6 +22,9 @@ header-includes:
 
 ![Single Nucleotide Polymorphism (SNP)](Dna-SNP.svg.png){ width=350px }
 
+\note{
+NOTES: This is a note page and you ought to be able to tell.
+}
 
 ---
 
