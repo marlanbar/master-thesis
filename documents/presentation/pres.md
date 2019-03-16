@@ -11,14 +11,13 @@ lang: es
 header-includes:
 - \usepackage{caption}
 - \captionsetup[figure]{labelformat=empty}
-
-
 ---
 
 # Introducción: ¿Qué son los SNPs?
 
 
 ![Single Nucleotide Polymorphism (SNP)](Dna-SNP.svg.png){ width=350px }
+
 
 ---
 
@@ -90,9 +89,9 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 # Problema biológico: detectar la patogenicidad de SNPs
 
-* La mayoría de las variantes no sinónimas son raras (AF < .05\%) 
+* La mayoría de las mutaciones no sinónimas son raras (AF < .05\%) 
 * Los estudios realizados con secuenciación tienen baja significación estadística
-* Existen bases de datos biológicas que registran patogenicidad de variantes: Clinvar, Humsavar y otras
+* Existen bases de datos biológicas que registran patogenicidad de mutaciones: Clinvar, Humsavar y otras
 
   Main gene name   AA change     Type of variant   dbSNP
   ---------------- ------------- ----------------- -------------
@@ -125,7 +124,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 # 
 
 \begin{center}
-\Huge Qué tan difícil es este problema?
+\Huge ¿Qué tan difícil es este problema?
 \end{center}
 
 ---
@@ -137,7 +136,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 :::
 
 ::: {.block2}
-### Variables extraídas (cobertura)
+### Features extraídos (cobertura)
 
 :::: columns
 
@@ -167,7 +166,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 * Removimos variantes sin un status confirmado (\textit{risk factor}, \textit{likely benign}, \textit{uncertain significance})
 * Priorizamos con el reporte de Humsavar (Pathogenic, Disease)
-* Aproximadamente 7,500 variables: 72% patogénicas, 28% benignas
+* Aproximadamente 7,500 variantes: 72% patogénicas, 28% benignas
 
 
 ![Intersección del dataset VarQ usando Humsavar y Clinvar](interseccion_varq.pdf){ width=200px }
@@ -218,7 +217,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 # 
 
 \begin{center}
-\Huge Cuál es el valor predictivo de las variables fisico-químicas de la proteína?
+\Huge ¿Cuál es el valor predictivo de las variables fisico-químicas de la proteína?
 \end{center}
 
 
@@ -303,7 +302,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 #
 
 \begin{center}
-\Huge Cuál es el valor predictivo de las variables genómicas?
+\Huge ¿Cuál es el valor predictivo de las variables genómicas?
 \end{center}
 
 
@@ -439,7 +438,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 ---
 
-# Conclusión general:
+# Conclusiones:
 
 * La combinación de distintas dimensiones del problema aportó buenos resultados, consiguiendo un AUC de 0.90
 * El método estándar de cálculo de importancia de variables usado por scikit-learn puede ser engañoso en el caso de variables altamente correlacionadas
@@ -457,13 +456,13 @@ Missense: Generan un cambio de aminoácido en la proteína
 # 
 
 \begin{center}
-\Huge Preguntas?
+\Huge ¿Preguntas?
 \end{center}
 
 # 
 
 \begin{center}
-\Huge Muchas gracias!
+\Huge ¡Muchas gracias!
 \end{center}
 
 
