@@ -12,12 +12,20 @@ theme:
 colortheme:
 - beaver
 lang: es
-header-includes:
-- \usepackage{caption}
-- \captionsetup[figure]{labelformat=empty}
+
 ---
 
-# Introducción: ¿Qué son los SNPs?
+# Motivación del trabajo
+
+* Existen variantes en el ADN causantes de enfermedades (patogénicas)
+\vspace*{2\baselineskip} 
+* La detección de estas variantes es esencial para el avance de la medicina personalizada
+\vspace*{2\baselineskip} 
+* Queremos poder predecir la patogenicidad de un SNP en el ADN usando métodos computacionales 
+
+---
+
+# ¿Qué son los SNPs?
 
 
 ![Single Nucleotide Polymorphism (SNP)](Dna-SNP.svg.png){ width=350px }
@@ -28,7 +36,7 @@ NOTES: This is a note page and you ought to be able to tell.
 
 ---
 
-# Introducción: Del ADN a las proteínas
+# Del ADN a las proteínas
 
 
 ![Dogma central de la biología](dogma.png){ width=450px }
@@ -42,7 +50,7 @@ NOTES: This is a note page and you ought to be able to tell.
 
 ---
 
-# Introducción: Tipos de SNPs
+# Tipos de SNPs
 
 ::: block1
 ## Sustitución sinónima o \textit{silent}
@@ -53,7 +61,7 @@ El cambio en el nucleótido no modifica el aminoácido
 
 ---
 
-# Introducción: Tipos de SNPs
+# Tipos de SNPs
 
 :::block2
 ## Sustituciones no sinónimas
@@ -65,7 +73,7 @@ Nonsense: Generan un codón de terminación o \textit{stop}
 
 ---
 
-# Introducción: Tipos de SNPs
+# Tipos de SNPs
 
 :::block2
 ## Sustituciones no sinónimas
@@ -94,19 +102,20 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 ---
 
-# Problema biológico: detectar la patogenicidad de SNPs
+# Bases de datos biológicas
 
-* La mayoría de las mutaciones no sinónimas son raras (AF < .05\%) 
-* Los estudios realizados con secuenciación tienen baja significación estadística
-* Existen bases de datos biológicas que registran patogenicidad de mutaciones: Clinvar, Humsavar y otras
+* Existen bases de datos biológicas que registran patogenicidad de variantes: 
+	* Clinvar (pública): Variantes de distinto nivel de confianza 
+	* **Humsavar (pública): Solamente variantes missense** 
+	* HGMD (privada)
 
-  Main gene name   AA change     Type of variant   dbSNP
+  Swiss Prot AC    AA change     Type of variant   dbSNP
   ---------------- ------------- ----------------- -------------
-  A4GALT           p.Pro251Leu   Polymorphism      rs28940571
-  A4GALT           p.Gln163Arg   Polymorphism      rs28915383
-  A4GNT            p.Ala218Asp   Polymorphism      rs2246945
-  AAAS             p.His160Arg   Disease           \-
-  AAAS             p.Ser263Pro   Disease           rs121918550
+  Q9NPC4           p.Pro251Leu   Polymorphism      rs28940571
+  Q9NPC4           p.Gln163Arg   Polymorphism      rs28915383
+  Q9NPC4           p.Ala218Asp   Polymorphism      rs2246945
+  Q9NRG9           p.His160Arg   Disease           \-
+  Q9NRG9           p.Ser263Pro   Disease           rs121918550
 
   \center{Selección de columnas de tabla Humsavar (extracto)}
 
@@ -115,16 +124,40 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 # Enfoque computacional: un problema de clasificación
 
-* **Objetivo: Predecir patogenicidad de SNPs \textit{missense} humanos**
-
 * Trabajos previos: 
 	* VEST (Carter et al., 2013)	
 	* FATHMM-MKL (Shihab et al., 2015)
 	* REVEL (Ioannidis et al., 2016)
-	
+	* VarQ (Santiago Moreno)
+\vspace*{1\baselineskip}
 * Aprendizaje automático supervisado
-* Dimensiones estructurales, físico-químicas de las proteínas, genómicas
-* Análisis de importancia de las variables
+\vspace*{1\baselineskip} 
+* Dimensiones estructurales, físico-químicas de las proteínas, genómica
+\vspace*{1\baselineskip}
+* Análisis de importancia de los features
+
+---
+
+# Principal métrica de desempeño: AUC (Area bajo la curva)
+
+::: columns
+
+
+:::: column
+![Curva ROC](roc_ejemplo.png){ width=220px }
+::::
+
+:::: column
+### Rango de valores 
+* \small AUC = 1: Predictor ideal
+* \small AUC = 0.5: Predictor \textit{random}
+
+### Principales ventajas
+* \small Independiente del umbral de clasificación
+* \small No es sensible a desbalances en los datos
+::::
+
+:::
 
 ---
 
@@ -148,19 +181,19 @@ Missense: Generan un cambio de aminoácido en la proteína
 :::: columns
 
 ::: column
-* Variación de la energía
-* SASA
-* Porcentaje de SASA
-* B-Factor
-* Switchbility
+* Variación de la energía (100%)
+* SASA (95%)
+* Porcentaje de SASA (95%)
+* B-Factor (95%)
+* Switchability (90%)
 :::
 
 ::: column
-* Aggregability
-* Conservación
-* Interfaz 3DID
-* Interfaz PDB
-* **Active Site**
+* Aggregability (72%)
+* Conservación (37%)
+* Interfaz 3DID (100%)
+* Interfaz PDB (100%)
+* **Active Site (5%)** 
 :::
 
 ::::
@@ -172,11 +205,11 @@ Missense: Generan un cambio de aminoácido en la proteína
 # Filtrado de variantes del dataset VarQ
 
 * Removimos variantes sin un status confirmado (\textit{risk factor}, \textit{likely benign}, \textit{uncertain significance})
-* Priorizamos con el reporte de Humsavar (Pathogenic, Disease)
-* Aproximadamente 7,500 variantes: 72% patogénicas, 28% benignas
+* Aproximadamente 7.5k variantes: 72% patogénicas, 28% benignas
+* Dataset VarQ Curado
 
 
-![Intersección del dataset VarQ usando Humsavar y Clinvar](interseccion_varq.pdf){ width=200px }
+![Intersección del dataset VarQ usando Humsavar y Clinvar](interseccion_varq.pdf){ width=250px }
 
 ---
 
@@ -186,13 +219,18 @@ Missense: Generan un cambio de aminoácido en la proteína
 	* Support Vector Classifier (kernel radial)
 	* Random Forest
 	* Regresión logística
-* Imputación de variables nulas
-* Búsqueda de hiperparámetros usando \textit{3-fold Cross Validation}
-
+\vspace*{2\baselineskip} 
+* Imputación de features nulos
+	* Mediana para features continuos
+	* Media para features categóricos (PDB, 3DID)
+\vspace*{2\baselineskip} 
+* Búsqueda de hiperparámetros usando \textit{Grid-search} y validación cruzada
+\vspace*{2\baselineskip} 
+* 70% dataset de entrenamiento, 30% dataset de test
 
 ---
 
-# Comparación de modelos usando VarQ: Random Forest tiene el mejor AUC
+# El modelo Random Forest obtuvo el mejor AUC
 
                         SVC        LR       RF
   --------------------- ---------- -------- --------
@@ -202,19 +240,29 @@ Missense: Generan un cambio de aminoácido en la proteína
   $T_{fit}$             2m 39s     **1.17s** 9.82s
   $T_{pred}$            0.77s      **0.01s** 0.11s
 
+* Hiperparamétros óptimos encontrados (RF):
+	* Profundidad de árbol: 7
+	* Estimadores: 100
+	* Cantidad de variables por árbol: 4
 
 ---
 
-# Resultados del modelo VarQ (Random Forest): La variable más importante es la Variación de la Energía
+# La variación de la energía es el feature más importante
 
 ::: columns
 
 :::: column
-![Importancia de variables usando método estándar de \texttt{scikit-learn}](importances_varq.pdf){ width=250px }
+![Importancia de features usando método estándar de \texttt{scikit-learn}](importances_varq.pdf){ width=250px }
 ::::
 
 :::: column
-![Curva ROC (0.74)](auc_varq.pdf){ width=170px }
+![Curva ROC](auc_varq.pdf){ width=170px }
+
+* **AUC VarQ Curado: 0.74**
+* \small AUC VEST: 0.84 
+* \small AUC FATHMM-MKL: 0.82 
+* \small AUC REVEL: 0.90
+
 ::::
 
 :::
@@ -223,28 +271,35 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 # 
 
+::: {.block1}
 \begin{center}
-\Huge ¿Cuál es el valor predictivo de las variables fisico-químicas de la proteína?
+\Huge ¿Cuál es el valor predictivo de las propiedades fisico-químicas de la proteína?
 \end{center}
+:::
+
+::: {.block2}
+![](sequence.png){ width=450px }
+:::
+
 
 
 ---
 
 # Modelo: Propiedades Físico-Químicas de la proteína
 
-* Uniprot: Proteoma humano completo
-* Nuevas fuentes de variables:
-	* ProtParam (Biopython) 
-	* SNVBox
-* Usando únicamente la tabla Humsavar: 
+* **Usando únicamente la tabla Humsavar**: 
 	* Más de 68 mil variantes (aprox. x10 Varq!)
 	* Status aportado por Humsavar
+* Uniprot: Proteoma humano completo
+* Nuevas fuentes de features:
+	* ProtParam (Biopython) 
+	* SNVBox
 
-![Extracción de secuencia proteica (ciclofilina) en formato FASTA usando Uniprot ](fasta.pdf){ width=350px }
+![Extracción de secuencia proteica (Ciclofilina A: P62937) en formato FASTA usando Uniprot](fasta.pdf){ width=350px }
 
 ---
 
-# Generación de nuevas variables usando ProtParam
+# Generación de nuevos features usando ProtParam
 
 ::: {.block1}
 ### Parámetros calculados
@@ -257,8 +312,8 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 ::: {.block2}
 ### Cambio en la variante
-* Diferencia
-* Log-ratio
+* Diferencia: $x_{var} - x$
+* Log-ratio: $log(x_{var}) / log(x)$
 :::
 
 
@@ -286,21 +341,24 @@ Missense: Generan un cambio de aminoácido en la proteína
 * ACTIVE_SITE: Sitio activo
 * LIPID: Unión con un lípido 
 * METAL: Unión con un metal
-* otras
 :::
 
+* Base de datos generada en la Universidad Johns Hopkins
 
-
-# Las matrices fueron las más relevantes
+# Las matrices de sustitución fueron las más relevantes
 
 ::: columns
 
 :::: column
-![Importancia de variables clusterizada usando \texttt{rfpimp}](structural_importance_cluster.pdf){ width=230px }
+![Importancia de features clusterizada usando \texttt{rfpimp}](structural_importance_cluster.pdf){ width=230px }
 ::::
 
 :::: column
-![Curva ROC (0.72)](auc_structural.pdf){ width=185px }
+![Curva ROC](auc_structural.pdf){ width=185px }
+
+* **AUC Físico-Químico: 0.72**
+* \small AUC VarQ: 0.74
+
 ::::
 
 :::
@@ -308,21 +366,25 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 #
 
+::: {.block1}
 \begin{center}
-\Huge ¿Cuál es el valor predictivo de las variables genómicas?
+\Huge ¿Cuál es el valor predictivo de los features genómicos?
 \end{center}
+:::
 
+::: {.block2}
+![](genomic_features.png){ width=450px }
+:::
 
 ---
 
 # Modelo: Variables genómicas
 
-* Identificador rsID: aproximadamente 55,000 variantes en Humsavar
+* Identificador rsID: aproximadamente 55k variantes en Humsavar
 	* 68% variantes benignas
 	* 32% variantes patogénicas
 
-
-* Fuentes de variables: 
+* Fuentes de features: 
 	* SNVBox 
 	* dbSNP 
 	* Genome Browser (UCSC)
@@ -330,42 +392,45 @@ Missense: Generan un cambio de aminoácido en la proteína
 ![Explorador de variantes de dbSNP (\texttt{https://www.ncbi.nlm.nih.gov/snp})](variation.pdf){ width=450px }
 
 
-# Variables del modelo Genómico
+# Features del modelo Genómico
 
 ::: {.block1}
-### Variables de conservación genómica
+### Features de conservación genómica
 * PhastCons a 46 vías (vertebrados)
 * PhyloP a 46 vías (vertebrados)
 
 :::
 
 ::: {.block2}
-### Variables extraídas de SNVBox
+### Features extraídas de SNVBox
 * Conservación a nivel de exón
 * Densidad de SNPs en HapMap
 * Densidad de SNPs a nivel de exón
 :::
 
 ::: {.block3}
-### Variables relativas a la clase funcional
+### Features relativas a la clase funcional
 * Missense
 * Nonsense
 * Intrón
-* y otras
 :::
 
 ---
 
-# La conservación genómica es importantísima!
+# La conservación genómica aportó un salto en el AUC
 
 ::: columns
 
 :::: column
-![Importancia de variables clusterizada usando \texttt{rfpimp}](genomic_importance_cluster.pdf){ width=235px }
+![Importancia de features clusterizada usando \texttt{rfpimp}](genomic_importance_cluster.pdf){ width=235px }
 ::::
 
 :::: column
-![Curva ROC (**0.85!**)](auc_genomic.pdf){ width=175px }
+![Curva ROC](auc_genomic.pdf){ width=175px }
+
+* **AUC Genómico: 0.85**
+* \small AUC Físico-Químico: 0.72
+* \small AUC VarQ: 0.74
 ::::
 
 :::
@@ -376,7 +441,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 #
 
 \begin{center}
-\Huge Podemos mejorar el modelo genómico integrando las variables físico-químicas?
+\Huge ¿Podemos mejorar el modelo genómico integrando los features físico-químicos?
 \end{center}
 
 
@@ -384,81 +449,104 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 
 
-# Integrando las variables físico-químicas y genómicas
+# Integramos los features físico-químicos y genómicos
 
 * Dataset Humsavar: 68 mil variantes
-* Cobertura variables genómicas: aprox. 80%
-* Cobertura variable físico-químicas: misma que el dataset físico-químico
+* Cobertura features genómicos: aprox. 80%
+* Cobertura features físico-químicos: misma que el dataset físico-químico
 * Evaluamos un nuevo método de aprendizaje automático: XGBoost
 
 
 ![Unión de los datasets Físico-Químico y Genómico](interseccion_integral.pdf){ width=250px }
 
 
-
-
-# XGBoost supera a Random Forest
+# XGBoost permitió alcanzar al mejor trabajo del área
 
 ::: columns
 
 :::: column
-![](integral_importance_cluster_xgb.pdf){ width=235px }
+![Importancia de features clusterizada
+usando rfpimp](integral_importance_cluster_xgb.pdf){ width=235px }
 ::::
 
 :::: column
-![AUC: 0.90](auc_integral.pdf){ width=200px }
-::::
+![Curva ROC](auc_integral.pdf){ width=200px }
 
-:::
-
-# Modelo Integral + VarQ
-
-![Unión de los datasets Integral y VarQ](interseccion_varq_integral.pdf){ width=300px }
-
-# Resultados del modelo Integral + VarQ (XGBoost)
-
-::: columns
-
-:::: column
-![](integral_varq_importance_cluster_xgb.pdf){ width=235px }
-::::
-
-:::: column
-![AUC: 0.88](auc_varq_integral.pdf){ width=175px }
-::::
-
-:::
-
-# Comparación entre los distintos modelos
-
-::: columns
-
-:::: column
-![Dataset Humsavar](curvas_auc_humsavar.pdf){ width=200px }
-::::
-
-:::: column
-![Dataset VarQ (Curado)](curvas_auc_varq.pdf){ width=200px }
+* **AUC Integral: 0.90**
+* \small AUC VEST: 0.84 
+* \small AUC FATHMM-MKL: 0.82 
+* **\small AUC REVEL: 0.90**
 ::::
 
 :::
 
 ---
 
-# Conclusiones:
+#
 
-* La combinación de distintas dimensiones del problema aportó buenos resultados, consiguiendo un AUC de 0.90
-* El método estándar de cálculo de importancia de variables usado por scikit-learn puede ser engañoso en el caso de variables altamente correlacionadas
-* Los mejores resultados fueron obtenidos por algoritmos de Boosting
+![Desempeño de los modelos usando las variantes de la tabla Humsavar](curvas_auc_humsavar.pdf){ width=300px }
+
+---
+
+
+\begin{center}
+\Huge ¿Qué sucede al sumar estos features al dataset VarQ?
+\end{center}
+
+---
+
+# Sumamos las nuevas variables al dataset VarQ
+
+* Unimos los features del dataset Integral al dataset VarQ Curado
+* 72 features: 9 de VarQ + 63 de Integral
+* 7.4k variantes: 72% patogénicas, 28% benignas
+
+
+![Unión de los datasets Integral y VarQ](interseccion_varq_integral.pdf){ width=300px }
+
+# Importancia transversal a todas las dimensiones estudiadas
+
+::: columns
+
+:::: column
+![Importancia de features clusterizada
+usando rfpimp](integral_varq_importance_cluster_xgb.pdf){ width=235px }
+::::
+
+:::: column
+![Curva ROC](auc_varq_integral.pdf){ width=175px }
+
+* **AUC VarQ+Integral: 0.88**
+* \small AUC VarQ Curado: 0.74
+::::
+
+:::
+
+---
+
+#
+
+![Desempeño de los modelos usando las variantes de VarQ (Curado)](curvas_auc_varq.pdf){ width=300px }
+
+---
+
+# Conclusiones
+
+* La combinación de distintas dimensiones del problema aportó excelentes resultados, consiguiendo un AUC de 0.90. Los features de conservación (genómicos y matrices de sustitución) fueron las que más aportaron al desempeño del modelo
+\vspace*{2\baselineskip} 
+* El método estándar de cálculo de importancia de features usado por scikit-learn puede ser engañoso en el caso de features altamente correlacionados
+\vspace*{2\baselineskip} 
+* La exploración de otros algoritmos más avanzados aportó mejoras sustanciales al modelo
 
 ---
 
 # Trabajo futuro
 
-* Aumentar la cobertura de las variables más importantes: La variación de la energía y las variables de conservación genómica
+* Aumentar la cobertura de los features más importantes: La variación de la energía y las features de conservación genómica
+\vspace*{2\baselineskip} 
 * Mejorar la búsqueda de hiperparámetros en XGBoost
-* Evaluar SNPs \textit{nonsense} o no codificantes
-* Mejoras metodológicas
+\vspace*{2\baselineskip} 
+* Evaluar SNPs en regiones no codificantes (FATHMM-MKL)
 
 # 
 
