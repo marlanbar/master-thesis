@@ -155,6 +155,9 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 # Enfoque computacional: un problema de clasificación
 
+
+* **Objetivo: Poder predecir si un SNPs missense es benigno o patogénico**
+
 * Trabajos previos: 
 	* VEST (Carter et al., 2013)	
 	* FATHMM-MKL (Shihab et al., 2015)
@@ -505,11 +508,28 @@ Missense: Generan un cambio de aminoácido en la proteína
 * Dataset Humsavar: 68k variantes
 * Cobertura features genómicos: aprox. 80%
 * Evaluamos un nuevo método de aprendizaje automático: XGBoost
-	* Hiperparámetros encontrados: 
-
 
 ![Unión de los datasets Físico-Químico y Genómico](interseccion_integral.pdf){ width=250px }
 
+---
+
+# XGBoost es un algoritmo de Boosting
+
+* Es un algoritmo iterativo
+\vspace*{1\baselineskip}
+* Muy usado en competencias (por ejemplo Kaggle)
+\vspace*{1\baselineskip} 
+* Para la búsqueda de hiperparámetros usamos Randomized Grid Search
+\vspace*{1\baselineskip} 
+* Mejores hiperparámetros encontrados: 
+	* Peso mínimo de las hojas: 5 
+	* Gamma: 5
+	* Muestreo: 0.8
+	* Cantidad de variables por árbol: 0.8
+	* Profundidad máxima:  0.8
+
+
+---
 
 # XGBoost permitió alcanzar al mejor trabajo del área
 
