@@ -12,7 +12,6 @@ theme:
 colortheme:
 - beaver
 lang: es
-
 ---
 
 # Motivación del trabajo
@@ -29,10 +28,6 @@ lang: es
 
 
 ![Single Nucleotide Polymorphism (SNP)](Dna-SNP.svg.png){ width=350px }
-
-\note{
-NOTES: This is a note page and you ought to be able to tell.
-}
 
 ---
 
@@ -57,7 +52,19 @@ NOTES: This is a note page and you ought to be able to tell.
 El cambio en el nucleótido no modifica el aminoácido
 :::
 
-![Sustitución \textit{silent}](silent_mutation.pdf){ width=250px }
+:::columns
+
+::::column
+![](silent_mutation.pdf){ width=250px }
+::::
+
+::::column
+![](table_codon_silent.pdf){ width=180px }
+::::
+
+:::
+
+\center{Sustitución \textit{silent}}
 
 ---
 
@@ -68,8 +75,20 @@ El cambio en el nucleótido no modifica el aminoácido
 Nonsense: Generan un codón de terminación o \textit{stop}
 :::
 
+:::columns
 
-![Sustitución \textit{nonsense}](nonsense_mutation.pdf){ width=250px }
+::::column
+![](nonsense_mutation.pdf){ width=250px }
+::::
+
+::::column
+![](table_codon_nonsense.pdf){ width=180px }
+::::
+
+:::
+
+\center{Sustitución \textit{nonsense}}
+
 
 ---
 
@@ -80,7 +99,19 @@ Nonsense: Generan un codón de terminación o \textit{stop}
 Missense: Generan un cambio de aminoácido en la proteína
 :::
 
-![Sustitución \textit{missense}](missense_mutation.pdf){ width=250px }
+:::columns
+
+::::column
+![](missense_mutation.pdf){ width=250px }
+::::
+
+::::column
+![](table_codon_missense.pdf){ width=180px }
+::::
+
+:::
+
+\center{Sustitución \textit{missense}}
 
 ---
 
@@ -128,7 +159,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 	* VEST (Carter et al., 2013)	
 	* FATHMM-MKL (Shihab et al., 2015)
 	* REVEL (Ioannidis et al., 2016)
-	* VarQ (Santiago Moreno)
+	* VarQ (Santiago Moreno, en proceso)
 \vspace*{1\baselineskip}
 * Aprendizaje automático supervisado
 \vspace*{1\baselineskip} 
@@ -234,13 +265,13 @@ Missense: Generan un cambio de aminoácido en la proteína
 
                         SVC        LR       RF
   --------------------- ---------- -------- --------
-  Precisión             0.72       0.75     **0.77**
-  Recall                **1.00**   0.94     0.93
-  AUC                   0.70       0.71     **0.74**
-  $T_{fit}$             2m 39s     **1.17s** 9.82s
-  $T_{pred}$            0.77s      **0.01s** 0.11s
+  Precisión             0.72       0.75     0.77
+  Recall                1.00       0.94     0.93
+  **AUC**               **0.70**   **0.71** **0.74**
+  $T_{fit}$             2m 39s     1.17s    9.82s
+  $T_{pred}$            0.77s      0.01s    0.11s
 
-* Hiperparamétros óptimos encontrados (RF):
+* Mejores hiperparamétros encontrados (RF):
 	* Profundidad de árbol: 7
 	* Estimadores: 100
 	* Cantidad de variables por árbol: 4
@@ -281,8 +312,6 @@ Missense: Generan un cambio de aminoácido en la proteína
 ![](sequence.png){ width=450px }
 :::
 
-
-
 ---
 
 # Modelo: Propiedades Físico-Químicas de la proteína
@@ -318,9 +347,9 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 
 ::: {.block3}
-![](protparam.pdf){ width=425px }
+\center ![](protparam.pdf){ width=350px }
+\tiny Gasteiger et al., 2005
 :::
-
 ---
 
 # Variables físico-químicas extraídas de SNVBox
@@ -331,7 +360,7 @@ Missense: Generan un cambio de aminoácido en la proteína
 * Carga 
 * Volumen 
 * Polaridad
-* Hidrofobia
+* Hidrofobicidad
 * Transición
 :::
 
@@ -344,6 +373,26 @@ Missense: Generan un cambio de aminoácido en la proteína
 :::
 
 * Base de datos generada en la Universidad Johns Hopkins
+\tiny Wong et al., 2011
+
+---
+
+# Modificamos nuestro análisis de importancia
+
+* Generamos un nuevo modelo basado en Random Forest
+\vspace*{2\baselineskip} 
+* Reutilizamos el pipeline usado en el modelo anterior (Pipeline Tree)
+	* Misma imputación de variables
+	* Mismo esquema de entrenamiento y test
+\vspace*{2\baselineskip} 
+* Mejores hiperparámetros encontrados:
+	* Profundidad de árbol: 7
+	* Estimadores: 100
+	* Cantidad de variables por árbol: 20%
+\vspace*{2\baselineskip} 
+* Usamos \texttt{rfpimp} para calcular la importancia de las variables
+
+---
 
 # Las matrices de sustitución fueron las más relevantes
 
@@ -415,6 +464,8 @@ Missense: Generan un cambio de aminoácido en la proteína
 * Intrón
 :::
 
+* \small Hiperparámetros: Profundidad 7, 100 estimadores, 7 variables por corte
+
 ---
 
 # La conservación genómica aportó un salto en el AUC
@@ -451,10 +502,10 @@ Missense: Generan un cambio de aminoácido en la proteína
 
 # Integramos los features físico-químicos y genómicos
 
-* Dataset Humsavar: 68 mil variantes
+* Dataset Humsavar: 68k variantes
 * Cobertura features genómicos: aprox. 80%
-* Cobertura features físico-químicos: misma que el dataset físico-químico
 * Evaluamos un nuevo método de aprendizaje automático: XGBoost
+	* Hiperparámetros encontrados: 
 
 
 ![Unión de los datasets Físico-Químico y Genómico](interseccion_integral.pdf){ width=250px }
@@ -500,17 +551,17 @@ usando rfpimp](integral_importance_cluster_xgb.pdf){ width=235px }
 * Unimos los features del dataset Integral al dataset VarQ Curado
 * 72 features: 9 de VarQ + 63 de Integral
 * 7.4k variantes: 72% patogénicas, 28% benignas
+* Comparamos XGBoost con Random Forest nuevamente
 
 
-![Unión de los datasets Integral y VarQ](interseccion_varq_integral.pdf){ width=300px }
+![*Right Join* de los datasets Integral y VarQ](interseccion_varq_integral.pdf){ width=300px }
 
 # Importancia transversal a todas las dimensiones estudiadas
 
 ::: columns
 
 :::: column
-![Importancia de features clusterizada
-usando rfpimp](integral_varq_importance_cluster_xgb.pdf){ width=235px }
+![Importancia de features clusterizada usando rfpimp](integral_varq_importance_cluster_xgb.pdf){ width=235px }
 ::::
 
 :::: column
@@ -536,7 +587,7 @@ usando rfpimp](integral_varq_importance_cluster_xgb.pdf){ width=235px }
 \vspace*{2\baselineskip} 
 * El método estándar de cálculo de importancia de features usado por scikit-learn puede ser engañoso en el caso de features altamente correlacionados
 \vspace*{2\baselineskip} 
-* La exploración de otros algoritmos más avanzados aportó mejoras sustanciales al modelo
+* La exploración de un algoritmo más avanzado (XGBoost) aportó mejoras sustanciales al modelo
 
 ---
 
