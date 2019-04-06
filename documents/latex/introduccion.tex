@@ -61,7 +61,7 @@ En particular estudiaremos los SNPs con cambio de sentido (\textit{missense}), e
     \label{fig:snp_types}
 \end{figure}
 
-\subsection{Bases de datos ómicas}
+\subsection{Bases de datos \textit{ómicas}}
 
 En la actualidad existen diferentes bases de datos públicas (dbSNP, SNPedia, HapMap, entre otras) que registran millones de estos SNPs \textit{missense}. Los costos de una secuenciación completa siguen bajando de forma acelerada desde el Proyecto Genoma Humano \cite{sequencingcost} (ver figura \ref{fig:cost_per_genome}). Esto ha permitido generar un número creciente de estudios que permiten asociar polimorfismos genéticos a enfermedades (ver figura \ref{fig:dbsnp_growth_rate}). Diferentes bases, como Humsavar \cite{humsavar} o Clinvar \cite{clinvar}, contienen reportes curados con dichos resultados, que se actualizan periódicamente y pueden variar con nueva evidencia. Sin embargo, todavía existe un gran número de SNPs \textit{missense} de los cuales se desconoce su efecto en el organismo. 
 
@@ -69,13 +69,13 @@ En la actualidad existen diferentes bases de datos públicas (dbSNP, SNPedia, Ha
 \begin{figure}[H]
 \begin{minipage}[c]{0.45\linewidth}
 \includegraphics[width=\linewidth]{documents/latex/figures/1/costpergenome_2017.pdf}
-\caption{Costo por secuenciación del genoma, NCBI-NIH, 2017. La curva verde corresponde al costo en dólares y la curva blanca equivale a la curva de la ley de Moore, es decir, si se reduciera a la mitad cada año.}
+\caption{Costo por secuenciación del genoma (NCBI-NIH, 2017). La curva verde corresponde al costo en dólares y la curva blanca equivale a la curva de la ley de Moore, es decir, si se reduciera a la mitad cada año.}
 \label{fig:cost_per_genome}
 \end{minipage}
 \hfill
 \begin{minipage}[c]{0.45\linewidth}
 \includegraphics[width=\linewidth]{documents/latex/figures/1/increase_dbsnp.pdf}
-\caption{Crecimiento de la base dbSNP a partir del Proyecto Genoma Humano, NCBI-NIH, 2008. La curva negra corresponde a todos los SNPs subidos a la base y la curva roja a los clusters de SNPs que referencian a la misma posición del genoma.}
+\caption{Crecimiento de la base dbSNP a partir del Proyecto Genoma Humano (NCBI-NIH, 2008). La curva negra corresponde a todos los SNPs subidos a la base y la curva roja a los clusters de SNPs que referencian a la misma posición del genoma.}
 \label{fig:dbsnp_growth_rate}
 \end{minipage}%
 \end{figure}
@@ -91,7 +91,7 @@ Existen diferentes formas de categorizar los algoritmos de aprendizaje automáti
 \begin{itemize}
 \item Supervisado, en donde se utilizan ejemplos previos que están ``rotulados'', es decir que poseen una variable de respuesta conocida y se busca conseguir una predicción lo más certera posible sobre nuevos datos. Esta variable de respuesta puede ser continua (problema de regresión) o dividida en clases (problema de clasificación). 
 \item No supervisado, donde el objetivo es encontrar distintos grupos o clusters dentro de los datos.
-\item Semi-supervisado, en el que se trabaja con un pequeño conjunto de datos etiquetados y un conjunto mucho mayor de datos no etiquetados. El objetivo está en usar este último conjunto para mejorar el clasificador construido con los datos etiquetados.
+\item Semi-supervisado, en el que se trabaja con un pequeño conjunto de datos etiquetados y un conjunto mucho mayor de datos no etiquetados. El objetivo consiste en usar este último conjunto para mejorar el clasificador construido con los datos etiquetados.
 \item Por refuerzo, donde un \textit{agente} observa el entorno y realiza diferentes acciones para maximizar la recompensa. El modelo a aprender entonces es la estrategia que le permite tomar decisiones ante determinadas situaciones. 
 \end{itemize}
 
@@ -184,7 +184,7 @@ En este trabajo vamos a utilizar XGBoost (XGB), una implementación de Gradient 
 
 Cada uno de estos métodos involucran una fase de entrenamiento, validación y evaluación. En la fase de entrenamiento los algoritmos ajustan sus datos de acuerdo a sus distintas funciones de pérdida. En nuestro trabajo también buscamos aproximarnos al mejor set de valores de hiperparámetros usando una técnica llamada \textit{Grid-Search}. Este método consiste en evaluar distintos valores para cada parámetro, que en conjunto forman una grilla (o \textit{grid}). 
 
-Para cada conjunto de hiperparámetros de esta grilla se entrena el modelo y finalmente se elige el conjunto de hiperparámetros que haya tenido mejor performance (bajo alguna métrica, ver sección \ref{eval_metrics}). Al evaluar la performance de cada conjunto de hiperparámetros no podemos volver a usar el mismo conjunto de datos para el que fue entrenado, por lo que para evitar esto usamos otra técnica llamada \textit{k-fold Cross Validation}. La idea es generar un corte (\textit{split}) en el dataset de entrenamiento con el objetivo de poder evaluar los hiperparámetros en un conjunto de datos que no haya sido utilizado (conjunto de validación). Este procedimiento se realiza $k$ veces con diferentes splits realizados al azar, con una proporción igual en cada subconjunto o \textit{fold}. Una vez elegido el modelo entrenado con el mejor conjunto de hiperparámetros se evalúa en un dataset de evaluación (que no fue usado durante el entremiento) de acuerdo a las métricas de la sección \ref{eval_metrics}.
+Para cada conjunto de hiperparámetros de esta grilla se entrena el modelo y finalmente se elige el conjunto de hiperparámetros que haya tenido mejor performance (bajo alguna métrica, ver sección \ref{eval_metrics}). Al evaluar la performance de cada conjunto de hiperparámetros no podemos volver a usar el mismo conjunto de datos para el que fue entrenado, por lo que para evitar esto usamos otra técnica llamada \textit{k-fold Cross Validation}. La idea es generar un corte (\textit{split}) en el dataset de entrenamiento con el objetivo de poder evaluar los hiperparámetros en un conjunto de datos que no haya sido utilizado (conjunto de validación). Este procedimiento se realiza $k$ veces con diferentes splits realizados al azar, con una proporción igual en cada subconjunto o \textit{fold}. Estos \textit{folds} son disjuntos entre sí. Una vez elegido el modelo entrenado con el mejor conjunto de hiperparámetros se evalúa en un dataset de evaluación (que no fue usado durante el entrenamiento) de acuerdo a las métricas de la sección \ref{eval_metrics}.
 
 % \newpage
 
@@ -232,7 +232,7 @@ Las medidas que utilizaremos para evaluar la performance del modelo son las sigu
     \begin{figure}[H]
     \centering
         \includegraphics[scale=0.6]{documents/latex/figures/1/threshold_auc.pdf}
-    \caption{Predicciones ordenadas de mayor a menor, donde el \textit{threshold} asigna clasificación positiva y negativa. El color de las instancias indica el valor real. En este caso el $TPR$ es igual a 2/3 y el FPR es igual a $3/8$.}
+    \caption{Predicciones ordenadas de mayor a menor, donde el \textit{threshold} asigna clasificación positiva y negativa. El color de las instancias indica el valor real. En este caso el $TPR$ es igual a $2/3$ y el FPR es igual a $3/8$.}
     \label{fig:threshold_auc}
     \end{figure}
     
@@ -262,7 +262,7 @@ Las medidas que utilizaremos para evaluar la performance del modelo son las sigu
 
 \section{Trabajos relacionados}
 
-A partir de mutaciones conocidas y sus propiedades asociadas, deseamos explorar un método de aprendizaje automático supervisado que nos permitan generar un modelo que, ante una mutación no estudiada, pueda predecir su patogenicidad. Para recolectar datos, asociados a mutaciones conocidas, existen múltiples herramientas. En particular, para el presente trabajo vamos a explorar: VarQ, VEST y FATHMM-MKL.
+A partir de mutaciones conocidas y sus propiedades asociadas, deseamos explorar un método de aprendizaje automático supervisado que nos permita generar un modelo que, ante una mutación no estudiada, pueda predecir su patogenicidad. Para recolectar datos, asociados a mutaciones conocidas, existen múltiples herramientas. En particular, para el presente trabajo vamos a explorar: VarQ, VEST y FATHMM-MKL.
 
 \subsubsection{VarQ}
 
