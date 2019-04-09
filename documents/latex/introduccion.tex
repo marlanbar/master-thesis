@@ -105,7 +105,7 @@ La creciente producción de trabajos nos aporta una gran cantidad de efectos con
 
 Como mencionamos anteriormente, el aprendizaje supervisado trata de predecir una respuesta usando un modelo generado con datos correctamente etiquetados. Definido de manera formal, dado un set de datos $ \mathcal{D} = \{(x^n, y^n), n = 1...N\}$  buscamos aprender la relación entre el ejemplo $x$ y la variable de respuesta $y$ tal que al recibir un nuevo ejemplo $x^*$ la respuesta predicha $y^*$ sea precisa \cite{Barber2011}. La precisión está definida formalmente por la función de pérdida o \textit{Loss Function}, $L(y^{pred}, y^{true})$. Esta función nos permite medir el costo de errar en la predicción y por lo tanto entrenar nuestro modelo de manera que el valor de la función de pérdida usando los datos de entrenamiento sea mínimo o cercano al mínimo.
 
-En el contexto de nuestro problema, cada vector $x$ del set de datos $\mathcal{D}$ es un conjunto de variables que describen a distintos niveles (estructural, físico-químico, genómico) al SNP y a su variante proteica producida e $y$ es el efecto producido en el organismo, basándonos en reportes de Humsavar y Clinvar. Al ser una variable de tipo binaria, podemos aplicar algoritmos de clasificación para este problema.
+En el contexto de nuestro problema, cada vector $x$ del set de datos $\mathcal{D}$ es un conjunto de variables que describen a distintos niveles (estructural, físico-químico, genómico) al SNP y a su variante proteica producida e $y$ es el efecto producido en el organismo, basándonos en reportes de Humsavar y Clinvar. Al ser una variable de tipo binaria, podemos aplicar algoritmos de clasificación para este problema. Posteriormente en la secciones \ref{pipeline}, \ref{confusion_matrix} y \ref{eval_metrics} analizaremos el proceso general por el cuál estos algoritmos son entrenados y las métricas para evaluar su desempeño.
 
 A continuación haremos un recorrido por los distintos métodos de clasificación que utilizaremos en esta tesis. Estos métodos se encuentran implementados en el módulo \texttt{scikit-learn} de Python \cite{scikit-learn}, excepto por el método Gradient Boosting y su implementación XGBoost \cite{xgboost}. En cada uno de los apartados mencionaremos su funcionamiento general, sus parámetros y sus hiperparámetros. Para estos últimos mencionaremos entre paréntesis su nombre usado en la implementación.
 
@@ -186,6 +186,20 @@ Cada uno de estos métodos involucran una fase de entrenamiento, validación y e
 
 Para cada conjunto de hiperparámetros de esta grilla se entrena el modelo y finalmente se elige el conjunto de hiperparámetros que haya tenido mejor performance (bajo alguna métrica, ver sección \ref{eval_metrics}). Al evaluar la performance de cada conjunto de hiperparámetros no podemos volver a usar el mismo conjunto de datos para el que fue entrenado, por lo que para evitar esto usamos otra técnica llamada \textit{k-fold Cross Validation}. La idea es generar un corte (\textit{split}) en el dataset de entrenamiento con el objetivo de poder evaluar los hiperparámetros en un conjunto de datos que no haya sido utilizado (conjunto de validación). Este procedimiento se realiza $k$ veces con diferentes splits realizados al azar, con una proporción igual en cada subconjunto o \textit{fold}. Estos \textit{folds} son disjuntos entre sí. Una vez elegido el modelo entrenado con el mejor conjunto de hiperparámetros se evalúa en un dataset de evaluación (que no fue usado durante el entrenamiento) de acuerdo a las métricas de la sección \ref{eval_metrics}.
 
+\newpage
+
+\subsection{Matriz de confusión} \label{confusion_matrix}
+
+Una matriz de confusión en el caso de un problema de clasificación binario es una tabla de contingencia con cuatro posibles resultados, como podemos ver en la figura \ref{fig:confusion_matrix}. Dado un clasificador y un conjunto de instancias del que conocemos sus clases, esta tabla informa de la cantidad de instancias correctamente clasificadas como positivas (verdaderos positivos) y la cantidad de instancias correctamente clasificadas como negativas (verdaderos negativos). También, si el valor predicho es negativo y la clase verdadera es negativa es un verdadero negativo, en caso contrario es un falso negativo \cite{Fawcett2006}. Esta tabla puede expresarse en valores absolutos o relativos a la cantidad total de instancias. A partir de estos conjuntos (VP, VN, FP y FN) calculamos las métricas con las que evaluamos el modelo, descriptas a continuación.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{documents/latex/figures/1/confusion_matrix.pdf}
+    \caption{La matriz de confusión y sus cuatro posibles casos: Verdaderos positivos, verdaderos negativos (marcados en verde), falsos positivos y falsos negativos (marcados en rojo).}
+    \label{fig:confusion_matrix}
+\end{figure}
+
+
 % \newpage
 
 \subsection{Métricas de evaluación} \label{eval_metrics}
@@ -201,11 +215,13 @@ Las medidas que utilizaremos para evaluar la performance del modelo son las sigu
     \end{equation*}
     
 % \pagebreak
-    \item \textbf{Recall}: El Recall corresponde a la cantidad de verdaderos positivos sobre el total de positivos: verdaderos positivos (VP) y falsos negativos (FN).
+    \item \textbf{Sensibilidad o Recall}: La Sensibilidad (o \textit{Recall}, en inglés), corresponde a la cantidad de verdaderos positivos sobre el total de positivos: verdaderos positivos (VP) y falsos negativos (FN).
     
     \begin{equation*}
         \frac{VP}{VP + FN}
     \end{equation*}
+
+    \newpage
     
     \item \textbf{F1-Score}: El F1-Score es el promedio armónico entre la Precisión y el Recall. Usamos el promedio armónico de manera de afectar negativamente el resultado si alguno de los valores es especialmente bajo. Posee un rango de 0 a 1. 
     
@@ -231,7 +247,7 @@ Las medidas que utilizaremos para evaluar la performance del modelo son las sigu
     
     \begin{figure}[H]
     \centering
-        \includegraphics[scale=0.6]{documents/latex/figures/1/threshold_auc.pdf}
+        \includegraphics[scale=0.8]{documents/latex/figures/1/threshold_auc.pdf}
     \caption{Predicciones ordenadas de mayor a menor, donde el \textit{threshold} asigna clasificación positiva y negativa. El color de las instancias indica el valor real. En este caso el $TPR$ es igual a $2/3$ y el FPR es igual a $3/8$.}
     \label{fig:threshold_auc}
     \end{figure}
@@ -242,7 +258,7 @@ Las medidas que utilizaremos para evaluar la performance del modelo son las sigu
     
     \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{documents/latex/figures/1/roc_ejemplo.pdf}
+        \includegraphics[scale=0.35]{documents/latex/figures/1/roc_ejemplo.pdf}
         \caption{Curva ROC de la clasificación de la figura \ref{fig:threshold_auc}. La línea punteada roja representa el umbral de decisión, que fijó el FPR y TPR en los valores anteriormente mencionados.}
         \label{fig:example_roc}
     \end{figure}
